@@ -1,0 +1,205 @@
+import "server-only";
+
+import { cookies } from "next/headers";
+
+export const LOCALES = ["en", "nl", "de", "pl"] as const;
+export type Locale = (typeof LOCALES)[number];
+
+export const LOCALE_COOKIE = "movr_locale";
+export const DEFAULT_LOCALE: Locale = "en";
+
+export type Messages = {
+  brand: { name: string };
+  nav: {
+    loads: string;
+    applications: string;
+    profile: string;
+    business: string;
+    logout: string;
+    dashboard: string;
+    login: string;
+    signup: string;
+  };
+  auth: {
+    joinTitle: string;
+    joinSubtitle: string;
+    carrierRole: string;
+    carrierRoleSub: string;
+    companyRole: string;
+    companyRoleSub: string;
+    alreadyAccount: string;
+    newToMovr: string;
+    createTitle: string;
+    fullName: string;
+    email: string;
+    password: string;
+    createAccount: string;
+    creatingAccount: string;
+    welcomeBack: string;
+    loginSubtitle: string;
+    loginAction: string;
+    loggingIn: string;
+    backHome: string;
+  };
+  landing: {
+    title: string;
+    subtitle: string;
+    carrierCta: string;
+    companyCta: string;
+    featureCarrierTitle: string;
+    featureCarrierBody: string;
+    featureCompanyTitle: string;
+    featureCompanyBody: string;
+    featureEmptyTitle: string;
+    featureEmptyBody: string;
+    howTitle: string;
+    step1Title: string;
+    step1Body: string;
+    step2Title: string;
+    step2Body: string;
+    step3Title: string;
+    step3Body: string;
+  };
+};
+
+const en: Messages = {
+  brand: { name: "MOVR" },
+  nav: {
+    loads: "Loads",
+    applications: "Applications",
+    profile: "Profile",
+    business: "Business",
+    logout: "Log out",
+    dashboard: "Dashboard",
+    login: "Log in",
+    signup: "Sign up",
+  },
+  auth: {
+    joinTitle: "Join MOVR",
+    joinSubtitle: "Choose how you want to use MOVR.",
+    carrierRole: "I'm a carrier",
+    carrierRoleSub: "Independent transporter on the road — find return loads.",
+    companyRole: "I'm a company",
+    companyRoleSub: "Move freight reliably with trusted local partners.",
+    alreadyAccount: "Already have an account?",
+    newToMovr: "New to MOVR?",
+    createTitle: "Create your account",
+    fullName: "Full name",
+    email: "Email",
+    password: "Password",
+    createAccount: "Create account",
+    creatingAccount: "Creating account…",
+    welcomeBack: "Welcome back",
+    loginSubtitle: "Log in to your MOVR account.",
+    loginAction: "Log in",
+    loggingIn: "Logging in…",
+    backHome: "Go home",
+  },
+  landing: {
+    title: "Return loads, real partners.",
+    subtitle:
+      "MOVR connects independent carriers with local companies in Venlo and Limburg, turning empty return trips into paid loads.",
+    carrierCta: "I'm a carrier",
+    companyCta: "I'm a company",
+    featureCarrierTitle: "For carriers",
+    featureCarrierBody:
+      "See loads that fit your truck, home region and route — and show interest in the ones you can actually do.",
+    featureCompanyTitle: "For companies",
+    featureCompanyBody:
+      "Publish a load once, get honest interest from independent carriers, and choose who moves your freight.",
+    featureEmptyTitle: "Fewer empty miles",
+    featureEmptyBody: "Purpose-built for return loads in the Venlo and Limburg freight region.",
+    howTitle: "How MOVR works",
+    step1Title: "Set up your profile",
+    step1Body: "Carriers pick their vehicle and regions. Companies add their business details.",
+    step2Title: "Match and show interest",
+    step2Body: "Carriers see compatible loads and apply. No automatic booking, ever.",
+    step3Title: "You choose",
+    step3Body: "The company always selects the transporter they trust. Then you keep them updated.",
+  },
+};
+
+const nl: Messages = {
+  brand: { name: "MOVR" },
+  nav: {
+    loads: "Ladingen",
+    applications: "Sollicitaties",
+    profile: "Profiel",
+    business: "Bedrijf",
+    logout: "Uitloggen",
+    dashboard: "Dashboard",
+    login: "Inloggen",
+    signup: "Aanmelden",
+  },
+  auth: {
+    joinTitle: "Word lid van MOVR",
+    joinSubtitle: "Kies hoe je MOVR wilt gebruiken.",
+    carrierRole: "Ik ben een vervoerder",
+    carrierRoleSub: "Onafhankelijke chauffeur onderweg — vind retourladingen.",
+    companyRole: "Ik ben een bedrijf",
+    companyRoleSub: "Verplaats vracht betrouwbaar met vertrouwde lokale partners.",
+    alreadyAccount: "Heb je al een account?",
+    newToMovr: "Nieuw bij MOVR?",
+    createTitle: "Maak je account aan",
+    fullName: "Volledige naam",
+    email: "E-mailadres",
+    password: "Wachtwoord",
+    createAccount: "Account aanmaken",
+    creatingAccount: "Account wordt aangemaakt…",
+    welcomeBack: "Welkom terug",
+    loginSubtitle: "Log in op je MOVR-account.",
+    loginAction: "Inloggen",
+    loggingIn: "Inloggen…",
+    backHome: "Naar home",
+  },
+  landing: {
+    title: "Retourladingen, echte partners.",
+    subtitle:
+      "MOVR verbindt onafhankelijke vervoerders met lokale bedrijven in Venlo en Limburg en maakt van lege retourritten betaalde ladingen.",
+    carrierCta: "Ik ben een vervoerder",
+    companyCta: "Ik ben een bedrijf",
+    featureCarrierTitle: "Voor vervoerders",
+    featureCarrierBody:
+      "Zie ladingen die passen bij je vrachtwagen, thuisregio en route — en toon interesse in wat je echt kunt doen.",
+    featureCompanyTitle: "Voor bedrijven",
+    featureCompanyBody:
+      "Publiceer een lading, ontvang eerlijke interesse van onafhankelijke vervoerders en kies wie jouw vracht vervoert.",
+    featureEmptyTitle: "Minder lege kilometers",
+    featureEmptyBody: "Gemaakt voor retourladingen in de vervoersregio Venlo en Limburg.",
+    howTitle: "Hoe MOVR werkt",
+    step1Title: "Stel je profiel in",
+    step1Body: "Vervoerders kiezen hun voertuig en regio's. Bedrijven voegen hun bedrijfsgegevens toe.",
+    step2Title: "Match en toon interesse",
+    step2Body: "Vervoerders zien passende ladingen en solliciteren. Nooit automatisch boeken.",
+    step3Title: "Jij kiest",
+    step3Body: "Het bedrijf kiest altijd de vervoerder die zij vertrouwen. Daarna houd je hen op de hoogte.",
+  },
+};
+
+const dictionaries: Record<Locale, Messages> = {
+  en,
+  nl,
+  de: en,
+  pl: en,
+};
+
+export function isLocale(value: string | undefined): value is Locale {
+  return !!value && (LOCALES as readonly string[]).includes(value);
+}
+
+export function resolveLocale(value: string | undefined): Locale {
+  return isLocale(value) ? value : DEFAULT_LOCALE;
+}
+
+export async function getLocale(): Promise<Locale> {
+  try {
+    const store = await cookies();
+    return resolveLocale(store.get(LOCALE_COOKIE)?.value);
+  } catch {
+    return DEFAULT_LOCALE;
+  }
+}
+
+export function getDictionary(locale: Locale = DEFAULT_LOCALE): Messages {
+  return dictionaries[locale] ?? en;
+}
