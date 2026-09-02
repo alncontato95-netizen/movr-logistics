@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum Role {
+  CARRIER
+  COMPANY
+}
+
+enum VehicleType {
+  VAN
+  LIGHT_TRUCK
+  TRUCK
+  TRACTOR_TRAILER
+}
+
+enum CargoType {
+  PALLET
+  CONTAINER
+  BULK
+  OTHER
+}
+
+enum LoadStatus {
+  OPEN
+  SELECTED
+  CONFIRMED
+  IN_TRANSIT
+  COMPLETED
+}
+
+enum ApplicationStatus {
+  PENDING
+  SELECTED
+  REJECTED
+  CANCELLED
+}
+
+model User {
+  id           String      @id @default(cuid())
+  email        String      @unique
+  passwordHash String
+  name         String
+  phone        String?
+  role         Role
+  vehicleType  VehicleType?
+  vehiclePlate String?
+  professionalLicense String?
+  currentRegion String?
+  available    Boolean     @default(true)
+  acceptsRegions String?
+  createdAt    DateTime    @default(now())
+  company      Company?
+  loads        Load[]      @relation("PublishedLoads")
+  applications Application[]
+  sessions     Session[]
+}
+
+model Company {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  kvk       String
+  address   String
+  phone     String
+  verified  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  loads     Load[]
+}
+
+model Load {
+  id           String     @id @default(cuid())
+  companyId    String
+  company      Company    @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  publishedBy  String
+  publisher    User       @relation("PublishedLoads", fields: [publishedBy], references: [id])
+  origin       String
+  destination  String
+  pickupDate   DateTime
+  pickupWindow String?
+  cargoType    CargoType
+  weightKg     Int
+  volumeM3     Float?
+  requiredVehicle VehicleType?
+  priceEur     Int?
+  priceNegotiable Boolean   @default(true)
+  notes        String?
+  status       LoadStatus @default(OPEN)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  applications Application[]
+
+  @@index([status])
+  @@index([origin])
+  @@index([destination])
+}
+
+model Application {
+  id            String            @id @default(cuid())
+  loadId        String
+  load          Load              @relation(fields: [loadId], references: [id], onDelete: Cascade)
+  transporterId String
+  transporter   User              @relation(fields: [transporterId], references: [id], onDelete: Cascade)
+  status        ApplicationStatus @default(PENDING)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@unique([loadId, transporterId])
+  @@index([transporterId])
+  @@index([status])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  revoked   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+}
