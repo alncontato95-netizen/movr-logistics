@@ -44,6 +44,17 @@ enum ApplicationStatus {
   CANCELLED
 }
 
+enum NotificationType {
+  APPLICATION
+  SELECTED
+  ACCEPTED
+  DECLINED
+  CONFIRMED
+  PICKED_UP
+  DELIVERED
+  COMPLETED
+}
+
 model User {
   id           String      @id @default(cuid())
   email        String      @unique
@@ -62,6 +73,7 @@ model User {
   loads        Load[]      @relation("PublishedLoads")
   applications Application[]
   sessions     Session[]
+  notifications Notification[]
 }
 
 model Company {
@@ -98,6 +110,7 @@ model Load {
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   applications Application[]
+  notifications Notification[]
 
   @@index([status])
   @@index([origin])
@@ -129,4 +142,19 @@ model Session {
 
   @@index([userId])
   @@index([expiresAt])
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  loadId    String
+  load      Load             @relation(fields: [loadId], references: [id], onDelete: Cascade)
+  type      NotificationType
+  message   String
+  read      Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  @@index([userId, read])
+  @@index([userId, createdAt])
 }

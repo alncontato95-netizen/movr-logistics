@@ -19,6 +19,7 @@ export type Messages = {
     dashboard: string;
     login: string;
     signup: string;
+    notifications: string;
   };
   auth: {
     joinTitle: string;
@@ -73,6 +74,7 @@ const en: Messages = {
     dashboard: "Dashboard",
     login: "Log in",
     signup: "Sign up",
+    notifications: "Notifications",
   },
   auth: {
     joinTitle: "Join MOVR",
@@ -130,6 +132,7 @@ const nl: Messages = {
     dashboard: "Dashboard",
     login: "Inloggen",
     signup: "Aanmelden",
+    notifications: "Meldingen",
   },
   auth: {
     joinTitle: "Word lid van MOVR",

@@ -323,6 +323,7 @@ export type LoadWhereInput = {
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   publisher?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   applications?: Prisma.ApplicationListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
 }
 
 export type LoadOrderByWithRelationInput = {
@@ -346,6 +347,7 @@ export type LoadOrderByWithRelationInput = {
   company?: Prisma.CompanyOrderByWithRelationInput
   publisher?: Prisma.UserOrderByWithRelationInput
   applications?: Prisma.ApplicationOrderByRelationAggregateInput
+  notifications?: Prisma.NotificationOrderByRelationAggregateInput
 }
 
 export type LoadWhereUniqueInput = Prisma.AtLeast<{
@@ -372,6 +374,7 @@ export type LoadWhereUniqueInput = Prisma.AtLeast<{
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   publisher?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   applications?: Prisma.ApplicationListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
 }, "id">
 
 export type LoadOrderByWithAggregationInput = {
@@ -441,6 +444,7 @@ export type LoadCreateInput = {
   company: Prisma.CompanyCreateNestedOneWithoutLoadsInput
   publisher: Prisma.UserCreateNestedOneWithoutLoadsInput
   applications?: Prisma.ApplicationCreateNestedManyWithoutLoadInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutLoadInput
 }
 
 export type LoadUncheckedCreateInput = {
@@ -462,6 +466,7 @@ export type LoadUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutLoadInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutLoadInput
 }
 
 export type LoadUpdateInput = {
@@ -483,6 +488,7 @@ export type LoadUpdateInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutLoadsNestedInput
   publisher?: Prisma.UserUpdateOneRequiredWithoutLoadsNestedInput
   applications?: Prisma.ApplicationUpdateManyWithoutLoadNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutLoadNestedInput
 }
 
 export type LoadUncheckedUpdateInput = {
@@ -504,6 +510,7 @@ export type LoadUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutLoadNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutLoadNestedInput
 }
 
 export type LoadCreateManyInput = {
@@ -781,6 +788,20 @@ export type LoadUpdateOneRequiredWithoutApplicationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.LoadUpdateToOneWithWhereWithoutApplicationsInput, Prisma.LoadUpdateWithoutApplicationsInput>, Prisma.LoadUncheckedUpdateWithoutApplicationsInput>
 }
 
+export type LoadCreateNestedOneWithoutNotificationsInput = {
+  create?: Prisma.XOR<Prisma.LoadCreateWithoutNotificationsInput, Prisma.LoadUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.LoadCreateOrConnectWithoutNotificationsInput
+  connect?: Prisma.LoadWhereUniqueInput
+}
+
+export type LoadUpdateOneRequiredWithoutNotificationsNestedInput = {
+  create?: Prisma.XOR<Prisma.LoadCreateWithoutNotificationsInput, Prisma.LoadUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.LoadCreateOrConnectWithoutNotificationsInput
+  upsert?: Prisma.LoadUpsertWithoutNotificationsInput
+  connect?: Prisma.LoadWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LoadUpdateToOneWithWhereWithoutNotificationsInput, Prisma.LoadUpdateWithoutNotificationsInput>, Prisma.LoadUncheckedUpdateWithoutNotificationsInput>
+}
+
 export type LoadCreateWithoutPublisherInput = {
   id?: string
   origin: string
@@ -799,6 +820,7 @@ export type LoadCreateWithoutPublisherInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutLoadsInput
   applications?: Prisma.ApplicationCreateNestedManyWithoutLoadInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutLoadInput
 }
 
 export type LoadUncheckedCreateWithoutPublisherInput = {
@@ -819,6 +841,7 @@ export type LoadUncheckedCreateWithoutPublisherInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutLoadInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutLoadInput
 }
 
 export type LoadCreateOrConnectWithoutPublisherInput = {
@@ -887,6 +910,7 @@ export type LoadCreateWithoutCompanyInput = {
   updatedAt?: Date | string
   publisher: Prisma.UserCreateNestedOneWithoutLoadsInput
   applications?: Prisma.ApplicationCreateNestedManyWithoutLoadInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutLoadInput
 }
 
 export type LoadUncheckedCreateWithoutCompanyInput = {
@@ -907,6 +931,7 @@ export type LoadUncheckedCreateWithoutCompanyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutLoadInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutLoadInput
 }
 
 export type LoadCreateOrConnectWithoutCompanyInput = {
@@ -952,6 +977,7 @@ export type LoadCreateWithoutApplicationsInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutLoadsInput
   publisher: Prisma.UserCreateNestedOneWithoutLoadsInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutLoadInput
 }
 
 export type LoadUncheckedCreateWithoutApplicationsInput = {
@@ -972,6 +998,7 @@ export type LoadUncheckedCreateWithoutApplicationsInput = {
   status?: $Enums.LoadStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutLoadInput
 }
 
 export type LoadCreateOrConnectWithoutApplicationsInput = {
@@ -1008,6 +1035,7 @@ export type LoadUpdateWithoutApplicationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutLoadsNestedInput
   publisher?: Prisma.UserUpdateOneRequiredWithoutLoadsNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutLoadNestedInput
 }
 
 export type LoadUncheckedUpdateWithoutApplicationsInput = {
@@ -1028,6 +1056,107 @@ export type LoadUncheckedUpdateWithoutApplicationsInput = {
   status?: Prisma.EnumLoadStatusFieldUpdateOperationsInput | $Enums.LoadStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutLoadNestedInput
+}
+
+export type LoadCreateWithoutNotificationsInput = {
+  id?: string
+  origin: string
+  destination: string
+  pickupDate: Date | string
+  pickupWindow?: string | null
+  cargoType: $Enums.CargoType
+  weightKg: number
+  volumeM3?: number | null
+  requiredVehicle?: $Enums.VehicleType | null
+  priceEur?: number | null
+  priceNegotiable?: boolean
+  notes?: string | null
+  status?: $Enums.LoadStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutLoadsInput
+  publisher: Prisma.UserCreateNestedOneWithoutLoadsInput
+  applications?: Prisma.ApplicationCreateNestedManyWithoutLoadInput
+}
+
+export type LoadUncheckedCreateWithoutNotificationsInput = {
+  id?: string
+  companyId: string
+  publishedBy: string
+  origin: string
+  destination: string
+  pickupDate: Date | string
+  pickupWindow?: string | null
+  cargoType: $Enums.CargoType
+  weightKg: number
+  volumeM3?: number | null
+  requiredVehicle?: $Enums.VehicleType | null
+  priceEur?: number | null
+  priceNegotiable?: boolean
+  notes?: string | null
+  status?: $Enums.LoadStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutLoadInput
+}
+
+export type LoadCreateOrConnectWithoutNotificationsInput = {
+  where: Prisma.LoadWhereUniqueInput
+  create: Prisma.XOR<Prisma.LoadCreateWithoutNotificationsInput, Prisma.LoadUncheckedCreateWithoutNotificationsInput>
+}
+
+export type LoadUpsertWithoutNotificationsInput = {
+  update: Prisma.XOR<Prisma.LoadUpdateWithoutNotificationsInput, Prisma.LoadUncheckedUpdateWithoutNotificationsInput>
+  create: Prisma.XOR<Prisma.LoadCreateWithoutNotificationsInput, Prisma.LoadUncheckedCreateWithoutNotificationsInput>
+  where?: Prisma.LoadWhereInput
+}
+
+export type LoadUpdateToOneWithWhereWithoutNotificationsInput = {
+  where?: Prisma.LoadWhereInput
+  data: Prisma.XOR<Prisma.LoadUpdateWithoutNotificationsInput, Prisma.LoadUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type LoadUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  origin?: Prisma.StringFieldUpdateOperationsInput | string
+  destination?: Prisma.StringFieldUpdateOperationsInput | string
+  pickupDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pickupWindow?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cargoType?: Prisma.EnumCargoTypeFieldUpdateOperationsInput | $Enums.CargoType
+  weightKg?: Prisma.IntFieldUpdateOperationsInput | number
+  volumeM3?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  requiredVehicle?: Prisma.NullableEnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType | null
+  priceEur?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  priceNegotiable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumLoadStatusFieldUpdateOperationsInput | $Enums.LoadStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutLoadsNestedInput
+  publisher?: Prisma.UserUpdateOneRequiredWithoutLoadsNestedInput
+  applications?: Prisma.ApplicationUpdateManyWithoutLoadNestedInput
+}
+
+export type LoadUncheckedUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  publishedBy?: Prisma.StringFieldUpdateOperationsInput | string
+  origin?: Prisma.StringFieldUpdateOperationsInput | string
+  destination?: Prisma.StringFieldUpdateOperationsInput | string
+  pickupDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pickupWindow?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cargoType?: Prisma.EnumCargoTypeFieldUpdateOperationsInput | $Enums.CargoType
+  weightKg?: Prisma.IntFieldUpdateOperationsInput | number
+  volumeM3?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  requiredVehicle?: Prisma.NullableEnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType | null
+  priceEur?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  priceNegotiable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumLoadStatusFieldUpdateOperationsInput | $Enums.LoadStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  applications?: Prisma.ApplicationUncheckedUpdateManyWithoutLoadNestedInput
 }
 
 export type LoadCreateManyPublisherInput = {
@@ -1067,6 +1196,7 @@ export type LoadUpdateWithoutPublisherInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutLoadsNestedInput
   applications?: Prisma.ApplicationUpdateManyWithoutLoadNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutLoadNestedInput
 }
 
 export type LoadUncheckedUpdateWithoutPublisherInput = {
@@ -1087,6 +1217,7 @@ export type LoadUncheckedUpdateWithoutPublisherInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutLoadNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutLoadNestedInput
 }
 
 export type LoadUncheckedUpdateManyWithoutPublisherInput = {
@@ -1145,6 +1276,7 @@ export type LoadUpdateWithoutCompanyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   publisher?: Prisma.UserUpdateOneRequiredWithoutLoadsNestedInput
   applications?: Prisma.ApplicationUpdateManyWithoutLoadNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutLoadNestedInput
 }
 
 export type LoadUncheckedUpdateWithoutCompanyInput = {
@@ -1165,6 +1297,7 @@ export type LoadUncheckedUpdateWithoutCompanyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutLoadNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutLoadNestedInput
 }
 
 export type LoadUncheckedUpdateManyWithoutCompanyInput = {
@@ -1193,10 +1326,12 @@ export type LoadUncheckedUpdateManyWithoutCompanyInput = {
 
 export type LoadCountOutputType = {
   applications: number
+  notifications: number
 }
 
 export type LoadCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   applications?: boolean | LoadCountOutputTypeCountApplicationsArgs
+  notifications?: boolean | LoadCountOutputTypeCountNotificationsArgs
 }
 
 /**
@@ -1214,6 +1349,13 @@ export type LoadCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
  */
 export type LoadCountOutputTypeCountApplicationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ApplicationWhereInput
+}
+
+/**
+ * LoadCountOutputType without action
+ */
+export type LoadCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationWhereInput
 }
 
 
@@ -1238,6 +1380,7 @@ export type LoadSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   publisher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   applications?: boolean | Prisma.Load$applicationsArgs<ExtArgs>
+  notifications?: boolean | Prisma.Load$notificationsArgs<ExtArgs>
   _count?: boolean | Prisma.LoadCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["load"]>
 
@@ -1310,6 +1453,7 @@ export type LoadInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   publisher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   applications?: boolean | Prisma.Load$applicationsArgs<ExtArgs>
+  notifications?: boolean | Prisma.Load$notificationsArgs<ExtArgs>
   _count?: boolean | Prisma.LoadCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LoadIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1327,6 +1471,7 @@ export type $LoadPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     company: Prisma.$CompanyPayload<ExtArgs>
     publisher: Prisma.$UserPayload<ExtArgs>
     applications: Prisma.$ApplicationPayload<ExtArgs>[]
+    notifications: Prisma.$NotificationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1743,6 +1888,7 @@ export interface Prisma__LoadClient<T, Null = never, ExtArgs extends runtime.Typ
   company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   publisher<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   applications<T extends Prisma.Load$applicationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Load$applicationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notifications<T extends Prisma.Load$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Load$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2209,6 +2355,30 @@ export type Load$applicationsArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.ApplicationScalarFieldEnum | Prisma.ApplicationScalarFieldEnum[]
+}
+
+/**
+ * Load.notifications
+ */
+export type Load$notificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Notification
+   */
+  select?: Prisma.NotificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Notification
+   */
+  omit?: Prisma.NotificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationInclude<ExtArgs> | null
+  where?: Prisma.NotificationWhereInput
+  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
 }
 
 /**

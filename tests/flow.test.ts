@@ -292,3 +292,56 @@ test("undo selection reverts load and applications to OPEN/PENDING", async () =>
     await prisma.user.delete({ where: { id: carrier2.id } });
   }
 });
+
+test("notifications: created for the recipient, unread count, and mark-all-read", async () => {
+  // Mirror createNotification helpers directly against the Notification model.
+  const load = await prisma.load.create({
+    data: {
+      companyId: companyProfile.id,
+      publishedBy: carrier.id,
+      origin: "Venlo",
+      destination: "Breda",
+      pickupDate: new Date(Date.now() + 24 * 3600 * 1000),
+      cargoType: "PALLET",
+      weightKg: 1300,
+      status: "OPEN",
+    },
+  });
+
+  try {
+    // Two notifications for the same recipient (the company user / publisher).
+    const company = await prisma.user.findUniqueOrThrow({ where: { email: "company@movr.dev" } });
+    await prisma.notification.create({
+      data: { userId: company.id, loadId: load.id, type: "APPLICATION", message: "interest" },
+    });
+    await prisma.notification.create({
+      data: { userId: company.id, loadId: load.id, type: "PICKED_UP", message: "picked up" },
+    });
+
+    // unreadCount semantics used by the bell badge.
+    const unread = await prisma.notification.count({
+      where: { userId: company.id, read: false },
+    });
+    assert.equal(unread, 2);
+
+    // Only notifications for this load's recipient exist; the carrier (opener) has none.
+    assert.equal(await prisma.notification.count({ where: { userId: carrier.id } }), 0);
+
+    // markAllRead semantics used by the notifications page.
+    await prisma.notification.updateMany({
+      where: { userId: company.id, read: false },
+      data: { read: true },
+    });
+    assert.equal(
+      await prisma.notification.count({ where: { userId: company.id, read: false } }),
+      0,
+    );
+    assert.equal(
+      await prisma.notification.count({ where: { userId: company.id, read: true } }),
+      2,
+    );
+  } finally {
+    await prisma.notification.deleteMany({ where: { loadId: load.id } });
+    await prisma.load.delete({ where: { id: load.id } });
+  }
+});

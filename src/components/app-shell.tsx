@@ -2,13 +2,16 @@ import Link from "next/link";
 import { LogoMark } from "@/components/brand";
 import { LogoutButton } from "@/components/logout-button";
 import { LangSwitcher } from "@/components/lang-switcher";
+import { NotificationBell } from "@/components/notification-bell";
 import { getDictionary, getLocale } from "@/lib/i18n";
 
 export async function AppShell({
   user,
+  unread,
   children,
 }: {
   user: { role: "CARRIER" | "COMPANY"; name: string };
+  unread: number;
   children: React.ReactNode;
 }) {
   const locale = await getLocale();
@@ -35,6 +38,7 @@ export async function AppShell({
                 <NavLink href="/profile">{t.nav.profile}</NavLink>
               </>
             )}
+            <NotificationBell unread={unread} href="/notifications" label={t.nav.notifications} />
             <LangSwitcher />
             <LogoutButton label={t.nav.logout} />
           </nav>

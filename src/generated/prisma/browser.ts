@@ -42,3 +42,8 @@ export type Application = Prisma.ApplicationModel
  * 
  */
 export type Session = Prisma.SessionModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel

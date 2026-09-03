@@ -62,3 +62,26 @@ export type Region = (typeof REGIONS)[number];
 
 export const ORGANIZATION = "MOVR Logistics";
 export const TAGLINE = "Return loads, real partners.";
+
+export const NOTIFICATION_TYPES = [
+  "APPLICATION",
+  "SELECTED",
+  "ACCEPTED",
+  "DECLINED",
+  "CONFIRMED",
+  "PICKED_UP",
+  "DELIVERED",
+  "COMPLETED",
+] as const;
+export type NotificationType = (typeof NOTIFICATION_TYPES)[number];
+
+export const NOTIFICATION_ICONS: Record<NotificationType, string> = {
+  APPLICATION: "👋",
+  SELECTED: "🎯",
+  ACCEPTED: "✅",
+  DECLINED: "↩️",
+  CONFIRMED: "📋",
+  PICKED_UP: "📦",
+  DELIVERED: "🏁",
+  COMPLETED: "🎉",
+};

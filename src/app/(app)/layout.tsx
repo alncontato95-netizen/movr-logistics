@@ -1,7 +1,13 @@
 import { AppShell } from "@/components/app-shell";
-import { verifySession } from "@/lib/dal";
+import { getCurrentUser } from "@/lib/dal";
+import { unreadCount } from "@/lib/notify";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
-  const session = await verifySession();
-  return <AppShell user={{ role: session.role, name: session.name }}>{children}</AppShell>;
+  const user = await getCurrentUser();
+  const unread = await unreadCount(user.id);
+  return (
+    <AppShell user={{ role: user.role, name: user.name }} unread={unread}>
+      {children}
+    </AppShell>
+  );
 }

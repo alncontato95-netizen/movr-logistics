@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/lib/dal";
 import { prisma } from "@/lib/prisma";
 import { loadSchema } from "@/lib/validation";
+import { createNotification } from "@/lib/notify";
 
 export type LoadState = { errors?: Record<string, string[] | undefined>; message?: string } | undefined;
 
@@ -73,6 +74,12 @@ export async function applyToLoad(formData: FormData) {
     await prisma.application.create({
       data: { loadId, transporterId: user.id, status: "PENDING" },
     });
+    await createNotification({
+      userId: load.publishedBy,
+      loadId,
+      type: "APPLICATION",
+      message: `${user.name} expressed interest in your load ${load.origin} → ${load.destination}.`,
+    });
   }
 
   revalidatePath(`/loads/${loadId}`);
@@ -104,13 +111,20 @@ export async function acceptOffer(formData: FormData) {
   if (user.role !== "CARRIER") redirect("/login");
 
   const loadId = formData.get("loadId") as string;
+  const load = await prisma.load.findUnique({ where: { id: loadId } });
   const existing = await prisma.application.findUnique({
     where: { loadId_transporterId: { loadId, transporterId: user.id } },
   });
-  if (existing && existing.status === "SELECTED") {
+  if (existing && existing.status === "SELECTED" && load) {
     await prisma.application.update({
       where: { id: existing.id },
       data: { status: "ACCEPTED" },
+    });
+    await createNotification({
+      userId: load.publishedBy,
+      loadId,
+      type: "ACCEPTED",
+      message: `${user.name} accepted your offer for ${load.origin} → ${load.destination}. You can confirm the booking.`,
     });
   }
 
@@ -124,6 +138,7 @@ export async function declineOffer(formData: FormData) {
   if (user.role !== "CARRIER") redirect("/login");
 
   const loadId = formData.get("loadId") as string;
+  const load = await prisma.load.findUnique({ where: { id: loadId } });
   const existing = await prisma.application.findUnique({
     where: { loadId_transporterId: { loadId, transporterId: user.id } },
   });
@@ -143,6 +158,15 @@ export async function declineOffer(formData: FormData) {
       data: { status: "OPEN" },
     }),
   ]);
+
+  if (load) {
+    await createNotification({
+      userId: load.publishedBy,
+      loadId,
+      type: "DECLINED",
+      message: `${user.name} declined the offer for ${load.origin} → ${load.destination}. The load is open again.`,
+    });
+  }
 
   revalidatePath(`/loads/${loadId}`);
   revalidatePath("/applications");
@@ -165,6 +189,13 @@ export async function confirmPickup(formData: FormData) {
 
   await prisma.load.update({ where: { id: loadId }, data: { status: "PICKED_UP" } });
 
+  await createNotification({
+    userId: load.publishedBy,
+    loadId,
+    type: "PICKED_UP",
+    message: `${user.name} picked up the load ${load.origin} → ${load.destination}. It is now in transit.`,
+  });
+
   revalidatePath(`/loads/${loadId}`);
   revalidatePath(`/company/loads/${loadId}`);
   redirect(`/loads/${loadId}?picked-up=1`);
@@ -185,6 +216,13 @@ export async function confirmDelivery(formData: FormData) {
 
   await prisma.load.update({ where: { id: loadId }, data: { status: "DELIVERED" } });
 
+  await createNotification({
+    userId: load.publishedBy,
+    loadId,
+    type: "DELIVERED",
+    message: `${user.name} delivered the load ${load.origin} → ${load.destination}. You can mark the booking as complete.`,
+  });
+
   revalidatePath(`/loads/${loadId}`);
   revalidatePath(`/company/loads/${loadId}`);
   redirect(`/loads/${loadId}?delivered=1`);
@@ -204,6 +242,7 @@ export async function selectTransporter(formData: FormData) {
 
   const application = await prisma.application.findUnique({
     where: { id: applicationId, loadId },
+    include: { transporter: true },
   });
   if (!application) redirect(`/company/loads/${loadId}`);
 
@@ -221,6 +260,13 @@ export async function selectTransporter(formData: FormData) {
       data: { status: "SELECTED" },
     }),
   ]);
+
+  await createNotification({
+    userId: application.transporterId,
+    loadId,
+    type: "SELECTED",
+    message: `${company.name} selected you for the load ${load.origin} → ${load.destination}. Review the offer and accept or decline it.`,
+  });
 
   revalidatePath(`/company/loads/${loadId}`);
   revalidatePath("/company/loads");
@@ -293,6 +339,26 @@ export async function updateLoadStatus(formData: FormData) {
   }
 
   await prisma.load.update({ where: { id: loadId }, data: { status: status as "CONFIRMED" | "COMPLETED" } });
+
+  const carrier = await prisma.application.findFirst({
+    where: { loadId, status: "ACCEPTED" },
+    include: { transporter: true },
+  });
+  if (status === "CONFIRMED" && carrier) {
+    await createNotification({
+      userId: carrier.transporterId,
+      loadId,
+      type: "CONFIRMED",
+      message: `${company.name} confirmed the booking for ${load.origin} → ${load.destination}. You can now confirm pickup when ready.`,
+    });
+  } else if (status === "COMPLETED" && carrier) {
+    await createNotification({
+      userId: carrier.transporterId,
+      loadId,
+      type: "COMPLETED",
+      message: `${company.name} marked the load ${load.origin} → ${load.destination} as completed. Thanks for the delivery!`,
+    });
+  }
 
   revalidatePath(`/company/loads/${loadId}`);
   redirect(`/company/loads/${loadId}`);
