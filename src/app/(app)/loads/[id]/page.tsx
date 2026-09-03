@@ -3,14 +3,15 @@ import Link from "next/link";
 import { requireCarrier } from "@/lib/dal";
 import { prisma } from "@/lib/prisma";
 import { applyToLoad, cancelApplication, acceptOffer, declineOffer } from "@/app/actions/loads";
+import { PollRefresh } from "@/components/poll-refresh";
 import { Badge, LoadStatusBadge } from "@/components/ui";
 import { CARGO_LABELS, VEHICLE_LABELS } from "@/lib/constants";
 import { formatDate, formatMoney } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
-export default async function LoadDetailPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ applied?: string }> }) {
-  const [{ id }, { applied }] = await Promise.all([params, searchParams]);
+export default async function LoadDetailPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ applied?: string; accepted?: string; declined?: string }> }) {
+  const [{ id }, { applied, accepted, declined }] = await Promise.all([params, searchParams]);
   const user = await requireCarrier();
 
   const load = await prisma.load.findUnique({
@@ -29,6 +30,7 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
 
   return (
     <div className="mx-auto max-w-2xl space-y-5">
+      <PollRefresh intervalMs={10000} />
       <Link href="/loads" className="text-sm font-medium text-muted hover:text-ink">
         ← Back to loads
       </Link>
@@ -36,6 +38,18 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
       {applied && appliedPending && (
         <div className="rounded-2xl bg-brand-light p-4 text-sm font-semibold text-brand-dark">
           Interest sent. The company will review all applications and select their carrier.
+        </div>
+      )}
+
+      {accepted && (
+        <div className="rounded-2xl bg-emerald-50 p-4 text-sm font-semibold text-emerald-800">
+          Offer accepted. The company will confirm the booking.
+        </div>
+      )}
+
+      {declined && (
+        <div className="rounded-2xl bg-red-50 p-4 text-sm font-semibold text-red-700">
+          You declined the offer. This load is open for other carriers.
         </div>
       )}
 

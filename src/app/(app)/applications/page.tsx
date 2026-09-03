@@ -1,6 +1,7 @@
 import { requireCarrier } from "@/lib/dal";
 import { prisma } from "@/lib/prisma";
 import { ApplicationStatusBadge, Card } from "@/components/ui";
+import { PollRefresh } from "@/components/poll-refresh";
 import { formatDate } from "@/lib/format";
 import { CARGO_LABELS } from "@/lib/constants";
 import Link from "next/link";
@@ -18,6 +19,7 @@ export default async function ApplicationsPage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
+      <PollRefresh intervalMs={15000} />
       <div>
         <h1 className="text-2xl font-bold text-ink">My applications</h1>
         <p className="mt-1 text-sm text-muted">Track the loads you showed interest in.</p>

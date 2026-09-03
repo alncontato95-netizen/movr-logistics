@@ -4,6 +4,7 @@ import { requireCompany } from "@/lib/dal";
 import { prisma } from "@/lib/prisma";
 import { regionsFor } from "@/lib/matching";
 import { selectTransporter, undoSelection, updateLoadStatus } from "@/app/actions/loads";
+import { PollRefresh } from "@/components/poll-refresh";
 import { Badge, LoadStatusBadge } from "@/components/ui";
 import { CARGO_LABELS, VEHICLE_LABELS, LOAD_STATUS_LABELS, type VehicleType } from "@/lib/constants";
 import { formatDate, formatMoney } from "@/lib/format";
@@ -32,6 +33,7 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
 
   return (
     <div className="mx-auto max-w-2xl space-y-5">
+      <PollRefresh intervalMs={10000} />
       <Link href="/company/loads" className="text-sm font-medium text-muted hover:text-ink">
         ← Back to your loads
       </Link>

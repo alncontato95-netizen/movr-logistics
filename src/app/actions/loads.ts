@@ -116,7 +116,7 @@ export async function acceptOffer(formData: FormData) {
 
   revalidatePath(`/loads/${loadId}`);
   revalidatePath("/applications");
-  redirect(`/loads/${loadId}`);
+  redirect(`/loads/${loadId}?accepted=1`);
 }
 
 export async function declineOffer(formData: FormData) {
@@ -147,7 +147,7 @@ export async function declineOffer(formData: FormData) {
   revalidatePath(`/loads/${loadId}`);
   revalidatePath("/applications");
   revalidatePath(`/company/loads/${loadId}`);
-  redirect(`/loads/${loadId}`);
+  redirect(`/loads/${loadId}?declined=1`);
 }
 
 export async function selectTransporter(formData: FormData) {
