@@ -66,10 +66,10 @@ test("apply -> select -> status progression", async () => {
   assert.equal(loadAfterSelect.status, "SELECTED");
 
   // Status progression (mirrors updateLoadStatus)
-  for (const s of ["CONFIRMED", "IN_TRANSIT", "COMPLETED"]) {
+  for (const s of ["CONFIRMED", "PICKED_UP", "DELIVERED", "COMPLETED"]) {
     await prisma.load.update({
       where: { id: loadId },
-      data: { status: s as "CONFIRMED" | "IN_TRANSIT" | "COMPLETED" },
+      data: { status: s as "CONFIRMED" | "PICKED_UP" | "DELIVERED" | "COMPLETED" },
     });
     const l = await prisma.load.findUniqueOrThrow({ where: { id: loadId } });
     assert.equal(l.status, s);
@@ -113,6 +113,59 @@ test("carrier accepts the offer before the booking is confirmed", async () => {
     assert.ok(hasAccepted);
     await prisma.load.update({ where: { id: load.id }, data: { status: "CONFIRMED" } });
     assert.equal((await prisma.load.findUniqueOrThrow({ where: { id: load.id } })).status, "CONFIRMED");
+  } finally {
+    await prisma.application.deleteMany({ where: { loadId: load.id } });
+    await prisma.load.delete({ where: { id: load.id } });
+  }
+});
+
+test("full carrier-driven flow: accept -> confirm -> pickup -> delivery -> completed", async () => {
+  const load = await prisma.load.create({
+    data: {
+      companyId: companyProfile.id,
+      publishedBy: carrier.id,
+      origin: "Eindhoven",
+      destination: "Rotterdam",
+      pickupDate: new Date(Date.now() + 24 * 3600 * 1000),
+      cargoType: "PALLET",
+      weightKg: 2000,
+      status: "OPEN",
+    },
+  });
+
+  try {
+    // Carrier applies and company selects (mirrors selectTransporter)
+    const app = await prisma.application.create({
+      data: { loadId: load.id, transporterId: carrier.id, status: "PENDING" },
+    });
+    await prisma.$transaction([
+      prisma.application.update({ where: { id: app.id }, data: { status: "SELECTED" } }),
+      prisma.load.update({ where: { id: load.id }, data: { status: "SELECTED" } }),
+    ]);
+
+    // Carrier accepts the offer (mirrors acceptOffer)
+    await prisma.application.update({ where: { id: app.id }, data: { status: "ACCEPTED" } });
+    assert.equal((await prisma.application.findFirstOrThrow({ where: { loadId: load.id } })).status, "ACCEPTED");
+
+    // Company confirms booking (mirrors updateLoadStatus with ACCEPTED guard)
+    await prisma.load.update({ where: { id: load.id }, data: { status: "CONFIRMED" } });
+    assert.equal((await prisma.load.findUniqueOrThrow({ where: { id: load.id } })).status, "CONFIRMED");
+
+    // Carrier confirms pickup (mirrors confirmPickup)
+    const loadBeforePickup = await prisma.load.findUniqueOrThrow({ where: { id: load.id } });
+    assert.equal(loadBeforePickup.status, "CONFIRMED");
+    await prisma.load.update({ where: { id: load.id }, data: { status: "PICKED_UP" } });
+    assert.equal((await prisma.load.findUniqueOrThrow({ where: { id: load.id } })).status, "PICKED_UP");
+
+    // Carrier confirms delivery (mirrors confirmDelivery)
+    const loadBeforeDelivery = await prisma.load.findUniqueOrThrow({ where: { id: load.id } });
+    assert.equal(loadBeforeDelivery.status, "PICKED_UP");
+    await prisma.load.update({ where: { id: load.id }, data: { status: "DELIVERED" } });
+    assert.equal((await prisma.load.findUniqueOrThrow({ where: { id: load.id } })).status, "DELIVERED");
+
+    // Company marks completed (mirrors updateLoadStatus)
+    await prisma.load.update({ where: { id: load.id }, data: { status: "COMPLETED" } });
+    assert.equal((await prisma.load.findUniqueOrThrow({ where: { id: load.id } })).status, "COMPLETED");
   } finally {
     await prisma.application.deleteMany({ where: { loadId: load.id } });
     await prisma.load.delete({ where: { id: load.id } });

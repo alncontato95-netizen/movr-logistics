@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { requireCarrier } from "@/lib/dal";
 import { prisma } from "@/lib/prisma";
-import { applyToLoad, cancelApplication, acceptOffer, declineOffer } from "@/app/actions/loads";
+import { applyToLoad, cancelApplication, acceptOffer, declineOffer, confirmPickup, confirmDelivery } from "@/app/actions/loads";
 import { PollRefresh } from "@/components/poll-refresh";
 import { Badge, LoadStatusBadge } from "@/components/ui";
 import { CARGO_LABELS, VEHICLE_LABELS } from "@/lib/constants";
@@ -10,8 +10,8 @@ import { formatDate, formatMoney } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
-export default async function LoadDetailPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ applied?: string; accepted?: string; declined?: string }> }) {
-  const [{ id }, { applied, accepted, declined }] = await Promise.all([params, searchParams]);
+export default async function LoadDetailPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ applied?: string; accepted?: string; declined?: string; "picked-up"?: string; delivered?: string }> }) {
+  const [{ id }, { applied, accepted, declined, "picked-up": pickedUp, delivered }] = await Promise.all([params, searchParams]);
   const user = await requireCarrier();
 
   const load = await prisma.load.findUnique({
@@ -50,6 +50,18 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
       {declined && (
         <div className="rounded-2xl bg-red-50 p-4 text-sm font-semibold text-red-700">
           You declined the offer. This load is open for other carriers.
+        </div>
+      )}
+
+      {pickedUp && (
+        <div className="rounded-2xl bg-sky-50 p-4 text-sm font-semibold text-sky-800">
+          Pickup confirmed. The load is on its way.
+        </div>
+      )}
+
+      {delivered && (
+        <div className="rounded-2xl bg-emerald-50 p-4 text-sm font-semibold text-emerald-800">
+          Delivery confirmed. Awaiting company confirmation.
         </div>
       )}
 
@@ -110,6 +122,26 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
               </form>
             </div>
           </div>
+        ) : load.status === "CONFIRMED" && myApplication?.status === "ACCEPTED" ? (
+          <form action={confirmPickup}>
+            <input type="hidden" name="loadId" value={load.id} />
+            <button
+              type="submit"
+              className="w-full rounded-xl bg-brand py-3.5 text-sm font-bold text-white shadow-lg shadow-brand/30 hover:bg-brand-dark"
+            >
+              Confirm pickup
+            </button>
+          </form>
+        ) : load.status === "PICKED_UP" && myApplication?.status === "ACCEPTED" ? (
+          <form action={confirmDelivery}>
+            <input type="hidden" name="loadId" value={load.id} />
+            <button
+              type="submit"
+              className="w-full rounded-xl bg-brand py-3.5 text-sm font-bold text-white shadow-lg shadow-brand/30 hover:bg-brand-dark"
+            >
+              Confirm delivery
+            </button>
+          </form>
         ) : appliedPending ? (
           <form action={cancelApplication}>
             <input type="hidden" name="loadId" value={load.id} />
@@ -132,7 +164,9 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
           </form>
         ) : (
           <div className="rounded-xl bg-black/5 py-3.5 text-center text-sm font-semibold text-muted">
-            {myApplication?.status === "ACCEPTED" ? (
+            {myApplication?.status === "ACCEPTED" && load.status === "DELIVERED" ? (
+              <Badge tone="green">Delivered — awaiting company confirmation</Badge>
+            ) : myApplication?.status === "ACCEPTED" ? (
               <Badge tone="green">Offer accepted — the company can now confirm the booking</Badge>
             ) : myApplication?.status === "DECLINED" ? (
               <Badge tone="red">You declined this offer — it&apos;s open for other carriers</Badge>

@@ -150,6 +150,46 @@ export async function declineOffer(formData: FormData) {
   redirect(`/loads/${loadId}?declined=1`);
 }
 
+export async function confirmPickup(formData: FormData) {
+  const user = await getCurrentUser();
+  if (user.role !== "CARRIER") redirect("/login");
+
+  const loadId = formData.get("loadId") as string;
+  const load = await prisma.load.findUnique({ where: { id: loadId } });
+  if (!load || load.status !== "CONFIRMED") redirect(`/loads/${loadId}`);
+
+  const existing = await prisma.application.findUnique({
+    where: { loadId_transporterId: { loadId, transporterId: user.id } },
+  });
+  if (!existing || existing.status !== "ACCEPTED") redirect(`/loads/${loadId}`);
+
+  await prisma.load.update({ where: { id: loadId }, data: { status: "PICKED_UP" } });
+
+  revalidatePath(`/loads/${loadId}`);
+  revalidatePath(`/company/loads/${loadId}`);
+  redirect(`/loads/${loadId}?picked-up=1`);
+}
+
+export async function confirmDelivery(formData: FormData) {
+  const user = await getCurrentUser();
+  if (user.role !== "CARRIER") redirect("/login");
+
+  const loadId = formData.get("loadId") as string;
+  const load = await prisma.load.findUnique({ where: { id: loadId } });
+  if (!load || load.status !== "PICKED_UP") redirect(`/loads/${loadId}`);
+
+  const existing = await prisma.application.findUnique({
+    where: { loadId_transporterId: { loadId, transporterId: user.id } },
+  });
+  if (!existing || existing.status !== "ACCEPTED") redirect(`/loads/${loadId}`);
+
+  await prisma.load.update({ where: { id: loadId }, data: { status: "DELIVERED" } });
+
+  revalidatePath(`/loads/${loadId}`);
+  revalidatePath(`/company/loads/${loadId}`);
+  redirect(`/loads/${loadId}?delivered=1`);
+}
+
 export async function selectTransporter(formData: FormData) {
   const user = await getCurrentUser();
   if (user.role !== "COMPANY") redirect("/login");
@@ -228,7 +268,7 @@ export async function updateLoadStatus(formData: FormData) {
   const loadId = formData.get("loadId") as string;
   const status = formData.get("status") as string;
 
-  const allowed = ["CONFIRMED", "IN_TRANSIT", "COMPLETED"];
+  const allowed = ["CONFIRMED", "COMPLETED"];
   if (!allowed.includes(status)) redirect(`/company/loads/${loadId}`);
 
   const load = await prisma.load.findUnique({ where: { id: loadId } });
@@ -246,7 +286,13 @@ export async function updateLoadStatus(formData: FormData) {
     }
   }
 
-  await prisma.load.update({ where: { id: loadId }, data: { status: status as "CONFIRMED" | "IN_TRANSIT" | "COMPLETED" } });
+  // Completion requires the carrier to have confirmed delivery.
+  if (status === "COMPLETED" && load.status !== "DELIVERED") {
+    revalidatePath(`/company/loads/${loadId}`);
+    redirect(`/company/loads/${loadId}`);
+  }
+
+  await prisma.load.update({ where: { id: loadId }, data: { status: status as "CONFIRMED" | "COMPLETED" } });
 
   revalidatePath(`/company/loads/${loadId}`);
   redirect(`/company/loads/${loadId}`);

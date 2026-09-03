@@ -29,7 +29,7 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
   const showSelect = load.status === "OPEN";
   const carrierAccepted = chosen?.status === "ACCEPTED";
   const progressStatus =
-    load.status === "SELECTED" || load.status === "CONFIRMED" || load.status === "IN_TRANSIT" ? load.status : null;
+    load.status === "SELECTED" || load.status === "CONFIRMED" || load.status === "PICKED_UP" || load.status === "DELIVERED" ? load.status : null;
 
   return (
     <div className="mx-auto max-w-2xl space-y-5">
@@ -102,6 +102,15 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
           )}
           {chosen.status === "DECLINED" && (
             <p className="text-sm font-semibold text-red-700">The carrier declined the offer. The load is open for applications again.</p>
+          )}
+          {load.status === "CONFIRMED" && (
+            <p className="text-sm font-semibold text-sky-700">Booking confirmed — awaiting carrier pickup.</p>
+          )}
+          {load.status === "PICKED_UP" && (
+            <p className="text-sm font-semibold text-sky-700">Carrier has picked up the load — in transit.</p>
+          )}
+          {load.status === "DELIVERED" && (
+            <p className="text-sm font-semibold text-emerald-700">Load delivered — you can mark this booking as completed.</p>
           )}
           {progressStatus && <ProgressFlow loadId={load.id} status={progressStatus} carrierConfirmed={carrierAccepted} />}
           {load.status === "SELECTED" && chosen.status !== "DECLINED" && <UndoSelection loadId={load.id} />}
@@ -184,11 +193,10 @@ function CarrierInfo({
   );
 }
 
-function ProgressFlow({ loadId, status, carrierConfirmed }: { loadId: string; status: "SELECTED" | "CONFIRMED" | "IN_TRANSIT"; carrierConfirmed: boolean }) {
-  const next: Record<string, { status: "CONFIRMED" | "IN_TRANSIT" | "COMPLETED"; label: string }> = {
+function ProgressFlow({ loadId, status, carrierConfirmed }: { loadId: string; status: "SELECTED" | "CONFIRMED" | "PICKED_UP" | "DELIVERED"; carrierConfirmed: boolean }) {
+  const next: Record<string, { status: "CONFIRMED" | "COMPLETED"; label: string }> = {
     SELECTED: { status: "CONFIRMED", label: "Confirm booking" },
-    CONFIRMED: { status: "IN_TRANSIT", label: "Mark in transit" },
-    IN_TRANSIT: { status: "COMPLETED", label: "Mark completed" },
+    DELIVERED: { status: "COMPLETED", label: "Mark completed" },
   };
   const step = next[status];
   if (!step) return null;

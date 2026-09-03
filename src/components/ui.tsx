@@ -135,7 +135,8 @@ const loadStatusTone: Record<LoadStatus, "brand" | "amber" | "blue" | "green" | 
   OPEN: "brand",
   SELECTED: "amber",
   CONFIRMED: "blue",
-  IN_TRANSIT: "blue",
+  PICKED_UP: "blue",
+  DELIVERED: "green",
   COMPLETED: "neutral",
 };
 

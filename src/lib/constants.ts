@@ -4,7 +4,7 @@ export type VehicleType = (typeof VEHICLE_TYPES)[number];
 export const CARGO_TYPES = ["PALLET", "CONTAINER", "BULK", "OTHER"] as const;
 export type CargoType = (typeof CARGO_TYPES)[number];
 
-export const LOAD_STATUSES = ["OPEN", "SELECTED", "CONFIRMED", "IN_TRANSIT", "COMPLETED"] as const;
+export const LOAD_STATUSES = ["OPEN", "SELECTED", "CONFIRMED", "PICKED_UP", "DELIVERED", "COMPLETED"] as const;
 export type LoadStatus = (typeof LOAD_STATUSES)[number];
 
 export const APPLICATION_STATUSES = ["PENDING", "SELECTED", "ACCEPTED", "DECLINED", "REJECTED", "CANCELLED"] as const;
@@ -28,7 +28,8 @@ export const LOAD_STATUS_LABELS: Record<LoadStatus, string> = {
   OPEN: "Open",
   SELECTED: "Carrier selected",
   CONFIRMED: "Confirmed",
-  IN_TRANSIT: "In transit",
+  PICKED_UP: "Picked up",
+  DELIVERED: "Delivered",
   COMPLETED: "Completed",
 };
 
