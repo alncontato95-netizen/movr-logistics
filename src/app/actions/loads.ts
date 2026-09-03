@@ -136,6 +136,40 @@ export async function selectTransporter(formData: FormData) {
   redirect(`/company/loads/${loadId}?selected=1`);
 }
 
+export async function undoSelection(formData: FormData) {
+  const user = await getCurrentUser();
+  if (user.role !== "COMPANY") redirect("/login");
+
+  const loadId = formData.get("loadId") as string;
+
+  const load = await prisma.load.findUnique({ where: { id: loadId } });
+  if (!load) redirect("/company/loads");
+  const company = await prisma.company.findUnique({ where: { userId: user.id } });
+  if (!company || load.companyId !== company.id) redirect("/company/loads");
+
+  // Only a load that is reserved (carrier selected) but not yet confirmed can be undone.
+  if (load.status !== "SELECTED") redirect(`/company/loads/${loadId}`);
+
+  await prisma.$transaction([
+    prisma.application.updateMany({
+      where: { loadId, status: "SELECTED" },
+      data: { status: "PENDING" },
+    }),
+    prisma.application.updateMany({
+      where: { loadId, status: "REJECTED" },
+      data: { status: "PENDING" },
+    }),
+    prisma.load.update({
+      where: { id: loadId },
+      data: { status: "OPEN" },
+    }),
+  ]);
+
+  revalidatePath(`/company/loads/${loadId}`);
+  revalidatePath("/company/loads");
+  redirect(`/company/loads/${loadId}?undone=1`);
+}
+
 export async function updateLoadStatus(formData: FormData) {
   const user = await getCurrentUser();
   if (user.role !== "COMPANY") redirect("/login");

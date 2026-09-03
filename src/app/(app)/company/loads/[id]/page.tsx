@@ -3,15 +3,15 @@ import Link from "next/link";
 import { requireCompany } from "@/lib/dal";
 import { prisma } from "@/lib/prisma";
 import { regionsFor } from "@/lib/matching";
-import { selectTransporter, updateLoadStatus } from "@/app/actions/loads";
+import { selectTransporter, undoSelection, updateLoadStatus } from "@/app/actions/loads";
 import { Badge, LoadStatusBadge } from "@/components/ui";
 import { CARGO_LABELS, VEHICLE_LABELS, LOAD_STATUS_LABELS, type VehicleType } from "@/lib/constants";
 import { formatDate, formatMoney } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
-export default async function CompanyLoadDetailPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ selected?: string }> }) {
-  const [{ id }, { selected }] = await Promise.all([params, searchParams]);
+export default async function CompanyLoadDetailPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ selected?: string; undone?: string }> }) {
+  const [{ id }, { selected, undone }] = await Promise.all([params, searchParams]);
   const user = await requireCompany();
   const company = await prisma.company.findUnique({ where: { userId: user.id } });
 
@@ -38,6 +38,12 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
       {selected && selectedApp && (
         <div className="rounded-2xl bg-brand-light p-4 text-sm font-semibold text-brand-dark">
           {selectedApp.transporter.name.split(" ")[0]} selected. The load is now reserved for them — confirm to proceed.
+        </div>
+      )}
+
+      {undone && (
+        <div className="rounded-2xl bg-brand-light p-4 text-sm font-semibold text-brand-dark">
+          Selection undone. The load is open for applications again.
         </div>
       )}
 
@@ -80,6 +86,7 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
           <h2 className="text-lg font-bold text-ink">Selected carrier</h2>
           <CarrierInfo app={selectedApp} revealContact />
           {progressStatus && <ProgressFlow loadId={load.id} status={progressStatus} />}
+          {load.status === "SELECTED" && <UndoSelection loadId={load.id} />}
         </section>
       )}
 
@@ -176,6 +183,20 @@ function ProgressFlow({ loadId, status }: { loadId: string; status: "SELECTED" |
         className="w-full rounded-xl bg-brand py-3 text-sm font-bold text-white hover:bg-brand-dark"
       >
         {step.label} ({LOAD_STATUS_LABELS[step.status]})
+      </button>
+    </form>
+  );
+}
+
+function UndoSelection({ loadId }: { loadId: string }) {
+  return (
+    <form action={undoSelection}>
+      <input type="hidden" name="loadId" value={loadId} />
+      <button
+        type="submit"
+        className="w-full rounded-xl border border-black/10 bg-white py-2.5 text-sm font-semibold text-muted hover:border-red-400 hover:text-red-600"
+      >
+        Undo selection
       </button>
     </form>
   );

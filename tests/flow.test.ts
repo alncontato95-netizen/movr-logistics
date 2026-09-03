@@ -75,3 +75,66 @@ test("apply -> select -> status progression", async () => {
     assert.equal(l.status, s);
   }
 });
+
+test("undo selection reverts load and applications to OPEN/PENDING", async () => {
+  // A second transporter so one application is selected and the other rejected.
+  const carrier2 = await prisma.user.create({
+    data: {
+      email: `carrier-undo-${Date.now()}@movr.dev`,
+      passwordHash: "x",
+      name: "Test Carrier Two",
+      role: "CARRIER",
+    },
+  });
+
+  const load = await prisma.load.create({
+    data: {
+      companyId: companyProfile.id,
+      publishedBy: carrier.id,
+      origin: "Venlo",
+      destination: "Roermond",
+      pickupDate: new Date(Date.now() + 24 * 3600 * 1000),
+      cargoType: "PALLET",
+      weightKg: 1200,
+      status: "OPEN",
+    },
+  });
+
+  try {
+    // Two carriers apply (mirrors applyToLoad)
+    const app1 = await prisma.application.create({
+      data: { loadId: load.id, transporterId: carrier.id, status: "PENDING" },
+    });
+    await prisma.application.create({
+      data: { loadId: load.id, transporterId: carrier2.id, status: "PENDING" },
+    });
+
+    // Company selects carrier (mirrors selectTransporter)
+    await prisma.$transaction([
+      prisma.application.updateMany({ where: { loadId: load.id, status: "PENDING" }, data: { status: "REJECTED" } }),
+      prisma.application.update({ where: { id: app1.id }, data: { status: "SELECTED" } }),
+      prisma.load.update({ where: { id: load.id }, data: { status: "SELECTED" } }),
+    ]);
+
+    const selected = await prisma.application.findFirstOrThrow({ where: { loadId: load.id, status: "SELECTED" } });
+    assert.equal(selected.transporterId, carrier.id);
+    assert.equal((await prisma.application.count({ where: { loadId: load.id, status: "REJECTED" } })), 1);
+
+    // Undo selection (mirrors undoSelection transaction)
+    await prisma.$transaction([
+      prisma.application.updateMany({ where: { loadId: load.id, status: "SELECTED" }, data: { status: "PENDING" } }),
+      prisma.application.updateMany({ where: { loadId: load.id, status: "REJECTED" }, data: { status: "PENDING" } }),
+      prisma.load.update({ where: { id: load.id }, data: { status: "OPEN" } }),
+    ]);
+
+    const loadAfterUndo = await prisma.load.findUniqueOrThrow({ where: { id: load.id } });
+    assert.equal(loadAfterUndo.status, "OPEN");
+    assert.equal(await prisma.application.count({ where: { loadId: load.id, status: "PENDING" } }), 2);
+    assert.equal(await prisma.application.count({ where: { loadId: load.id, status: "SELECTED" } }), 0);
+    assert.equal(await prisma.application.count({ where: { loadId: load.id, status: "REJECTED" } }), 0);
+  } finally {
+    await prisma.application.deleteMany({ where: { loadId: load.id } });
+    await prisma.load.delete({ where: { id: load.id } });
+    await prisma.user.delete({ where: { id: carrier2.id } });
+  }
+});
