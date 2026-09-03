@@ -37,6 +37,8 @@ enum LoadStatus {
 enum ApplicationStatus {
   PENDING
   SELECTED
+  ACCEPTED
+  DECLINED
   REJECTED
   CANCELLED
 }

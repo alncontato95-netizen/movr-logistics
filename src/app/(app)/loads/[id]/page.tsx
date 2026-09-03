@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { requireCarrier } from "@/lib/dal";
 import { prisma } from "@/lib/prisma";
-import { applyToLoad, cancelApplication } from "@/app/actions/loads";
+import { applyToLoad, cancelApplication, acceptOffer, declineOffer } from "@/app/actions/loads";
 import { Badge, LoadStatusBadge } from "@/components/ui";
 import { CARGO_LABELS, VEHICLE_LABELS } from "@/lib/constants";
 import { formatDate, formatMoney } from "@/lib/format";
@@ -70,7 +70,33 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
       </div>
 
       <div className="sticky bottom-4">
-        {appliedPending ? (
+        {myApplication?.status === "SELECTED" ? (
+          <div className="space-y-2">
+            <p className="rounded-xl bg-amber-50 p-3 text-center text-sm font-semibold text-amber-800">
+              The company selected you for this load. Accept the offer to book it.
+            </p>
+            <div className="flex gap-2">
+              <form action={declineOffer} className="flex-1">
+                <input type="hidden" name="loadId" value={load.id} />
+                <button
+                  type="submit"
+                  className="w-full rounded-xl border border-black/10 bg-white py-3.5 text-sm font-semibold text-ink hover:border-red-400 hover:text-red-600"
+                >
+                  Decline
+                </button>
+              </form>
+              <form action={acceptOffer} className="flex-1">
+                <input type="hidden" name="loadId" value={load.id} />
+                <button
+                  type="submit"
+                  className="w-full rounded-xl bg-brand py-3.5 text-sm font-bold text-white shadow-lg shadow-brand/30 hover:bg-brand-dark"
+                >
+                  Accept offer
+                </button>
+              </form>
+            </div>
+          </div>
+        ) : appliedPending ? (
           <form action={cancelApplication}>
             <input type="hidden" name="loadId" value={load.id} />
             <button
@@ -92,8 +118,10 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
           </form>
         ) : (
           <div className="rounded-xl bg-black/5 py-3.5 text-center text-sm font-semibold text-muted">
-            {myApplication?.status === "SELECTED" ? (
-              <Badge tone="brand">Selected — the company chose you</Badge>
+            {myApplication?.status === "ACCEPTED" ? (
+              <Badge tone="green">Offer accepted — the company can now confirm the booking</Badge>
+            ) : myApplication?.status === "DECLINED" ? (
+              <Badge tone="red">You declined this offer — it&apos;s open for other carriers</Badge>
             ) : myApplication?.status === "REJECTED" ? (
               <Badge tone="red">Not selected for this load</Badge>
             ) : (

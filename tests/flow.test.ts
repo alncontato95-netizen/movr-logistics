@@ -76,6 +76,107 @@ test("apply -> select -> status progression", async () => {
   }
 });
 
+test("carrier accepts the offer before the booking is confirmed", async () => {
+  const load = await prisma.load.create({
+    data: {
+      companyId: companyProfile.id,
+      publishedBy: carrier.id,
+      origin: "Venlo",
+      destination: "Weert",
+      pickupDate: new Date(Date.now() + 24 * 3600 * 1000),
+      cargoType: "PALLET",
+      weightKg: 1100,
+      status: "OPEN",
+    },
+  });
+
+  try {
+    // Carrier applies and company selects (mirrors selectTransporter)
+    const app = await prisma.application.create({
+      data: { loadId: load.id, transporterId: carrier.id, status: "SELECTED" },
+    });
+    await prisma.load.update({ where: { id: load.id }, data: { status: "SELECTED" } });
+
+    // Carrier accepts the offer (mirrors acceptOffer)
+    await prisma.application.update({
+      where: { id: app.id },
+      data: { status: "ACCEPTED" },
+    });
+
+    const accepted = await prisma.application.findFirstOrThrow({
+      where: { loadId: load.id, status: "ACCEPTED" },
+    });
+    assert.equal(accepted.transporterId, carrier.id);
+
+    // Company confirms: there is an ACCEPTED application, so CONFIRMED is allowed.
+    const hasAccepted = await prisma.application.findFirst({ where: { loadId: load.id, status: "ACCEPTED" } });
+    assert.ok(hasAccepted);
+    await prisma.load.update({ where: { id: load.id }, data: { status: "CONFIRMED" } });
+    assert.equal((await prisma.load.findUniqueOrThrow({ where: { id: load.id } })).status, "CONFIRMED");
+  } finally {
+    await prisma.application.deleteMany({ where: { loadId: load.id } });
+    await prisma.load.delete({ where: { id: load.id } });
+  }
+});
+
+test("carrier declining the offer reopens the load for other candidates", async () => {
+  const load = await prisma.load.create({
+    data: {
+      companyId: companyProfile.id,
+      publishedBy: carrier.id,
+      origin: "Venlo",
+      destination: "Helmond",
+      pickupDate: new Date(Date.now() + 24 * 3600 * 1000),
+      cargoType: "PALLET",
+      weightKg: 900,
+      status: "OPEN",
+    },
+  });
+
+  try {
+    // A second candidate so one is selected and the other ends up pending again.
+    const carrier2 = await prisma.user.create({
+      data: {
+        email: `carrier-decline-${Date.now()}@movr.dev`,
+        passwordHash: "x",
+        name: "Decline Carrier",
+        role: "CARRIER",
+      },
+    });
+
+    // Both candidates apply, the first is selected (mirrors selectTransporter).
+    const app1 = await prisma.application.create({
+      data: { loadId: load.id, transporterId: carrier.id, status: "PENDING" },
+    });
+    const app2 = await prisma.application.create({
+      data: { loadId: load.id, transporterId: carrier2.id, status: "PENDING" },
+    });
+    await prisma.$transaction([
+      prisma.application.updateMany({ where: { loadId: load.id, status: "PENDING" }, data: { status: "REJECTED" } }),
+      prisma.application.update({ where: { id: app1.id }, data: { status: "SELECTED" } }),
+      prisma.load.update({ where: { id: load.id }, data: { status: "SELECTED" } }),
+    ]);
+    await prisma.application.update({ where: { id: app2.id }, data: { status: "REJECTED" } });
+
+    // Selected carrier declines the offer (mirrors declineOffer transaction).
+    await prisma.$transaction([
+      prisma.application.update({ where: { id: app1.id }, data: { status: "DECLINED" } }),
+      prisma.application.updateMany({ where: { loadId: load.id, status: "REJECTED" }, data: { status: "PENDING" } }),
+      prisma.load.update({ where: { id: load.id }, data: { status: "OPEN" } }),
+    ]);
+
+    const loadAfter = await prisma.load.findUniqueOrThrow({ where: { id: load.id } });
+    assert.equal(loadAfter.status, "OPEN");
+    assert.equal(await prisma.application.count({ where: { loadId: load.id, status: "DECLINED" } }), 1);
+    assert.equal(await prisma.application.count({ where: { loadId: load.id, status: "PENDING" } }), 1);
+
+    await prisma.user.delete({ where: { id: carrier2.id } });
+  } finally {
+    await prisma.application.deleteMany({ where: { loadId: load.id } });
+    await prisma.load.delete({ where: { id: load.id } });
+  }
+});
+
 test("undo selection reverts load and applications to OPEN/PENDING", async () => {
   // A second transporter so one application is selected and the other rejected.
   const carrier2 = await prisma.user.create({

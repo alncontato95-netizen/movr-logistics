@@ -51,6 +51,8 @@ export type LoadStatus = (typeof LoadStatus)[keyof typeof LoadStatus]
 export const ApplicationStatus = {
   PENDING: 'PENDING',
   SELECTED: 'SELECTED',
+  ACCEPTED: 'ACCEPTED',
+  DECLINED: 'DECLINED',
   REJECTED: 'REJECTED',
   CANCELLED: 'CANCELLED'
 } as const

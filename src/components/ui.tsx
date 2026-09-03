@@ -139,9 +139,11 @@ const loadStatusTone: Record<LoadStatus, "brand" | "amber" | "blue" | "green" | 
   COMPLETED: "neutral",
 };
 
-const applicationStatusTone: Record<ApplicationStatus, "brand" | "amber" | "neutral" | "red"> = {
+const applicationStatusTone: Record<ApplicationStatus, "brand" | "amber" | "neutral" | "red" | "green"> = {
   PENDING: "amber",
   SELECTED: "brand",
+  ACCEPTED: "green",
+  DECLINED: "red",
   REJECTED: "red",
   CANCELLED: "neutral",
 };

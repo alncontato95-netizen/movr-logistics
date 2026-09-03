@@ -10,8 +10,8 @@ import { formatDate, formatMoney } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
-export default async function CompanyLoadDetailPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ selected?: string; undone?: string }> }) {
-  const [{ id }, { selected, undone }] = await Promise.all([params, searchParams]);
+export default async function CompanyLoadDetailPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ selected?: string; undone?: string; "awaiting-acceptance"?: string }> }) {
+  const [{ id }, { selected, undone, "awaiting-acceptance": awaitingAcceptance }] = await Promise.all([params, searchParams]);
   const user = await requireCompany();
   const company = await prisma.company.findUnique({ where: { userId: user.id } });
 
@@ -22,10 +22,11 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
   if (!load || !company || load.companyId !== company.id) notFound();
 
   const pending = load.applications.filter((a) => a.status === "PENDING");
-  const selectedApp = load.applications.find((a) => a.status === "SELECTED");
+  const chosen = load.applications.find((a) => a.status === "SELECTED" || a.status === "ACCEPTED" || a.status === "DECLINED");
   const rejected = load.applications.filter((a) => a.status === "REJECTED");
 
   const showSelect = load.status === "OPEN";
+  const carrierAccepted = chosen?.status === "ACCEPTED";
   const progressStatus =
     load.status === "SELECTED" || load.status === "CONFIRMED" || load.status === "IN_TRANSIT" ? load.status : null;
 
@@ -35,15 +36,21 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
         ← Back to your loads
       </Link>
 
-      {selected && selectedApp && (
+      {selected && chosen && (
         <div className="rounded-2xl bg-brand-light p-4 text-sm font-semibold text-brand-dark">
-          {selectedApp.transporter.name.split(" ")[0]} selected. The load is now reserved for them — confirm to proceed.
+          {chosen.transporter.name.split(" ")[0]} selected. The load is now reserved for them — awaiting their acceptance.
         </div>
       )}
 
       {undone && (
         <div className="rounded-2xl bg-brand-light p-4 text-sm font-semibold text-brand-dark">
           Selection undone. The load is open for applications again.
+        </div>
+      )}
+
+      {awaitingAcceptance && (
+        <div className="rounded-2xl bg-amber-50 p-4 text-sm font-semibold text-amber-800">
+          The booking can&apos;t be confirmed yet — the selected carrier must accept the offer first.
         </div>
       )}
 
@@ -81,12 +88,21 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
         </section>
       )}
 
-      {progressStatus && selectedApp && (
+      {progressStatus && chosen && (
         <section className="space-y-3 rounded-2xl border border-black/8 bg-white p-5">
           <h2 className="text-lg font-bold text-ink">Selected carrier</h2>
-          <CarrierInfo app={selectedApp} revealContact />
-          {progressStatus && <ProgressFlow loadId={load.id} status={progressStatus} />}
-          {load.status === "SELECTED" && <UndoSelection loadId={load.id} />}
+          <CarrierInfo app={chosen} revealContact />
+          {chosen.status === "ACCEPTED" && (
+            <p className="text-sm font-semibold text-emerald-700">Offer accepted by the carrier — you can confirm the booking.</p>
+          )}
+          {chosen.status === "SELECTED" && (
+            <p className="text-sm font-semibold text-amber-700">Waiting for the carrier to accept this offer.</p>
+          )}
+          {chosen.status === "DECLINED" && (
+            <p className="text-sm font-semibold text-red-700">The carrier declined the offer. The load is open for applications again.</p>
+          )}
+          {progressStatus && <ProgressFlow loadId={load.id} status={progressStatus} carrierConfirmed={carrierAccepted} />}
+          {load.status === "SELECTED" && chosen.status !== "DECLINED" && <UndoSelection loadId={load.id} />}
         </section>
       )}
 
@@ -166,7 +182,7 @@ function CarrierInfo({
   );
 }
 
-function ProgressFlow({ loadId, status }: { loadId: string; status: "SELECTED" | "CONFIRMED" | "IN_TRANSIT" }) {
+function ProgressFlow({ loadId, status, carrierConfirmed }: { loadId: string; status: "SELECTED" | "CONFIRMED" | "IN_TRANSIT"; carrierConfirmed: boolean }) {
   const next: Record<string, { status: "CONFIRMED" | "IN_TRANSIT" | "COMPLETED"; label: string }> = {
     SELECTED: { status: "CONFIRMED", label: "Confirm booking" },
     CONFIRMED: { status: "IN_TRANSIT", label: "Mark in transit" },
@@ -174,6 +190,20 @@ function ProgressFlow({ loadId, status }: { loadId: string; status: "SELECTED" |
   };
   const step = next[status];
   if (!step) return null;
+
+  // Confirming a booking requires the carrier to have accepted the offer.
+  if (step.status === "CONFIRMED" && !carrierConfirmed) {
+    return (
+      <button
+        type="button"
+        disabled
+        className="w-full rounded-xl bg-brand/40 py-3 text-sm font-bold text-white disabled:opacity-60"
+      >
+        Waiting for carrier to accept
+      </button>
+    );
+  }
+
   return (
     <form action={updateLoadStatus}>
       <input type="hidden" name="loadId" value={loadId} />

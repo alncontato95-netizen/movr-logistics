@@ -99,6 +99,57 @@ export async function cancelApplication(formData: FormData) {
   redirect(`/loads/${loadId}`);
 }
 
+export async function acceptOffer(formData: FormData) {
+  const user = await getCurrentUser();
+  if (user.role !== "CARRIER") redirect("/login");
+
+  const loadId = formData.get("loadId") as string;
+  const existing = await prisma.application.findUnique({
+    where: { loadId_transporterId: { loadId, transporterId: user.id } },
+  });
+  if (existing && existing.status === "SELECTED") {
+    await prisma.application.update({
+      where: { id: existing.id },
+      data: { status: "ACCEPTED" },
+    });
+  }
+
+  revalidatePath(`/loads/${loadId}`);
+  revalidatePath("/applications");
+  redirect(`/loads/${loadId}`);
+}
+
+export async function declineOffer(formData: FormData) {
+  const user = await getCurrentUser();
+  if (user.role !== "CARRIER") redirect("/login");
+
+  const loadId = formData.get("loadId") as string;
+  const existing = await prisma.application.findUnique({
+    where: { loadId_transporterId: { loadId, transporterId: user.id } },
+  });
+  if (!existing || existing.status !== "SELECTED") redirect(`/loads/${loadId}`);
+
+  await prisma.$transaction([
+    prisma.application.update({
+      where: { id: existing.id },
+      data: { status: "DECLINED" },
+    }),
+    prisma.application.updateMany({
+      where: { loadId, status: "REJECTED" },
+      data: { status: "PENDING" },
+    }),
+    prisma.load.update({
+      where: { id: loadId },
+      data: { status: "OPEN" },
+    }),
+  ]);
+
+  revalidatePath(`/loads/${loadId}`);
+  revalidatePath("/applications");
+  revalidatePath(`/company/loads/${loadId}`);
+  redirect(`/loads/${loadId}`);
+}
+
 export async function selectTransporter(formData: FormData) {
   const user = await getCurrentUser();
   if (user.role !== "COMPANY") redirect("/login");
@@ -183,6 +234,17 @@ export async function updateLoadStatus(formData: FormData) {
   const load = await prisma.load.findUnique({ where: { id: loadId } });
   const company = await prisma.company.findUnique({ where: { userId: user.id } });
   if (!load || !company || load.companyId !== company.id) redirect("/company/loads");
+
+  // A booking can only be confirmed once the selected carrier has accepted the offer.
+  if (status === "CONFIRMED") {
+    const accepted = await prisma.application.findFirst({
+      where: { loadId, status: "ACCEPTED" },
+    });
+    if (!accepted) {
+      revalidatePath(`/company/loads/${loadId}`);
+      redirect(`/company/loads/${loadId}?awaiting-acceptance=1`);
+    }
+  }
 
   await prisma.load.update({ where: { id: loadId }, data: { status: status as "CONFIRMED" | "IN_TRANSIT" | "COMPLETED" } });
 
