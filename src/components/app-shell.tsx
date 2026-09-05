@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { LogoMark } from "@/components/brand";
 import { LogoutButton } from "@/components/logout-button";
 import { LangSwitcher } from "@/components/lang-switcher";
 import { NotificationBell } from "@/components/notification-bell";
@@ -18,12 +17,11 @@ export async function AppShell({
   const t = getDictionary(locale);
   const isCompany = user.role === "COMPANY";
   return (
-    <div className="flex min-h-full flex-col bg-[#fafafb]">
-      <header className="sticky top-0 z-20 border-b border-black/5 bg-white/90 backdrop-blur">
+    <div className="flex min-h-full flex-col bg-transparent">
+      <header className="sticky top-0 z-20 border-b border-white/60 bg-white/70 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60">
         <div className="mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-3">
-          <Link href={isCompany ? "/company/loads" : "/loads"} className="flex items-center gap-2">
-            <LogoMark size={24} />
-            <span className="text-base font-extrabold tracking-tight text-ink">MOVR</span>
+          <Link href={isCompany ? "/company/loads" : "/loads"} className="text-base font-extrabold tracking-tight text-ink">
+            MO<span className="text-brand">V</span>R
           </Link>
           <nav className="flex items-center gap-1">
             {isCompany ? (

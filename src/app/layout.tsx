@@ -23,7 +23,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   } catch {}
   return (
     <html lang={lang} className={`${geistSans.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-white text-ink">{children}</body>
+      <body className="min-h-full flex flex-col bg-transparent text-ink">{children}</body>
     </html>
   );
 }

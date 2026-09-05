@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { LogoutButton } from "@/components/logout-button";
-import { LogoMark } from "@/components/brand";
 import { LangSwitcher } from "@/components/lang-switcher";
 import { getCurrentUser } from "@/lib/dal";
 import { getDictionary, getLocale } from "@/lib/i18n";
@@ -18,9 +17,8 @@ export default async function HomePage() {
   return (
     <div className="flex flex-1 flex-col">
       <header className="mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-6">
-        <Link href="/" className="flex items-center gap-2">
-          <LogoMark />
-          <span className="text-lg font-extrabold tracking-tight text-ink">MOVR</span>
+        <Link href="/" className="text-lg font-extrabold tracking-tight text-ink">
+          MO<span className="text-brand">V</span>R
         </Link>
         <nav className="flex items-center gap-2">
           <LangSwitcher />
@@ -63,10 +61,10 @@ export default async function HomePage() {
             >
               {t.landing.carrierCta}
             </Link>
-            <Link
-              href="/register?role=company"
-              className="rounded-xl border border-black/10 bg-white px-6 py-3 text-center font-semibold text-ink hover:border-brand hover:bg-brand-light/40"
-            >
+          <Link
+                href="/register?role=company"
+                className="rounded-[var(--radius-input)] border border-border bg-surface-strong px-6 py-3 text-center font-semibold text-ink hover:border-brand hover:bg-brand-light/40"
+              >
               {t.landing.companyCta}
             </Link>
           </div>
@@ -78,8 +76,11 @@ export default async function HomePage() {
           <Feature title={t.landing.featureEmptyTitle} body={t.landing.featureEmptyBody} />
         </section>
 
-        <section className="mt-12 rounded-3xl bg-brand-light/50 p-6 sm:p-10">
-          <h2 className="text-xl font-bold text-ink">{t.landing.howTitle}</h2>
+        <section className="mt-12 rounded-[var(--radius-card)] border border-brand/10 bg-brand-light p-6 sm:p-10">
+          <div className="flex items-center gap-2">
+            <span className="h-px w-6 bg-brand/40" aria-hidden />
+            <h2 className="text-xl font-bold tracking-tight text-ink">{t.landing.howTitle}</h2>
+          </div>
           <ol className="mt-4 grid gap-4 sm:grid-cols-3">
             <Step n={1} title={t.landing.step1Title} body={t.landing.step1Body} />
             <Step n={2} title={t.landing.step2Title} body={t.landing.step2Body} />
@@ -88,8 +89,12 @@ export default async function HomePage() {
         </section>
       </main>
 
-      <footer className="border-t border-black/5 py-6 text-center text-sm text-muted">
-        MOVR Logistics — Venlo, Limburg, NL
+      <footer className="border-t border-border py-6 text-center">
+        <div className="flex items-center justify-center gap-2">
+          <span className="h-px w-6 bg-brand/40" aria-hidden />
+          <span className="text-sm font-semibold tracking-[0.2em] text-muted">MOVR LOGISTICS — Venlo, Limburg, NL</span>
+          <span className="h-px w-6 bg-brand/40" aria-hidden />
+        </div>
       </footer>
     </div>
   );
@@ -97,7 +102,7 @@ export default async function HomePage() {
 
 function Feature({ title, body }: { title: string; body: string }) {
   return (
-    <div className="rounded-2xl border border-black/8 bg-white p-5">
+    <div className="rounded-[var(--radius-card)] border border-border bg-surface-strong p-5 shadow-[var(--shadow-card)]">
       <h3 className="font-semibold text-ink">{title}</h3>
       <p className="mt-1 text-sm text-muted">{body}</p>
     </div>
