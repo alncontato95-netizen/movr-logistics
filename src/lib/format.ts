@@ -1,6 +1,19 @@
-export function formatDate(date: Date | string): string {
+function localeTag(locale?: string): string {
+  switch (locale) {
+    case "nl":
+      return "nl-NL";
+    case "de":
+      return "de-DE";
+    case "pl":
+      return "pl-PL";
+    default:
+      return "en-GB";
+  }
+}
+
+export function formatDate(date: Date | string, locale?: string): string {
   const d = typeof date === "string" ? new Date(date) : date;
-  return d.toLocaleDateString("en-GB", {
+  return d.toLocaleDateString(localeTag(locale), {
     weekday: "short",
     day: "numeric",
     month: "short",
@@ -8,15 +21,15 @@ export function formatDate(date: Date | string): string {
   });
 }
 
-export function formatDateTime(date: Date | string): string {
+export function formatDateTime(date: Date | string, locale?: string): string {
   const d = typeof date === "string" ? new Date(date) : date;
-  return d.toLocaleDateString("en-GB", {
+  return d.toLocaleDateString(localeTag(locale), {
     day: "numeric",
     month: "short",
     year: "numeric",
   });
 }
 
-export function formatMoney(eur: number): string {
-  return `€ ${eur.toLocaleString("en-GB")}`;
+export function formatMoney(eur: number, locale?: string): string {
+  return `€ ${eur.toLocaleString(localeTag(locale))}`;
 }

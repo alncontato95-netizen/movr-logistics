@@ -29,9 +29,10 @@ export function isCompatible(
   if (load.pickupDate.getTime() < now.getTime()) return false;
 
   const serves = regionsFor(carrier.acceptsRegions);
-  if (serves.length && !serves.includes(load.destination)) return false;
+  if (serves.length === 0) return false;
+  if (!serves.includes(load.destination)) return false;
 
-  if (load.requiredVehicle && carrier.vehicleType && load.requiredVehicle !== carrier.vehicleType) return false;
+  if (load.requiredVehicle && load.requiredVehicle !== carrier.vehicleType) return false;
 
   return true;
 }

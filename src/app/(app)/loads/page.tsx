@@ -2,7 +2,10 @@ import { requireCarrier } from "@/lib/dal";
 import { prisma } from "@/lib/prisma";
 import { filterCompatible, regionsFor } from "@/lib/matching";
 import { LoadCard } from "@/components/load-card";
+import { PollRefresh } from "@/components/poll-refresh";
 import { ButtonLink } from "@/components/ui";
+
+export const dynamic = "force-dynamic";
 
 export default async function LoadsPage() {
   const user = await requireCarrier();
@@ -18,6 +21,7 @@ export default async function LoadsPage() {
 
   return (
     <div className="space-y-6">
+      <PollRefresh intervalMs={15000} />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-ink">Loads for you</h1>

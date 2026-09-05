@@ -6,6 +6,7 @@ import { getCurrentUser } from "@/lib/dal";
 import { prisma } from "@/lib/prisma";
 import { loadSchema } from "@/lib/validation";
 import { createNotification } from "@/lib/notify";
+import { isCompatible } from "@/lib/matching";
 
 export type LoadState = { errors?: Record<string, string[] | undefined>; message?: string } | undefined;
 
@@ -64,22 +65,29 @@ export async function applyToLoad(formData: FormData) {
   if (user.role !== "CARRIER") redirect("/login");
 
   const loadId = formData.get("loadId") as string;
+  if (!loadId || typeof loadId !== "string" || loadId.length < 10) redirect("/loads");
   const load = await prisma.load.findUnique({ where: { id: loadId } });
   if (!load || load.status !== "OPEN") redirect("/loads");
+  if (load.pickupDate.getTime() < Date.now()) redirect("/loads");
+  if (!isCompatible(user as never, load)) redirect("/loads");
 
   const existing = await prisma.application.findUnique({
     where: { loadId_transporterId: { loadId, transporterId: user.id } },
   });
   if (!existing) {
-    await prisma.application.create({
-      data: { loadId, transporterId: user.id, status: "PENDING" },
-    });
+    try {
+      await prisma.application.create({
+        data: { loadId, transporterId: user.id, status: "PENDING" },
+      });
+    } catch {
+      // unique constraint race — already applied
+    }
     await createNotification({
       userId: load.publishedBy,
       loadId,
       type: "APPLICATION",
       message: `${user.name} expressed interest in your load ${load.origin} → ${load.destination}.`,
-    });
+    }).catch(() => {});
   }
 
   revalidatePath(`/loads/${loadId}`);
@@ -111,21 +119,29 @@ export async function acceptOffer(formData: FormData) {
   if (user.role !== "CARRIER") redirect("/login");
 
   const loadId = formData.get("loadId") as string;
+  if (!loadId) redirect("/loads");
   const load = await prisma.load.findUnique({ where: { id: loadId } });
+  if (!load || load.status !== "SELECTED") redirect(`/loads/${loadId}`);
   const existing = await prisma.application.findUnique({
     where: { loadId_transporterId: { loadId, transporterId: user.id } },
   });
   if (existing && existing.status === "SELECTED" && load) {
-    await prisma.application.update({
-      where: { id: existing.id },
-      data: { status: "ACCEPTED" },
+    await prisma.$transaction(async (tx) => {
+      const fresh = await tx.application.findUnique({ where: { id: existing.id } });
+      if (!fresh || fresh.status !== "SELECTED") return;
+      const freshLoad = await tx.load.findUnique({ where: { id: loadId } });
+      if (!freshLoad || freshLoad.status !== "SELECTED") return;
+      await tx.application.update({
+        where: { id: existing.id },
+        data: { status: "ACCEPTED" },
+      });
     });
     await createNotification({
       userId: load.publishedBy,
       loadId,
       type: "ACCEPTED",
       message: `${user.name} accepted your offer for ${load.origin} → ${load.destination}. You can confirm the booking.`,
-    });
+    }).catch(() => {});
   }
 
   revalidatePath(`/loads/${loadId}`);
@@ -138,26 +154,32 @@ export async function declineOffer(formData: FormData) {
   if (user.role !== "CARRIER") redirect("/login");
 
   const loadId = formData.get("loadId") as string;
+  if (!loadId) redirect("/loads");
   const load = await prisma.load.findUnique({ where: { id: loadId } });
+  if (!load || load.status !== "SELECTED") redirect(`/loads/${loadId}`);
   const existing = await prisma.application.findUnique({
     where: { loadId_transporterId: { loadId, transporterId: user.id } },
   });
   if (!existing || existing.status !== "SELECTED") redirect(`/loads/${loadId}`);
 
-  await prisma.$transaction([
-    prisma.application.update({
+  await prisma.$transaction(async (tx) => {
+    const freshLoad = await tx.load.findUnique({ where: { id: loadId } });
+    if (!freshLoad || freshLoad.status !== "SELECTED") return;
+    const freshApp = await tx.application.findUnique({ where: { id: existing.id } });
+    if (!freshApp || freshApp.status !== "SELECTED") return;
+    await tx.application.update({
       where: { id: existing.id },
       data: { status: "DECLINED" },
-    }),
-    prisma.application.updateMany({
+    });
+    await tx.application.updateMany({
       where: { loadId, status: "REJECTED" },
       data: { status: "PENDING" },
-    }),
-    prisma.load.update({
+    });
+    await tx.load.update({
       where: { id: loadId },
       data: { status: "OPEN" },
-    }),
-  ]);
+    });
+  });
 
   if (load) {
     await createNotification({
@@ -165,7 +187,7 @@ export async function declineOffer(formData: FormData) {
       loadId,
       type: "DECLINED",
       message: `${user.name} declined the offer for ${load.origin} → ${load.destination}. The load is open again.`,
-    });
+    }).catch(() => {});
   }
 
   revalidatePath(`/loads/${loadId}`);
@@ -194,7 +216,7 @@ export async function confirmPickup(formData: FormData) {
     loadId,
     type: "PICKED_UP",
     message: `${user.name} picked up the load ${load.origin} → ${load.destination}. It is now in transit.`,
-  });
+  }).catch(() => {});
 
   revalidatePath(`/loads/${loadId}`);
   revalidatePath(`/company/loads/${loadId}`);
@@ -221,7 +243,7 @@ export async function confirmDelivery(formData: FormData) {
     loadId,
     type: "DELIVERED",
     message: `${user.name} delivered the load ${load.origin} → ${load.destination}. You can mark the booking as complete.`,
-  });
+  }).catch(() => {});
 
   revalidatePath(`/loads/${loadId}`);
   revalidatePath(`/company/loads/${loadId}`);
@@ -234,39 +256,51 @@ export async function selectTransporter(formData: FormData) {
 
   const loadId = formData.get("loadId") as string;
   const applicationId = formData.get("applicationId") as string;
+  if (!loadId || !applicationId) redirect("/company/loads");
 
-  const load = await prisma.load.findUnique({ where: { id: loadId } });
-  if (!load) redirect("/company/loads");
   const company = await prisma.company.findUnique({ where: { userId: user.id } });
-  if (!company || load.companyId !== company.id) redirect("/company/loads");
+  if (!company) redirect("/company/loads");
 
   const application = await prisma.application.findUnique({
     where: { id: applicationId, loadId },
     include: { transporter: true },
   });
-  if (!application) redirect(`/company/loads/${loadId}`);
+  if (!application || application.status !== "PENDING") redirect(`/company/loads/${loadId}`);
 
-  await prisma.$transaction([
-    prisma.application.updateMany({
-      where: { loadId, status: "PENDING" },
-      data: { status: "REJECTED" },
-    }),
-    prisma.application.update({
-      where: { id: application.id },
-      data: { status: "SELECTED" },
-    }),
-    prisma.load.update({
-      where: { id: loadId },
-      data: { status: "SELECTED" },
-    }),
-  ]);
+  try {
+    await prisma.$transaction(async (tx) => {
+      const freshLoad = await tx.load.findUnique({ where: { id: loadId } });
+      if (!freshLoad || freshLoad.companyId !== company.id || freshLoad.status !== "OPEN") throw new Error("Invalid load state");
+      const alreadySelected = await tx.application.findFirst({ where: { loadId, status: "SELECTED" } });
+      if (alreadySelected) throw new Error("Already selected");
+      const freshApp = await tx.application.findUnique({ where: { id: application.id } });
+      if (!freshApp || freshApp.status !== "PENDING") throw new Error("Invalid application");
+      await tx.application.updateMany({
+        where: { loadId, status: "PENDING" },
+        data: { status: "REJECTED" },
+      });
+      await tx.application.update({
+        where: { id: application.id },
+        data: { status: "SELECTED" },
+      });
+      await tx.load.update({
+        where: { id: loadId },
+        data: { status: "SELECTED" },
+      });
+    });
+  } catch {
+    redirect(`/company/loads/${loadId}`);
+  }
 
-  await createNotification({
-    userId: application.transporterId,
-    loadId,
-    type: "SELECTED",
-    message: `${company.name} selected you for the load ${load.origin} → ${load.destination}. Review the offer and accept or decline it.`,
-  });
+  const load = await prisma.load.findUnique({ where: { id: loadId } });
+  if (load) {
+    await createNotification({
+      userId: application.transporterId,
+      loadId,
+      type: "SELECTED",
+      message: `${company.name} selected you for the load ${load.origin} → ${load.destination}. Review the offer and accept or decline it.`,
+    }).catch(() => {});
+  }
 
   revalidatePath(`/company/loads/${loadId}`);
   revalidatePath("/company/loads");
@@ -278,29 +312,36 @@ export async function undoSelection(formData: FormData) {
   if (user.role !== "COMPANY") redirect("/login");
 
   const loadId = formData.get("loadId") as string;
+  if (!loadId) redirect("/company/loads");
 
-  const load = await prisma.load.findUnique({ where: { id: loadId } });
-  if (!load) redirect("/company/loads");
   const company = await prisma.company.findUnique({ where: { userId: user.id } });
-  if (!company || load.companyId !== company.id) redirect("/company/loads");
+  if (!company) redirect("/company/loads");
 
-  // Only a load that is reserved (carrier selected) but not yet confirmed can be undone.
-  if (load.status !== "SELECTED") redirect(`/company/loads/${loadId}`);
-
-  await prisma.$transaction([
-    prisma.application.updateMany({
-      where: { loadId, status: "SELECTED" },
-      data: { status: "PENDING" },
-    }),
-    prisma.application.updateMany({
-      where: { loadId, status: "REJECTED" },
-      data: { status: "PENDING" },
-    }),
-    prisma.load.update({
-      where: { id: loadId },
-      data: { status: "OPEN" },
-    }),
-  ]);
+  try {
+    await prisma.$transaction(async (tx) => {
+      const freshLoad = await tx.load.findUnique({ where: { id: loadId } });
+      if (!freshLoad || freshLoad.companyId !== company.id || freshLoad.status !== "SELECTED") throw new Error("Invalid state");
+      const hasSelected = await tx.application.findFirst({ where: { loadId, status: "SELECTED" } });
+      if (!hasSelected) throw new Error("No selection");
+      // Only a load that is reserved (carrier selected) but not yet confirmed can be undone.
+      const hasAccepted = await tx.application.findFirst({ where: { loadId, status: "ACCEPTED" } });
+      if (hasAccepted) throw new Error("Already accepted");
+      await tx.application.updateMany({
+        where: { loadId, status: "SELECTED" },
+        data: { status: "PENDING" },
+      });
+      await tx.application.updateMany({
+        where: { loadId, status: "REJECTED" },
+        data: { status: "PENDING" },
+      });
+      await tx.load.update({
+        where: { id: loadId },
+        data: { status: "OPEN" },
+      });
+    });
+  } catch {
+    redirect(`/company/loads/${loadId}`);
+  }
 
   revalidatePath(`/company/loads/${loadId}`);
   revalidatePath("/company/loads");
@@ -313,16 +354,23 @@ export async function updateLoadStatus(formData: FormData) {
 
   const loadId = formData.get("loadId") as string;
   const status = formData.get("status") as string;
+  if (!loadId) redirect("/company/loads");
 
   const allowed = ["CONFIRMED", "COMPLETED"];
   if (!allowed.includes(status)) redirect(`/company/loads/${loadId}`);
 
-  const load = await prisma.load.findUnique({ where: { id: loadId } });
   const company = await prisma.company.findUnique({ where: { userId: user.id } });
-  if (!load || !company || load.companyId !== company.id) redirect("/company/loads");
+  if (!company) redirect("/company/loads");
 
-  // A booking can only be confirmed once the selected carrier has accepted the offer.
+  const load = await prisma.load.findUnique({ where: { id: loadId } });
+  if (!load || load.companyId !== company.id) redirect("/company/loads");
+
+  // A booking can only be confirmed once the selected carrier has accepted the offer and load is SELECTED.
   if (status === "CONFIRMED") {
+    if (load.status !== "SELECTED") {
+      revalidatePath(`/company/loads/${loadId}`);
+      redirect(`/company/loads/${loadId}`);
+    }
     const accepted = await prisma.application.findFirst({
       where: { loadId, status: "ACCEPTED" },
     });
@@ -338,7 +386,22 @@ export async function updateLoadStatus(formData: FormData) {
     redirect(`/company/loads/${loadId}`);
   }
 
-  await prisma.load.update({ where: { id: loadId }, data: { status: status as "CONFIRMED" | "COMPLETED" } });
+  try {
+    await prisma.$transaction(async (tx) => {
+      const fresh = await tx.load.findUnique({ where: { id: loadId } });
+      if (!fresh || fresh.companyId !== company.id) throw new Error("Invalid load");
+      if (status === "CONFIRMED" && fresh.status !== "SELECTED") throw new Error("Invalid transition");
+      if (status === "COMPLETED" && fresh.status !== "DELIVERED") throw new Error("Invalid transition");
+      if (status === "CONFIRMED") {
+        const acc = await tx.application.findFirst({ where: { loadId, status: "ACCEPTED" } });
+        if (!acc) throw new Error("No acceptance");
+      }
+      await tx.load.update({ where: { id: loadId }, data: { status: status as "CONFIRMED" | "COMPLETED" } });
+    });
+  } catch {
+    revalidatePath(`/company/loads/${loadId}`);
+    redirect(`/company/loads/${loadId}`);
+  }
 
   const carrier = await prisma.application.findFirst({
     where: { loadId, status: "ACCEPTED" },
@@ -350,14 +413,14 @@ export async function updateLoadStatus(formData: FormData) {
       loadId,
       type: "CONFIRMED",
       message: `${company.name} confirmed the booking for ${load.origin} → ${load.destination}. You can now confirm pickup when ready.`,
-    });
+    }).catch(() => {});
   } else if (status === "COMPLETED" && carrier) {
     await createNotification({
       userId: carrier.transporterId,
       loadId,
       type: "COMPLETED",
       message: `${company.name} marked the load ${load.origin} → ${load.destination} as completed. Thanks for the delivery!`,
-    });
+    }).catch(() => {});
   }
 
   revalidatePath(`/company/loads/${loadId}`);

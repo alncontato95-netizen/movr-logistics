@@ -1,7 +1,13 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { LogoMark } from "@/components/brand";
+import { getSession } from "@/lib/session";
 
-export default function AuthLayout({ children }: { children: React.ReactNode }) {
+export default async function AuthLayout({ children }: { children: React.ReactNode }) {
+  const session = await getSession();
+  if (session) {
+    redirect(session.role === "COMPANY" ? "/company/loads" : "/loads");
+  }
   return (
     <div className="flex min-h-full flex-col bg-white">
       <header className="mx-auto flex w-full max-w-md items-center justify-between px-4 py-6">

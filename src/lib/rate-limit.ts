@@ -46,6 +46,7 @@ export async function isLocked(
   opts: { max: number; windowMs: number },
 ): Promise<RateLimitResult> {
   const now = Date.now();
+  cleanup(now);
   const c = store.get(identifier);
   if (!c || c.resetAt <= now) return { ok: true };
   return result(c, opts.max, now);
@@ -62,9 +63,15 @@ export async function recordFailure(identifier: string, windowMs: number) {
 export async function clientIp(): Promise<string> {
   try {
     const h = await headers();
+    const trusted = process.env.TRUSTED_PROXY !== "0";
     const xff = h.get("x-forwarded-for");
-    if (xff) return xff.split(",")[0].trim();
-    return h.get("x-real-ip") ?? "local";
+    if (xff && trusted) {
+      const first = xff.split(",")[0].trim();
+      if (/^[\d.:a-fA-F]+$/.test(first) && first.length <= 45) return first;
+    }
+    const realIp = h.get("x-real-ip");
+    if (realIp && /^[\d.:a-fA-F]+$/.test(realIp)) return realIp;
+    return "local";
   } catch {
     return "local";
   }

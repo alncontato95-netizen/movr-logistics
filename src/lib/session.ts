@@ -6,9 +6,17 @@ import { prisma } from "@/lib/prisma";
 
 const SESSION_COOKIE = "movr_session";
 const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000;
-const SECRET = new TextEncoder().encode(
-  process.env.SESSION_SECRET ?? "dev-only-insecure-session-secret-change-me",
-);
+function getSecret(): Uint8Array {
+  const raw = process.env.SESSION_SECRET;
+  if (!raw) {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("SESSION_SECRET is not set");
+    }
+    return new TextEncoder().encode("dev-only-insecure-session-secret-change-me");
+  }
+  return new TextEncoder().encode(raw);
+}
+const SECRET = getSecret();
 
 type SessionToken = { sid: string };
 
@@ -79,7 +87,13 @@ export async function destroySession() {
     }
   }
 
-  cookieStore.set(SESSION_COOKIE, "", { maxAge: 0, path: "/" });
+  cookieStore.set(SESSION_COOKIE, "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 0,
+  });
 }
 
 export async function revokeAllUserSessions(userId: string) {
