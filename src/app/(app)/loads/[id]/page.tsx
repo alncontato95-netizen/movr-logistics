@@ -93,6 +93,19 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
         <p className="text-sm font-semibold text-muted">Published by</p>
         <p className="mt-1 font-semibold text-ink">{load.company.user.name}</p>
         {load.company.name && <p className="text-sm text-muted">{load.company.name}</p>}
+        {myApplication &&
+          (myApplication.status === "SELECTED" ||
+            myApplication.status === "ACCEPTED" ||
+            load.status === "CONFIRMED" ||
+            load.status === "PICKED_UP" ||
+            load.status === "DELIVERED") && (
+            <div className="mt-3 rounded-xl bg-brand-light/60 p-3 text-sm">
+              <p className="font-semibold text-brand-dark">Contact details</p>
+              {load.company.phone && <p className="mt-1 text-ink">Phone: {load.company.phone}</p>}
+              {load.company.user.email && <p className="text-ink">Email: {load.company.user.email}</p>}
+              <p className="mt-1 text-xs text-muted">Contact to arrange pickup — they&apos;re expecting to hear from you about this load.</p>
+            </div>
+          )}
       </div>
 
       <div className="sticky bottom-4">

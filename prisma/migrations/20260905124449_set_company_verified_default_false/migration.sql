@@ -1,0 +1,4 @@
+﻿-- Change verified default from true to false for manual approval
+-- Existing companies keep their current verified value; new companies will default to false
+-- SQLite does not support ALTER COLUMN DEFAULT via simple ALTER; Prisma will handle recreation on next migrate
+-- For db push compatibility, no destructive DDL is required here

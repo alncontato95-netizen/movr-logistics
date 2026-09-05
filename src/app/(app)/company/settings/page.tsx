@@ -34,6 +34,12 @@ export default async function CompanySettingsPage() {
         <p className="mt-1 text-sm text-muted">Company information shown to carriers when you publish loads.</p>
       </div>
 
+      {company && !company.verified && (
+        <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-medium text-amber-800">
+          Your company is pending verification. Publishing will be enabled once approved.
+        </div>
+      )}
+
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <Metric label="Total loads" value={summary.loads} />
         <Metric label="Open" value={summary.open} tone="brand" />

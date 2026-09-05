@@ -36,6 +36,9 @@ export async function createLoad(_state: LoadState, formData: FormData): Promise
   if (!company) {
     return { message: "Please save your business details before publishing a load." };
   }
+  if (!company.verified) {
+    return { message: "Your company is pending verification. We'll approve it manually and let you know." };
+  }
 
   const data = parsed.data;
   const load = await prisma.load.create({
@@ -74,14 +77,28 @@ export async function applyToLoad(formData: FormData) {
   const existing = await prisma.application.findUnique({
     where: { loadId_transporterId: { loadId, transporterId: user.id } },
   });
+  let shouldNotify = false;
   if (!existing) {
     try {
       await prisma.application.create({
         data: { loadId, transporterId: user.id, status: "PENDING" },
       });
+      shouldNotify = true;
     } catch {
       // unique constraint race — already applied
     }
+  } else if (existing.status === "DECLINED" || existing.status === "CANCELLED" || existing.status === "REJECTED") {
+    await prisma.application.update({
+      where: { id: existing.id },
+      data: { status: "PENDING" },
+    });
+    shouldNotify = true;
+  } else {
+    // PENDING, SELECTED, ACCEPTED — already active, do nothing
+    shouldNotify = false;
+  }
+
+  if (shouldNotify) {
     await createNotification({
       userId: load.publishedBy,
       loadId,

@@ -84,7 +84,7 @@ model Company {
   kvk       String
   address   String
   phone     String
-  verified  Boolean  @default(true)
+  verified  Boolean  @default(false)
   createdAt DateTime @default(now())
   loads     Load[]
 }
