@@ -1,0 +1,3 @@
+﻿-- Add CANCELLED to LoadStatus enum
+-- SQLite stores enums as TEXT, no column alteration needed
+-- Add CANCELLED to NotificationType for cancellation notifications

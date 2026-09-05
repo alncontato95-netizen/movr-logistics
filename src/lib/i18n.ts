@@ -69,6 +69,14 @@ export type Messages = {
     step3Title: string;
     step3Body: string;
   };
+  common: {
+    backToLoads: string;
+    loading: string;
+    cancel: string;
+    save: string;
+    edit: string;
+    delete: string;
+  };
 };
 
 const en: Messages = {
@@ -126,6 +134,14 @@ const en: Messages = {
     step2Body: "Carriers see compatible loads and apply. No automatic booking, ever.",
     step3Title: "You choose",
     step3Body: "The company always selects the transporter they trust. Then you keep them updated.",
+  },
+  common: {
+    backToLoads: "← Back to loads",
+    loading: "Loading...",
+    cancel: "Cancel",
+    save: "Save",
+    edit: "Edit",
+    delete: "Delete",
   },
 };
 
@@ -185,6 +201,14 @@ const nl: Messages = {
     step3Title: "Jij kiest",
     step3Body: "Het bedrijf kiest altijd de vervoerder die zij vertrouwen. Daarna houd je hen op de hoogte.",
   },
+  common: {
+    backToLoads: "← Terug naar ladingen",
+    loading: "Laden...",
+    cancel: "Annuleren",
+    save: "Opslaan",
+    edit: "Bewerken",
+    delete: "Verwijderen",
+  },
 };
 
 const pt: Messages = {
@@ -243,14 +267,154 @@ const pt: Messages = {
     step3Title: "Você escolhe",
     step3Body: "A empresa sempre escolhe o transportador em quem confia. Depois mantenha todos atualizados.",
   },
+  common: {
+    backToLoads: "← Voltar às cargas",
+    loading: "Carregando...",
+    cancel: "Cancelar",
+    save: "Salvar",
+    edit: "Editar",
+    delete: "Excluir",
+  },
+};
+
+const de: Messages = {
+  brand: { name: "MOVR" },
+  nav: {
+    loads: "Ladungen",
+    applications: "Bewerbungen",
+    profile: "Profil",
+    business: "Unternehmen",
+    logout: "Abmelden",
+    dashboard: "Dashboard",
+    login: "Anmelden",
+    signup: "Registrieren",
+    notifications: "Benachrichtigungen",
+  },
+  auth: {
+    joinTitle: "Tritt MOVR bei",
+    joinSubtitle: "Wähle, wie du MOVR nutzen möchtest.",
+    carrierRole: "Ich bin Spediteur",
+    carrierRoleSub: "Unabhängiger Transporteur unterwegs — finde Rückladungen.",
+    companyRole: "Ich bin Unternehmen",
+    companyRoleSub: "Bewege Fracht zuverlässig mit vertrauenswürdigen Partnern.",
+    alreadyAccount: "Schon ein Konto?",
+    newToMovr: "Neu bei MOVR?",
+    createTitle: "Konto erstellen",
+    fullName: "Vollständiger Name",
+    email: "E-Mail",
+    password: "Passwort",
+    createAccount: "Konto erstellen",
+    creatingAccount: "Konto wird erstellt…",
+    welcomeBack: "Willkommen zurück",
+    loginSubtitle: "Melde dich bei deinem MOVR-Konto an.",
+    loginAction: "Anmelden",
+    loggingIn: "Anmeldung läuft…",
+    backHome: "Zur Startseite",
+  },
+  landing: {
+    title: "Rückladungen, echte Partner.",
+    subtitle:
+      "MOVR verbindet unabhängige Spediteure mit lokalen Unternehmen in Venlo und Limburg und verwandelt leere Rückfahrten in bezahlte Ladungen.",
+    carrierCta: "Ich bin Spediteur",
+    companyCta: "Ich bin Unternehmen",
+    featureCarrierTitle: "Für Spediteure",
+    featureCarrierBody:
+      "Sieh Ladungen, die zu deinem LKW, deiner Heimatregion und Route passen — und bekunde Interesse nur an machbaren Aufträgen.",
+    featureCompanyTitle: "Für Unternehmen",
+    featureCompanyBody:
+      "Veröffentliche eine Ladung einmal, erhalte ehrliches Interesse von unabhängigen Spediteuren und wähle, wer deine Fracht fährt.",
+    featureEmptyTitle: "Weniger Leerfahrten",
+    featureEmptyBody: "Entwickelt für Rückladungen in der Region Venlo und Limburg.",
+    howTitle: "Wie MOVR funktioniert",
+    step1Title: "Profil einrichten",
+    step1Body: "Spediteure wählen Fahrzeug und Regionen. Unternehmen ergänzen Firmendaten.",
+    step2Title: "Matchen und Interesse zeigen",
+    step2Body: "Spediteure sehen passende Ladungen und bewerben sich. Keine automatische Buchung.",
+    step3Title: "Du wählst",
+    step3Body: "Das Unternehmen wählt immer den Spediteur, dem es vertraut. Danach bleibt ihr auf dem Laufenden.",
+  },
+  common: {
+    backToLoads: "← Zurück zu Ladungen",
+    loading: "Lädt...",
+    cancel: "Abbrechen",
+    save: "Speichern",
+    edit: "Bearbeiten",
+    delete: "Löschen",
+  },
+};
+
+const pl: Messages = {
+  brand: { name: "MOVR" },
+  nav: {
+    loads: "Ładunki",
+    applications: "Zgłoszenia",
+    profile: "Profil",
+    business: "Firma",
+    logout: "Wyloguj",
+    dashboard: "Panel",
+    login: "Zaloguj się",
+    signup: "Zarejestruj się",
+    notifications: "Powiadomienia",
+  },
+  auth: {
+    joinTitle: "Dołącz do MOVR",
+    joinSubtitle: "Wybierz, jak chcesz korzystać z MOVR.",
+    carrierRole: "Jestem przewoźnikiem",
+    carrierRoleSub: "Niezależny przewoźnik w trasie — znajdź ładunki powrotne.",
+    companyRole: "Jestem firmą",
+    companyRoleSub: "Przewoź ładunki niezawodnie z zaufanymi partnerami.",
+    alreadyAccount: "Masz już konto?",
+    newToMovr: "Nowy w MOVR?",
+    createTitle: "Utwórz konto",
+    fullName: "Imię i nazwisko",
+    email: "E-mail",
+    password: "Hasło",
+    createAccount: "Utwórz konto",
+    creatingAccount: "Tworzenie konta…",
+    welcomeBack: "Witaj ponownie",
+    loginSubtitle: "Zaloguj się na swoje konto MOVR.",
+    loginAction: "Zaloguj się",
+    loggingIn: "Logowanie…",
+    backHome: "Strona główna",
+  },
+  landing: {
+    title: "Ładunki powrotne, prawdziwi partnerzy.",
+    subtitle:
+      "MOVR łączy niezależnych przewoźników z lokalnymi firmami w Venlo i Limburgii, zamieniając puste powroty w płatne ładunki.",
+    carrierCta: "Jestem przewoźnikiem",
+    companyCta: "Jestem firmą",
+    featureCarrierTitle: "Dla przewoźników",
+    featureCarrierBody:
+      "Zobacz ładunki pasujące do twojej ciężarówki, regionu i trasy — i zgłoś zainteresowanie tylko tymi, które możesz zrealizować.",
+    featureCompanyTitle: "Dla firm",
+    featureCompanyBody:
+      "Opublikuj ładunek raz, otrzymaj szczere zainteresowanie od niezależnych przewoźników i wybierz, kto przewiezie twój ładunek.",
+    featureEmptyTitle: "Mniej pustych kilometrów",
+    featureEmptyBody: "Stworzone dla ładunków powrotnych w regionie Venlo i Limburgii.",
+    howTitle: "Jak działa MOVR",
+    step1Title: "Skonfiguruj profil",
+    step1Body: "Przewoźnicy wybierają pojazd i regiony. Firmy dodają dane firmy.",
+    step2Title: "Dopasuj i okaż zainteresowanie",
+    step2Body: "Przewoźnicy widzą pasujące ładunki i aplikują. Nigdy automatycznej rezerwacji.",
+    step3Title: "Ty wybierasz",
+    step3Body: "Firma zawsze wybiera przewoźnika, któremu ufa. Potem bądźcie na bieżąco.",
+  },
+  common: {
+    backToLoads: "← Wróć do ładunków",
+    loading: "Ładowanie...",
+    cancel: "Anuluj",
+    save: "Zapisz",
+    edit: "Edytuj",
+    delete: "Usuń",
+  },
 };
 
 const dictionaries: Record<Locale, Messages> = {
   en,
   nl,
   pt,
-  de: en,
-  pl: en,
+  de,
+  pl,
 };
 
 export function isLocale(value: string | undefined): value is Locale {

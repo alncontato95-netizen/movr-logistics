@@ -33,6 +33,7 @@ enum LoadStatus {
   PICKED_UP
   DELIVERED
   COMPLETED
+  CANCELLED
 }
 
 enum ApplicationStatus {
@@ -53,6 +54,8 @@ enum NotificationType {
   PICKED_UP
   DELIVERED
   COMPLETED
+  CANCELLED
+  NEW_LOAD
 }
 
 model User {

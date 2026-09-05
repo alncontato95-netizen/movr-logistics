@@ -59,8 +59,82 @@ export async function createLoad(_state: LoadState, formData: FormData): Promise
     },
   });
 
+  // Notify compatible carriers (fire-and-forget, non-blocking, ignore failures)
+  void (async () => {
+    try {
+      const carriers = await prisma.user.findMany({
+        where: { role: "CARRIER", available: true },
+      });
+      for (const carrier of carriers) {
+        if (isCompatible(carrier as never, load)) {
+          void createNotification({
+            userId: carrier.id,
+            loadId: load.id,
+            type: "NEW_LOAD",
+            message: `New load available: ${load.origin} → ${load.destination}`,
+          }).catch(() => {});
+        }
+      }
+    } catch {}
+  })();
+
   revalidatePath("/company/loads");
   redirect(`/company/loads/${load.id}`);
+}
+
+export async function updateLoad(_state: LoadState, formData: FormData): Promise<LoadState> {
+  const user = await getCurrentUser();
+  if (user.role !== "COMPANY") redirect("/login");
+
+  const loadId = formData.get("loadId") as string;
+  if (!loadId) return { message: "Missing load." };
+
+  const company = await prisma.company.findUnique({ where: { userId: user.id } });
+  if (!company) return { message: "Please save your business details before publishing a load." };
+
+  const existing = await prisma.load.findUnique({ where: { id: loadId } });
+  if (!existing || existing.companyId !== company.id) redirect("/company/loads");
+  if (existing.status !== "OPEN") return { message: "This load can no longer be edited." };
+
+  const parsed = loadSchema.safeParse({
+    origin: formData.get("origin"),
+    destination: formData.get("destination"),
+    pickupDate: formData.get("pickupDate"),
+    pickupWindow: formData.get("pickupWindow") || undefined,
+    cargoType: formData.get("cargoType"),
+    weightKg: formData.get("weightKg"),
+    volumeM3: formData.get("volumeM3") || undefined,
+    requiredVehicle: formData.get("requiredVehicle") || undefined,
+    priceEur: formData.get("priceEur") || undefined,
+    priceNegotiable: formData.get("priceNegotiable") === "on",
+    notes: formData.get("notes") || undefined,
+  });
+
+  if (!parsed.success) {
+    return { errors: parsed.error.flatten().fieldErrors };
+  }
+
+  const data = parsed.data;
+  await prisma.load.update({
+    where: { id: loadId },
+    data: {
+      origin: data.origin,
+      destination: data.destination,
+      pickupDate: new Date(data.pickupDate),
+      pickupWindow: data.pickupWindow,
+      cargoType: data.cargoType,
+      weightKg: data.weightKg,
+      volumeM3: data.volumeM3,
+      requiredVehicle: data.requiredVehicle,
+      priceEur: data.priceEur,
+      priceNegotiable: data.priceNegotiable,
+      notes: data.notes,
+    },
+  });
+
+  revalidatePath("/company/loads");
+  revalidatePath(`/company/loads/${loadId}`);
+  redirect(`/company/loads/${loadId}?updated=1`);
 }
 
 export async function applyToLoad(formData: FormData) {
@@ -363,6 +437,57 @@ export async function undoSelection(formData: FormData) {
   revalidatePath(`/company/loads/${loadId}`);
   revalidatePath("/company/loads");
   redirect(`/company/loads/${loadId}?undone=1`);
+}
+
+export async function cancelLoad(formData: FormData) {
+  const user = await getCurrentUser();
+  if (user.role !== "COMPANY") redirect("/login");
+
+  const loadId = formData.get("loadId") as string;
+  if (!loadId) redirect("/company/loads");
+
+  const company = await prisma.company.findUnique({ where: { userId: user.id } });
+  if (!company) redirect("/company/loads");
+
+  const load = await prisma.load.findUnique({ where: { id: loadId } });
+  if (!load || load.companyId !== company.id) redirect("/company/loads");
+
+  if (load.status !== "OPEN" && load.status !== "SELECTED") {
+    revalidatePath(`/company/loads/${loadId}`);
+    redirect(`/company/loads/${loadId}`);
+  }
+
+  let selectedApp: { transporterId: string } | null = null;
+  if (load.status === "SELECTED") {
+    selectedApp = await prisma.application.findFirst({
+      where: { loadId, status: "SELECTED" },
+      select: { transporterId: true },
+    });
+  }
+
+  await prisma.$transaction(async (tx) => {
+    const fresh = await tx.load.findUnique({ where: { id: loadId } });
+    if (!fresh || fresh.companyId !== company.id) throw new Error("Invalid load");
+    if (fresh.status !== "OPEN" && fresh.status !== "SELECTED") throw new Error("Cannot cancel");
+    await tx.application.updateMany({
+      where: { loadId, status: { in: ["PENDING", "SELECTED"] as const } },
+      data: { status: "CANCELLED" },
+    });
+    await tx.load.update({ where: { id: loadId }, data: { status: "CANCELLED" } });
+  });
+
+  if (selectedApp) {
+    await createNotification({
+      userId: selectedApp.transporterId,
+      loadId,
+      type: "CANCELLED",
+      message: `${company.name} cancelled the load ${load.origin} → ${load.destination}.`,
+    }).catch(() => {});
+  }
+
+  revalidatePath("/company/loads");
+  revalidatePath(`/company/loads/${loadId}`);
+  redirect("/company/loads?cancelled=1");
 }
 
 export async function updateLoadStatus(formData: FormData) {

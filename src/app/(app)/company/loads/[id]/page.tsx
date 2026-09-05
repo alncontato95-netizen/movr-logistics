@@ -3,7 +3,7 @@ import Link from "next/link";
 import { requireCompany } from "@/lib/dal";
 import { prisma } from "@/lib/prisma";
 import { regionsFor } from "@/lib/matching";
-import { selectTransporter, undoSelection, updateLoadStatus } from "@/app/actions/loads";
+import { cancelLoad, selectTransporter, undoSelection, updateLoadStatus } from "@/app/actions/loads";
 import { PollRefresh } from "@/components/poll-refresh";
 import { Badge, LoadStatusBadge } from "@/components/ui";
 import { CARGO_LABELS, VEHICLE_LABELS, LOAD_STATUS_LABELS, type VehicleType } from "@/lib/constants";
@@ -11,8 +11,8 @@ import { formatDate, formatMoney } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
-export default async function CompanyLoadDetailPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ selected?: string; undone?: string; "awaiting-acceptance"?: string }> }) {
-  const [{ id }, { selected, undone, "awaiting-acceptance": awaitingAcceptance }] = await Promise.all([params, searchParams]);
+export default async function CompanyLoadDetailPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ selected?: string; undone?: string; "awaiting-acceptance"?: string; cancelled?: string; updated?: string }> }) {
+  const [{ id }, { selected, undone, "awaiting-acceptance": awaitingAcceptance, cancelled, updated }] = await Promise.all([params, searchParams]);
   const user = await requireCompany();
   const company = await prisma.company.findUnique({ where: { userId: user.id } });
 
@@ -56,6 +56,18 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
         </div>
       )}
 
+      {cancelled && (
+        <div className="rounded-2xl bg-neutral-100 p-4 text-sm font-semibold text-ink">
+          Load cancelled.
+        </div>
+      )}
+
+      {updated && (
+        <div className="rounded-2xl bg-brand-light p-4 text-sm font-semibold text-brand-dark">
+          Load updated.
+        </div>
+      )}
+
       <div className="rounded-2xl border border-black/8 bg-white p-6">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-extrabold text-ink">
@@ -74,6 +86,22 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
           {load.notes ? <Row label="Notes" value={load.notes} /> : null}
         </dl>
       </div>
+
+      {(load.status === "OPEN" || load.status === "SELECTED") && (
+        <div className="flex gap-3">
+          {load.status === "OPEN" && (
+            <Link
+              href={`/company/loads/${load.id}/edit`}
+              className="flex-1 rounded-xl border border-black/10 bg-white py-2.5 text-center text-sm font-semibold text-ink hover:border-brand hover:bg-brand-light/40 hover:text-brand-dark"
+            >
+              Edit load
+            </Link>
+          )}
+          <div className={load.status === "OPEN" ? "flex-1" : "w-full"}>
+            <CancelLoad loadId={load.id} />
+          </div>
+        </div>
+      )}
 
       {showSelect && (
         <section className="space-y-3">
@@ -237,6 +265,20 @@ function UndoSelection({ loadId }: { loadId: string }) {
         className="w-full rounded-xl border border-black/10 bg-white py-2.5 text-sm font-semibold text-muted hover:border-red-400 hover:text-red-600"
       >
         Undo selection
+      </button>
+    </form>
+  );
+}
+
+function CancelLoad({ loadId }: { loadId: string }) {
+  return (
+    <form action={cancelLoad}>
+      <input type="hidden" name="loadId" value={loadId} />
+      <button
+        type="submit"
+        className="w-full rounded-xl border border-black/10 bg-white py-2.5 text-sm font-semibold text-muted hover:border-red-400 hover:text-red-600"
+      >
+        Cancel load
       </button>
     </form>
   );

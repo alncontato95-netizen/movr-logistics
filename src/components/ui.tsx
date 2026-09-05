@@ -138,6 +138,7 @@ const loadStatusTone: Record<LoadStatus, "brand" | "amber" | "blue" | "green" | 
   PICKED_UP: "blue",
   DELIVERED: "green",
   COMPLETED: "neutral",
+  CANCELLED: "neutral",
 };
 
 const applicationStatusTone: Record<ApplicationStatus, "brand" | "amber" | "neutral" | "red" | "green"> = {

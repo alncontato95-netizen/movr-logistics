@@ -54,13 +54,17 @@ export default async function LoadsPage() {
         </div>
       )}
 
-      {serves.length === 0 && (
-        <div className="rounded-2xl border border-black/8 bg-white p-4 text-sm text-muted">
-          Pick the regions you serve on your profile so we can show you loads that fit your routes.
+      {serves.length === 0 ? (
+        <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6 text-center">
+          <p className="font-semibold text-amber-800">Complete your profile to see available loads</p>
+          <p className="mt-1 text-sm text-amber-700">
+            Select the regions you serve in your profile so we can show you loads that match your routes.
+          </p>
+          <div className="mt-4">
+            <ButtonLink href="/profile">Go to profile</ButtonLink>
+          </div>
         </div>
-      )}
-
-      {compatible.length === 0 ? (
+      ) : compatible.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-black/15 p-10 text-center text-sm text-muted">
           No compatible loads right now. Check back soon or widen the regions you serve.
         </div>

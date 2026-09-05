@@ -1,10 +1,10 @@
 import { getCurrentUser } from "@/lib/dal";
 import { prisma } from "@/lib/prisma";
-import { Card, Button } from "@/components/ui";
+import { Button } from "@/components/ui";
 import { PollRefresh } from "@/components/poll-refresh";
 import { markAllNotificationsRead } from "@/app/actions/notifications";
 import { NOTIFICATION_ICONS } from "@/lib/constants";
-import Link from "next/link";
+import { NotificationItem } from "@/components/notification-item";
 
 export const dynamic = "force-dynamic";
 
@@ -48,32 +48,16 @@ export default async function NotificationsPage() {
       ) : (
         <div className="grid gap-3">
           {notifications.map((n) => (
-            <Link
+            <NotificationItem
               key={n.id}
-              href={isCompany ? `/company/loads/${n.loadId}` : `/loads/${n.loadId}`}
-              className="block"
-            >
-              <Card className={`transition-colors hover:border-brand ${n.read ? "opacity-60" : ""}`}>
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex items-start gap-3">
-                    <span className="mt-0.5 text-lg" aria-hidden>
-                      {NOTIFICATION_ICONS[n.type]}
-                    </span>
-                    <div>
-                      <p className="font-medium text-ink">{n.message}</p>
-                      <p className="mt-0.5 text-sm text-muted">
-                        {formatWhen(n.createdAt)}
-                        {!n.read && (
-                          <span className="ml-2 rounded-full bg-brand px-2 py-0.5 text-xs font-semibold text-white">
-                            New
-                          </span>
-                        )}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            </Link>
+              id={n.id}
+              loadId={n.loadId}
+              isCompany={isCompany}
+              read={n.read}
+              icon={NOTIFICATION_ICONS[n.type]}
+              message={n.message}
+              when={formatWhen(n.createdAt)}
+            />
           ))}
         </div>
       )}

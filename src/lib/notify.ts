@@ -24,3 +24,7 @@ export async function unreadCount(userId: string): Promise<number> {
 export async function markAllRead(userId: string) {
   await prisma.notification.updateMany({ where: { userId, read: false }, data: { read: true } });
 }
+
+export async function markRead(notificationId: string, userId: string) {
+  await prisma.notification.updateMany({ where: { id: notificationId, userId }, data: { read: true } });
+}

@@ -1,0 +1,2 @@
+﻿-- Add NEW_LOAD to NotificationType enum
+-- SQLite stores enums as TEXT, no column alteration needed
