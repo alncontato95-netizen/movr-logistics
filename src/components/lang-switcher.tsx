@@ -1,4 +1,4 @@
-import { LOCALES, LOCALE_COOKIE } from "@/lib/i18n";
+import { LOCALES, LOCALE_COOKIE, LOCALE_FLAGS } from "@/lib/i18n";
 import { setLocaleAction } from "@/app/actions/locale";
 import { cookies } from "next/headers";
 
@@ -7,6 +7,7 @@ const LOCALE_LABELS: Record<string, string> = {
   nl: "Nederlands",
   de: "Deutsch",
   pl: "Polski",
+  pt: "Português (BR)",
 };
 
 export async function LangSwitcher() {
@@ -20,8 +21,8 @@ export async function LangSwitcher() {
     <form action={setLocaleAction} className="relative">
       <details className="group relative">
         <summary className="flex cursor-pointer list-none items-center gap-1.5 rounded-[var(--radius-input)] border border-border bg-surface-strong px-2.5 py-1.5 text-xs font-semibold text-ink transition hover:border-brand/30 hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/30 [&::-webkit-details-marker]:hidden">
-          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-brand-light text-[10px] font-bold text-brand-dark">
-            {current.toUpperCase().slice(0, 2)}
+          <span className="text-base leading-none" aria-hidden>
+            {LOCALE_FLAGS[current as keyof typeof LOCALE_FLAGS] ?? "🌐"}
           </span>
           <span className="hidden sm:inline">{LOCALE_LABELS[current] ?? current.toUpperCase()}</span>
           <span className="sm:hidden">{current.toUpperCase()}</span>
@@ -53,6 +54,9 @@ export async function LangSwitcher() {
                 }
               >
                 <span className="flex items-center gap-2">
+                  <span className="text-base leading-none" aria-hidden>
+                    {LOCALE_FLAGS[code as keyof typeof LOCALE_FLAGS] ?? "🌐"}
+                  </span>
                   <span className={"flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-bold " + (code === current ? "bg-white/20 text-white" : "bg-brand-light text-brand-dark")}>
                     {code.toUpperCase()}
                   </span>

@@ -6,6 +6,8 @@ function localeTag(locale?: string): string {
       return "de-DE";
     case "pl":
       return "pl-PL";
+    case "pt":
+      return "pt-BR";
     default:
       return "en-GB";
   }

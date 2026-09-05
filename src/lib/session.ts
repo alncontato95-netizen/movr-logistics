@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
 
 const SESSION_COOKIE = "movr_session";
-const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000;
 function getSecret(): Uint8Array {
   const raw = process.env.SESSION_SECRET;
   if (!raw) {
@@ -35,7 +35,7 @@ export async function createSession(user: { id: string; role: "CARRIER" | "COMPA
   const token = await new SignJWT({ sid: session.id })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime("7d")
+    .setExpirationTime("30d")
     .sign(SECRET);
 
   const cookieStore = await cookies();
@@ -44,7 +44,7 @@ export async function createSession(user: { id: string; role: "CARRIER" | "COMPA
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     path: "/",
-    maxAge: 60 * 60 * 24 * 7,
+    maxAge: 60 * 60 * 24 * 30,
   });
 }
 

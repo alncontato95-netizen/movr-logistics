@@ -2,8 +2,16 @@ import "server-only";
 
 import { cookies } from "next/headers";
 
-export const LOCALES = ["en", "nl", "de", "pl"] as const;
+export const LOCALES = ["en", "nl", "de", "pl", "pt"] as const;
 export type Locale = (typeof LOCALES)[number];
+
+export const LOCALE_FLAGS: Record<Locale, string> = {
+  en: "🇬🇧",
+  nl: "🇳🇱",
+  de: "🇩🇪",
+  pl: "🇵🇱",
+  pt: "🇧🇷",
+};
 
 export const LOCALE_COOKIE = "movr_locale";
 export const DEFAULT_LOCALE: Locale = "en";
@@ -179,9 +187,68 @@ const nl: Messages = {
   },
 };
 
+const pt: Messages = {
+  brand: { name: "MOVR" },
+  nav: {
+    loads: "Cargas",
+    applications: "Propostas",
+    profile: "Perfil",
+    business: "Empresa",
+    logout: "Sair",
+    dashboard: "Painel",
+    login: "Entrar",
+    signup: "Criar conta",
+    notifications: "Notificações",
+  },
+  auth: {
+    joinTitle: "Junte-se ao MOVR",
+    joinSubtitle: "Escolha como você quer usar o MOVR.",
+    carrierRole: "Sou transportador",
+    carrierRoleSub: "Transportador independente na estrada — encontre cargas de retorno.",
+    companyRole: "Sou empresa",
+    companyRoleSub: "Movimente cargas com parceiros locais confiáveis.",
+    alreadyAccount: "Já tem uma conta?",
+    newToMovr: "Novo no MOVR?",
+    createTitle: "Crie sua conta",
+    fullName: "Nome completo",
+    email: "E-mail",
+    password: "Senha",
+    createAccount: "Criar conta",
+    creatingAccount: "Criando conta…",
+    welcomeBack: "Bem-vindo de volta",
+    loginSubtitle: "Entre na sua conta MOVR.",
+    loginAction: "Entrar",
+    loggingIn: "Entrando…",
+    backHome: "Ir para início",
+  },
+  landing: {
+    title: "Cargas de retorno, parceiros reais.",
+    subtitle:
+      "A MOVR conecta transportadores independentes a empresas locais em Venlo e Limburg, transformando viagens de retorno vazias em cargas pagas.",
+    carrierCta: "Sou transportador",
+    companyCta: "Sou empresa",
+    featureCarrierTitle: "Para transportadores",
+    featureCarrierBody:
+      "Veja cargas compatíveis com seu caminhão, região e rota — e demonstre interesse apenas nas que você realmente pode fazer.",
+    featureCompanyTitle: "Para empresas",
+    featureCompanyBody:
+      "Publique uma carga uma vez, receba interesse real de transportadores independentes e escolha quem movimenta sua carga.",
+    featureEmptyTitle: "Menos quilômetros vazios",
+    featureEmptyBody: "Feito para cargas de retorno na região de Venlo e Limburg.",
+    howTitle: "Como a MOVR funciona",
+    step1Title: "Configure seu perfil",
+    step1Body: "Transportadores escolhem veículo e regiões. Empresas informam dados do negócio.",
+    step2Title: "Combine e demonstre interesse",
+    step2Body: "Transportadores veem cargas compatíveis e se candidatam. Nunca há reserva automática.",
+    step3Title: "Você escolhe",
+    step3Body: "A empresa sempre escolhe o transportador em quem confia. Depois mantenha todos atualizados.",
+  },
+};
+
 const dictionaries: Record<Locale, Messages> = {
   en,
   nl,
+  pt,
   de: en,
   pl: en,
 };
