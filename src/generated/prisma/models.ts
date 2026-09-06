@@ -11,6 +11,7 @@
 export type * from './models/User'
 export type * from './models/Company'
 export type * from './models/Load'
+export type * from './models/Rating'
 export type * from './models/Application'
 export type * from './models/Session'
 export type * from './models/Notification'

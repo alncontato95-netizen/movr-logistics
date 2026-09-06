@@ -54,6 +54,7 @@ export const ModelName = {
   User: 'User',
   Company: 'Company',
   Load: 'Load',
+  Rating: 'Rating',
   Application: 'Application',
   Session: 'Session',
   Notification: 'Notification'
@@ -82,6 +83,9 @@ export const UserScalarFieldEnum = {
   vehicleType: 'vehicleType',
   vehiclePlate: 'vehiclePlate',
   professionalLicense: 'professionalLicense',
+  licenseUrl: 'licenseUrl',
+  licenseExpiry: 'licenseExpiry',
+  carrierVerified: 'carrierVerified',
   currentRegion: 'currentRegion',
   available: 'available',
   acceptsRegions: 'acceptsRegions',
@@ -121,11 +125,26 @@ export const LoadScalarFieldEnum = {
   priceNegotiable: 'priceNegotiable',
   notes: 'notes',
   status: 'status',
+  podUrl: 'podUrl',
+  podNote: 'podNote',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type LoadScalarFieldEnum = (typeof LoadScalarFieldEnum)[keyof typeof LoadScalarFieldEnum]
+
+
+export const RatingScalarFieldEnum = {
+  id: 'id',
+  loadId: 'loadId',
+  companyId: 'companyId',
+  carrierId: 'carrierId',
+  score: 'score',
+  comment: 'comment',
+  createdAt: 'createdAt'
+} as const
+
+export type RatingScalarFieldEnum = (typeof RatingScalarFieldEnum)[keyof typeof RatingScalarFieldEnum]
 
 
 export const ApplicationScalarFieldEnum = {

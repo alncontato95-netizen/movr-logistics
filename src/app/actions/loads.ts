@@ -490,6 +490,79 @@ export async function cancelLoad(formData: FormData) {
   redirect("/company/loads?cancelled=1");
 }
 
+export async function duplicateLoad(formData: FormData) {
+  const user = await getCurrentUser();
+  if (user.role !== "COMPANY") redirect("/login");
+  const loadId = formData.get("loadId") as string;
+  if (!loadId) redirect("/company/loads");
+  const company = await prisma.company.findUnique({ where: { userId: user.id } });
+  if (!company) redirect("/company/loads");
+  const orig = await prisma.load.findUnique({ where: { id: loadId } });
+  if (!orig || orig.companyId !== company.id) redirect("/company/loads");
+  if (!company.verified) redirect("/company/loads");
+  const newPickup = new Date(Date.now() + 2 * 24 * 3600 * 1000);
+  const load = await prisma.load.create({
+    data: {
+      companyId: company.id,
+      publishedBy: user.id,
+      origin: orig.origin,
+      destination: orig.destination,
+      pickupDate: newPickup,
+      pickupWindow: orig.pickupWindow,
+      cargoType: orig.cargoType,
+      weightKg: orig.weightKg,
+      volumeM3: orig.volumeM3,
+      requiredVehicle: orig.requiredVehicle,
+      priceEur: orig.priceEur,
+      priceNegotiable: orig.priceNegotiable,
+      notes: orig.notes,
+    },
+  });
+  revalidatePath("/company/loads");
+  redirect(`/company/loads/${load.id}?duplicated=1`);
+}
+
+export async function submitRating(_state: { message?: string } | undefined, formData: FormData): Promise<{ message?: string } | undefined> {
+  const user = await getCurrentUser();
+  if (user.role !== "COMPANY") redirect("/login");
+  const loadId = formData.get("loadId") as string;
+  const score = Number(formData.get("score"));
+  const comment = (formData.get("comment") as string) || undefined;
+  if (!loadId || !score || score < 1 || score > 5) return { message: "Invalid rating" };
+  const company = await prisma.company.findUnique({ where: { userId: user.id } });
+  if (!company) return { message: "Company not found" };
+  const load = await prisma.load.findUnique({ where: { id: loadId }, include: { applications: true } });
+  if (!load || load.companyId !== company.id) return { message: "Load not found" };
+  if (load.status !== "COMPLETED") return { message: "Can only rate completed loads" };
+  const accepted = await prisma.application.findFirst({ where: { loadId, status: "ACCEPTED" } });
+  if (!accepted) return { message: "No carrier to rate" };
+  const existing = await prisma.rating.findUnique({ where: { loadId } });
+  if (existing) return { message: "Already rated" };
+  await prisma.rating.create({
+    data: { loadId, companyId: company.id, carrierId: accepted.transporterId, score, comment },
+  });
+  revalidatePath(`/company/loads/${loadId}`);
+  return { message: "Rating saved" };
+}
+
+export async function submitPod(formData: FormData) {
+  const user = await getCurrentUser();
+  if (user.role !== "CARRIER") redirect("/login");
+  const loadId = formData.get("loadId") as string;
+  const podUrl = (formData.get("podUrl") as string)?.trim();
+  const podNote = (formData.get("podNote") as string)?.trim();
+  if (!loadId) redirect("/loads");
+  const load = await prisma.load.findUnique({ where: { id: loadId } });
+  if (!load) redirect("/loads");
+  const app = await prisma.application.findUnique({ where: { loadId_transporterId: { loadId, transporterId: user.id } } });
+  if (!app || app.status !== "ACCEPTED") redirect(`/loads/${loadId}`);
+  if (load.status !== "DELIVERED" && load.status !== "PICKED_UP") redirect(`/loads/${loadId}`);
+  await prisma.load.update({ where: { id: loadId }, data: { podUrl: podUrl || null, podNote: podNote || null } });
+  revalidatePath(`/loads/${loadId}`);
+  revalidatePath(`/company/loads/${loadId}`);
+  redirect(`/loads/${loadId}?pod=1`);
+}
+
 export async function updateLoadStatus(formData: FormData) {
   const user = await getCurrentUser();
   if (user.role !== "COMPANY") redirect("/login");

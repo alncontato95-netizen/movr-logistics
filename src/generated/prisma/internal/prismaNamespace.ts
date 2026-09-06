@@ -400,6 +400,7 @@ export const ModelName = {
   User: 'User',
   Company: 'Company',
   Load: 'Load',
+  Rating: 'Rating',
   Application: 'Application',
   Session: 'Session',
   Notification: 'Notification'
@@ -418,7 +419,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "company" | "load" | "application" | "session" | "notification"
+    modelProps: "user" | "company" | "load" | "rating" | "application" | "session" | "notification"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -641,6 +642,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.LoadCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.LoadCountAggregateOutputType> | number
+        }
+      }
+    }
+    Rating: {
+      payload: Prisma.$RatingPayload<ExtArgs>
+      fields: Prisma.RatingFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RatingFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RatingPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RatingFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RatingPayload>
+        }
+        findFirst: {
+          args: Prisma.RatingFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RatingPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RatingFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RatingPayload>
+        }
+        findMany: {
+          args: Prisma.RatingFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RatingPayload>[]
+        }
+        create: {
+          args: Prisma.RatingCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RatingPayload>
+        }
+        createMany: {
+          args: Prisma.RatingCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.RatingCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RatingPayload>[]
+        }
+        delete: {
+          args: Prisma.RatingDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RatingPayload>
+        }
+        update: {
+          args: Prisma.RatingUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RatingPayload>
+        }
+        deleteMany: {
+          args: Prisma.RatingDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RatingUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RatingUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RatingPayload>[]
+        }
+        upsert: {
+          args: Prisma.RatingUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RatingPayload>
+        }
+        aggregate: {
+          args: Prisma.RatingAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRating>
+        }
+        groupBy: {
+          args: Prisma.RatingGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RatingGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RatingCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RatingCountAggregateOutputType> | number
         }
       }
     }
@@ -912,6 +987,9 @@ export const UserScalarFieldEnum = {
   vehicleType: 'vehicleType',
   vehiclePlate: 'vehiclePlate',
   professionalLicense: 'professionalLicense',
+  licenseUrl: 'licenseUrl',
+  licenseExpiry: 'licenseExpiry',
+  carrierVerified: 'carrierVerified',
   currentRegion: 'currentRegion',
   available: 'available',
   acceptsRegions: 'acceptsRegions',
@@ -951,11 +1029,26 @@ export const LoadScalarFieldEnum = {
   priceNegotiable: 'priceNegotiable',
   notes: 'notes',
   status: 'status',
+  podUrl: 'podUrl',
+  podNote: 'podNote',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type LoadScalarFieldEnum = (typeof LoadScalarFieldEnum)[keyof typeof LoadScalarFieldEnum]
+
+
+export const RatingScalarFieldEnum = {
+  id: 'id',
+  loadId: 'loadId',
+  companyId: 'companyId',
+  carrierId: 'carrierId',
+  score: 'score',
+  comment: 'comment',
+  createdAt: 'createdAt'
+} as const
+
+export type RatingScalarFieldEnum = (typeof RatingScalarFieldEnum)[keyof typeof RatingScalarFieldEnum]
 
 
 export const ApplicationScalarFieldEnum = {
@@ -1038,16 +1131,16 @@ export type EnumVehicleTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pris
 
 
 /**
- * Reference to a field of type 'Boolean'
+ * Reference to a field of type 'DateTime'
  */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
     
 
 
 /**
- * Reference to a field of type 'DateTime'
+ * Reference to a field of type 'Boolean'
  */
-export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -1246,6 +1339,7 @@ export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   company?: Prisma.CompanyOmit
   load?: Prisma.LoadOmit
+  rating?: Prisma.RatingOmit
   application?: Prisma.ApplicationOmit
   session?: Prisma.SessionOmit
   notification?: Prisma.NotificationOmit

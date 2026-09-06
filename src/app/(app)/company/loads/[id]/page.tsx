@@ -3,28 +3,40 @@ import Link from "next/link";
 import { requireCompany } from "@/lib/dal";
 import { prisma } from "@/lib/prisma";
 import { regionsFor } from "@/lib/matching";
-import { cancelLoad, selectTransporter, undoSelection, updateLoadStatus } from "@/app/actions/loads";
+import { cancelLoad, duplicateLoad, selectTransporter, submitRating, undoSelection, updateLoadStatus } from "@/app/actions/loads";
 import { PollRefresh } from "@/components/poll-refresh";
 import { Badge, LoadStatusBadge } from "@/components/ui";
 import { CARGO_LABELS, VEHICLE_LABELS, LOAD_STATUS_LABELS, type VehicleType } from "@/lib/constants";
 import { formatDate, formatMoney } from "@/lib/format";
+import { RatingForm } from "@/components/rating-form";
 
 export const dynamic = "force-dynamic";
 
-export default async function CompanyLoadDetailPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ selected?: string; undone?: string; "awaiting-acceptance"?: string; cancelled?: string; updated?: string }> }) {
-  const [{ id }, { selected, undone, "awaiting-acceptance": awaitingAcceptance, cancelled, updated }] = await Promise.all([params, searchParams]);
+export default async function CompanyLoadDetailPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ selected?: string; undone?: string; "awaiting-acceptance"?: string; cancelled?: string; updated?: string; duplicated?: string; rated?: string }> }) {
+  const [{ id }, { selected, undone, "awaiting-acceptance": awaitingAcceptance, cancelled, updated, duplicated, rated }] = await Promise.all([params, searchParams]);
   const user = await requireCompany();
   const company = await prisma.company.findUnique({ where: { userId: user.id } });
 
   const load = await prisma.load.findUnique({
     where: { id },
-    include: { applications: { include: { transporter: true }, orderBy: { createdAt: "asc" } } },
+    include: { applications: { include: { transporter: true }, orderBy: { createdAt: "asc" } }, rating: true },
   });
   if (!load || !company || load.companyId !== company.id) notFound();
 
   const pending = load.applications.filter((a) => a.status === "PENDING");
   const chosen = load.applications.find((a) => a.status === "SELECTED" || a.status === "ACCEPTED" || a.status === "DECLINED");
   const rejected = load.applications.filter((a) => a.status === "REJECTED");
+
+  const rating = load.rating;
+  const carrierAvg = chosen
+    ? await prisma.rating.aggregate({ where: { carrierId: chosen.transporter.id }, _avg: { score: true }, _count: { _all: true } })
+    : null;
+
+  const candidateIds = pending.map((a) => a.transporter.id);
+  const groupedRatings = candidateIds.length
+    ? await prisma.rating.groupBy({ by: ["carrierId"], where: { carrierId: { in: candidateIds } }, _avg: { score: true }, _count: { _all: true } })
+    : [];
+  const ratingsByCarrier = new Map(groupedRatings.map((g) => [g.carrierId, { avg: g._avg.score ?? 0, count: g._count._all }]));
 
   const showSelect = load.status === "OPEN";
   const carrierAccepted = chosen?.status === "ACCEPTED";
@@ -68,6 +80,18 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
         </div>
       )}
 
+      {duplicated && (
+        <div className="rounded-2xl bg-brand-light p-4 text-sm font-semibold text-brand-dark">
+          Load duplicated — new draft created.
+        </div>
+      )}
+
+      {rated && (
+        <div className="rounded-2xl bg-emerald-50 p-4 text-sm font-semibold text-emerald-800">
+          Rating saved. Thank you!
+        </div>
+      )}
+
       <div className="rounded-2xl border border-black/8 bg-white p-6">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-extrabold text-ink">
@@ -87,19 +111,32 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
         </dl>
       </div>
 
-      {(load.status === "OPEN" || load.status === "SELECTED") && (
-        <div className="flex gap-3">
-          {load.status === "OPEN" && (
-            <Link
-              href={`/company/loads/${load.id}/edit`}
-              className="flex-1 rounded-xl border border-black/10 bg-white py-2.5 text-center text-sm font-semibold text-ink hover:border-brand hover:bg-brand-light/40 hover:text-brand-dark"
-            >
-              Edit load
-            </Link>
-          )}
-          <div className={load.status === "OPEN" ? "flex-1" : "w-full"}>
+      <div className="flex gap-3">
+        {load.status === "OPEN" && (
+          <Link
+            href={`/company/loads/${load.id}/edit`}
+            className="flex-1 rounded-xl border border-black/10 bg-white py-2.5 text-center text-sm font-semibold text-ink hover:border-brand hover:bg-brand-light/40 hover:text-brand-dark"
+          >
+            Edit load
+          </Link>
+        )}
+        <div className="flex-1">
+          <DuplicateLoad loadId={load.id} />
+        </div>
+        {(load.status === "OPEN" || load.status === "SELECTED") && (
+          <div className="flex-1">
             <CancelLoad loadId={load.id} />
           </div>
+        )}
+      </div>
+
+      {load.podUrl && (
+        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+          <p className="font-semibold text-emerald-800">Proof of delivery</p>
+          <a href={load.podUrl} target="_blank" rel="noopener noreferrer" className="break-all text-sm text-emerald-700 underline">
+            {load.podUrl}
+          </a>
+          {load.podNote && <p className="mt-1 text-sm text-muted">{load.podNote}</p>}
         </div>
       )}
 
@@ -111,9 +148,10 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
               No interest yet. Share the load link or check back soon.
             </div>
           ) : (
-            pending.map((app) => (
-              <CandidateRow key={app.id} app={app} loadId={load.id} />
-            ))
+            pending.map((app) => {
+              const r = ratingsByCarrier.get(app.transporter.id);
+              return <CandidateRow key={app.id} app={app} loadId={load.id} rating={r} />;
+            })
           )}
         </section>
       )}
@@ -146,9 +184,33 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
       )}
 
       {load.status === "COMPLETED" && (
-        <div className="rounded-2xl border border-black/8 bg-white p-5 text-center text-sm text-muted">
-          This load is completed. Nice work.
-        </div>
+        <section className="rounded-2xl border border-black/8 bg-white p-5">
+          <div className="text-center text-sm text-muted">This load is completed. Nice work.</div>
+          {rating ? (
+            <div className="mt-4 rounded-xl bg-brand-light/40 p-3 text-sm">
+              <p className="font-semibold text-ink">Your rating: ★ {rating.score}</p>
+              {rating.comment && <p className="mt-1 text-muted">{rating.comment}</p>}
+              {carrierAvg && carrierAvg._avg.score && (
+                <p className="mt-1 text-xs text-muted">
+                  Carrier avg ★ {Number(carrierAvg._avg.score).toFixed(1)} ({carrierAvg._count._all})
+                </p>
+              )}
+            </div>
+          ) : (
+            <div className="mt-4">
+              <h3 className="font-semibold text-ink">Rate this carrier</h3>
+              <p className="text-sm text-muted">How was the delivery?</p>
+              <div className="mt-3">
+                <RatingForm loadId={load.id} />
+              </div>
+              {carrierAvg && carrierAvg._avg.score && (
+                <p className="mt-2 text-xs text-muted">
+                  Carrier avg ★ {Number(carrierAvg._avg.score).toFixed(1)} ({carrierAvg._count._all} ratings)
+                </p>
+              )}
+            </div>
+          )}
+        </section>
       )}
 
       {rejected.length > 0 && (
@@ -167,10 +229,13 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
   );
 }
 
-function CandidateRow({ app, loadId }: { app: { id: string; transporter: { id: string; name: string; vehicleType: VehicleType | null; currentRegion: string | null; acceptsRegions: string | null; available: boolean } }; loadId: string }) {
+function CandidateRow({ app, loadId, rating }: { app: { id: string; transporter: { id: string; name: string; vehicleType: VehicleType | null; currentRegion: string | null; acceptsRegions: string | null; available: boolean; carrierVerified?: boolean; licenseUrl?: string | null } }; loadId: string; rating?: { avg: number; count: number } }) {
   return (
     <div className="flex items-center justify-between gap-3 rounded-2xl border border-black/8 bg-white p-4">
-      <CarrierInfo app={app} compact />
+      <div className="min-w-0">
+        <CarrierInfo app={app} compact />
+        {rating && <p className="mt-1 text-xs text-muted">★ {rating.avg.toFixed(1)} ({rating.count}) trusted</p>}
+      </div>
       <form action={selectTransporter}>
         <input type="hidden" name="loadId" value={loadId} />
         <input type="hidden" name="applicationId" value={app.id} />
@@ -190,7 +255,7 @@ function CarrierInfo({
   compact,
   revealContact,
 }: {
-  app: { transporter: { name: string; vehicleType: VehicleType | null; currentRegion: string | null; acceptsRegions: string | null; available: boolean; phone?: string | null; email?: string | null }; createdAt?: Date };
+  app: { transporter: { name: string; vehicleType: VehicleType | null; currentRegion: string | null; acceptsRegions: string | null; available: boolean; carrierVerified?: boolean; licenseUrl?: string | null; phone?: string | null; email?: string | null }; createdAt?: Date };
   compact?: boolean;
   revealContact?: boolean;
 }) {
@@ -208,6 +273,13 @@ function CarrierInfo({
         {app.transporter.vehicleType && <Badge>{VEHICLE_LABELS[app.transporter.vehicleType]}</Badge>}
         {app.transporter.currentRegion && <Badge>Based in {app.transporter.currentRegion}</Badge>}
         {regions.length > 0 && <Badge tone="brand">Serves {regions.join(", ")}</Badge>}
+        {app.transporter.carrierVerified ? (
+          <Badge tone="green">Habilitação verificada</Badge>
+        ) : app.transporter.licenseUrl ? (
+          <Badge tone="amber">Habilitação enviada</Badge>
+        ) : (
+          <Badge tone="neutral">Sem habilitação</Badge>
+        )}
       </div>
       {revealContact && (
         <div className="mt-3 rounded-xl bg-brand-light/60 p-3 text-sm">
@@ -279,6 +351,20 @@ function CancelLoad({ loadId }: { loadId: string }) {
         className="w-full rounded-xl border border-black/10 bg-white py-2.5 text-sm font-semibold text-muted hover:border-red-400 hover:text-red-600"
       >
         Cancel load
+      </button>
+    </form>
+  );
+}
+
+function DuplicateLoad({ loadId }: { loadId: string }) {
+  return (
+    <form action={duplicateLoad}>
+      <input type="hidden" name="loadId" value={loadId} />
+      <button
+        type="submit"
+        className="w-full rounded-xl border border-black/10 bg-white py-2.5 text-sm font-semibold text-ink hover:border-brand hover:text-brand-dark"
+      >
+        Duplicate
       </button>
     </form>
   );

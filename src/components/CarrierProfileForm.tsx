@@ -12,6 +12,9 @@ export function CarrierProfileForm({
     vehicleType: string | null;
     vehiclePlate: string | null;
     professionalLicense: string | null;
+    licenseUrl: string | null;
+    licenseExpiry: string | null;
+    carrierVerified: boolean;
     phone: string | null;
     currentRegion: string | null;
     acceptsRegions: string[];
@@ -42,6 +45,26 @@ export function CarrierProfileForm({
       <Field label="Professional license" error={state?.errors?.professionalLicense?.[0]}>
         <Input name="professionalLicense" defaultValue={initial.professionalLicense ?? ""} placeholder="e.g. 2462LK123" />
       </Field>
+
+      <div className="rounded-xl border border-brand/10 bg-brand-light/30 p-3">
+        <p className="text-sm font-semibold text-brand-dark">Habilitação (C/E + Code 95) — for high-value loads</p>
+        <p className="text-xs text-muted">Add a link to your license document (Drive, etc.). Manual verification via Studio.</p>
+        <div className="mt-3 space-y-3">
+          <Field label="License document URL" error={state?.errors?.licenseUrl?.[0]}>
+            <Input name="licenseUrl" type="url" defaultValue={initial.licenseUrl ?? ""} placeholder="https://drive.google.com/..." />
+          </Field>
+          <Field label="License expiry" error={state?.errors?.licenseExpiry?.[0]}>
+            <Input name="licenseExpiry" type="date" defaultValue={initial.licenseExpiry ?? ""} />
+          </Field>
+          {initial.carrierVerified ? (
+            <p className="text-xs font-semibold text-emerald-700">✓ Habilitação verificada</p>
+          ) : initial.licenseUrl ? (
+            <p className="text-xs text-amber-700">Enviado — aguardando verificação manual.</p>
+          ) : (
+            <p className="text-xs text-muted">Optional now, required for high-value loads trust badge.</p>
+          )}
+        </div>
+      </div>
 
       <Field label="Phone number" error={state?.errors?.phone?.[0]}>
         <Input name="phone" type="tel" defaultValue={initial.phone ?? ""} placeholder="+31 6 1234 5678" />

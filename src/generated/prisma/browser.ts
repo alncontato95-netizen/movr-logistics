@@ -33,6 +33,11 @@ export type Company = Prisma.CompanyModel
  */
 export type Load = Prisma.LoadModel
 /**
+ * Model Rating
+ * 
+ */
+export type Rating = Prisma.RatingModel
+/**
  * Model Application
  * 
  */

@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { requireCarrier } from "@/lib/dal";
 import { prisma } from "@/lib/prisma";
-import { applyToLoad, cancelApplication, acceptOffer, declineOffer, confirmPickup, confirmDelivery } from "@/app/actions/loads";
+import { applyToLoad, cancelApplication, acceptOffer, declineOffer, confirmPickup, confirmDelivery, submitPod } from "@/app/actions/loads";
 import { PollRefresh } from "@/components/poll-refresh";
 import { Badge, LoadStatusBadge } from "@/components/ui";
 import { CARGO_LABELS, VEHICLE_LABELS } from "@/lib/constants";
@@ -23,6 +23,8 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
   const myApplication = await prisma.application.findUnique({
     where: { loadId_transporterId: { loadId: load.id, transporterId: user.id } },
   });
+
+  const rating = load.status === "COMPLETED" ? await prisma.rating.findUnique({ where: { loadId: load.id } }) : null;
 
   const isOpen = load.status === "OPEN";
   const canApply = isOpen && (!myApplication || myApplication.status === "CANCELLED");
@@ -107,6 +109,36 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
             </div>
           )}
       </div>
+
+      {load.podUrl && (
+        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+          <p className="font-semibold text-emerald-800">Proof of delivery</p>
+          <a href={load.podUrl} target="_blank" rel="noopener noreferrer" className="break-all text-sm text-emerald-700 underline">
+            {load.podUrl}
+          </a>
+          {load.podNote && <p className="mt-1 text-sm text-muted">{load.podNote}</p>}
+        </div>
+      )}
+
+      {load.status === "COMPLETED" && rating && (
+        <div className="rounded-2xl border border-black/8 bg-white p-4 text-center">
+          <p className="font-semibold text-ink">Your rating: ★ {rating.score}</p>
+          {rating.comment && <p className="mt-1 text-sm text-muted">{rating.comment}</p>}
+        </div>
+      )}
+
+      {myApplication?.status === "ACCEPTED" && (load.status === "PICKED_UP" || load.status === "DELIVERED") && !load.podUrl && (
+        <form action={submitPod} className="rounded-2xl border border-black/8 bg-white p-4 space-y-3">
+          <h3 className="font-semibold text-ink">Proof of delivery</h3>
+          <p className="text-sm text-muted">Add a link to the POD photo or document.</p>
+          <input type="hidden" name="loadId" value={load.id} />
+          <input name="podUrl" placeholder="https://... image URL" className="w-full rounded-[var(--radius-input)] border border-border bg-white px-3 py-2 text-sm outline-none focus:border-brand" />
+          <input name="podNote" placeholder="Note (optional)" className="w-full rounded-[var(--radius-input)] border border-border bg-white px-3 py-2 text-sm outline-none focus:border-brand" />
+          <button type="submit" className="w-full rounded-xl bg-brand py-2.5 text-sm font-bold text-white hover:bg-brand-dark">
+            Upload POD
+          </button>
+        </form>
+      )}
 
       <div className="sticky bottom-4">
         {myApplication?.status === "SELECTED" ? (

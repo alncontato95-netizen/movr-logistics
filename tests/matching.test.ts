@@ -19,6 +19,8 @@ function mkLoad(overrides: Partial<Load>): Load {
     priceEur: null,
     priceNegotiable: true,
     notes: null,
+    podUrl: null,
+    podNote: null,
     status: "OPEN",
     createdAt: new Date(),
     updatedAt: new Date(),

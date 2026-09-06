@@ -54,6 +54,8 @@ export type LoadMinAggregateOutputType = {
   priceNegotiable: boolean | null
   notes: string | null
   status: $Enums.LoadStatus | null
+  podUrl: string | null
+  podNote: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -74,6 +76,8 @@ export type LoadMaxAggregateOutputType = {
   priceNegotiable: boolean | null
   notes: string | null
   status: $Enums.LoadStatus | null
+  podUrl: string | null
+  podNote: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -94,6 +98,8 @@ export type LoadCountAggregateOutputType = {
   priceNegotiable: number
   notes: number
   status: number
+  podUrl: number
+  podNote: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -128,6 +134,8 @@ export type LoadMinAggregateInputType = {
   priceNegotiable?: true
   notes?: true
   status?: true
+  podUrl?: true
+  podNote?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -148,6 +156,8 @@ export type LoadMaxAggregateInputType = {
   priceNegotiable?: true
   notes?: true
   status?: true
+  podUrl?: true
+  podNote?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -168,6 +178,8 @@ export type LoadCountAggregateInputType = {
   priceNegotiable?: true
   notes?: true
   status?: true
+  podUrl?: true
+  podNote?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -275,6 +287,8 @@ export type LoadGroupByOutputType = {
   priceNegotiable: boolean
   notes: string | null
   status: $Enums.LoadStatus
+  podUrl: string | null
+  podNote: string | null
   createdAt: Date
   updatedAt: Date
   _count: LoadCountAggregateOutputType | null
@@ -318,12 +332,15 @@ export type LoadWhereInput = {
   priceNegotiable?: Prisma.BoolFilter<"Load"> | boolean
   notes?: Prisma.StringNullableFilter<"Load"> | string | null
   status?: Prisma.EnumLoadStatusFilter<"Load"> | $Enums.LoadStatus
+  podUrl?: Prisma.StringNullableFilter<"Load"> | string | null
+  podNote?: Prisma.StringNullableFilter<"Load"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Load"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Load"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   publisher?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   applications?: Prisma.ApplicationListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
+  rating?: Prisma.XOR<Prisma.RatingNullableScalarRelationFilter, Prisma.RatingWhereInput> | null
 }
 
 export type LoadOrderByWithRelationInput = {
@@ -342,12 +359,15 @@ export type LoadOrderByWithRelationInput = {
   priceNegotiable?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
+  podUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  podNote?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   company?: Prisma.CompanyOrderByWithRelationInput
   publisher?: Prisma.UserOrderByWithRelationInput
   applications?: Prisma.ApplicationOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
+  rating?: Prisma.RatingOrderByWithRelationInput
 }
 
 export type LoadWhereUniqueInput = Prisma.AtLeast<{
@@ -369,12 +389,15 @@ export type LoadWhereUniqueInput = Prisma.AtLeast<{
   priceNegotiable?: Prisma.BoolFilter<"Load"> | boolean
   notes?: Prisma.StringNullableFilter<"Load"> | string | null
   status?: Prisma.EnumLoadStatusFilter<"Load"> | $Enums.LoadStatus
+  podUrl?: Prisma.StringNullableFilter<"Load"> | string | null
+  podNote?: Prisma.StringNullableFilter<"Load"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Load"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Load"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   publisher?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   applications?: Prisma.ApplicationListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
+  rating?: Prisma.XOR<Prisma.RatingNullableScalarRelationFilter, Prisma.RatingWhereInput> | null
 }, "id">
 
 export type LoadOrderByWithAggregationInput = {
@@ -393,6 +416,8 @@ export type LoadOrderByWithAggregationInput = {
   priceNegotiable?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
+  podUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  podNote?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.LoadCountOrderByAggregateInput
@@ -421,6 +446,8 @@ export type LoadScalarWhereWithAggregatesInput = {
   priceNegotiable?: Prisma.BoolWithAggregatesFilter<"Load"> | boolean
   notes?: Prisma.StringNullableWithAggregatesFilter<"Load"> | string | null
   status?: Prisma.EnumLoadStatusWithAggregatesFilter<"Load"> | $Enums.LoadStatus
+  podUrl?: Prisma.StringNullableWithAggregatesFilter<"Load"> | string | null
+  podNote?: Prisma.StringNullableWithAggregatesFilter<"Load"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Load"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Load"> | Date | string
 }
@@ -439,12 +466,15 @@ export type LoadCreateInput = {
   priceNegotiable?: boolean
   notes?: string | null
   status?: $Enums.LoadStatus
+  podUrl?: string | null
+  podNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutLoadsInput
   publisher: Prisma.UserCreateNestedOneWithoutLoadsInput
   applications?: Prisma.ApplicationCreateNestedManyWithoutLoadInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutLoadInput
+  rating?: Prisma.RatingCreateNestedOneWithoutLoadInput
 }
 
 export type LoadUncheckedCreateInput = {
@@ -463,10 +493,13 @@ export type LoadUncheckedCreateInput = {
   priceNegotiable?: boolean
   notes?: string | null
   status?: $Enums.LoadStatus
+  podUrl?: string | null
+  podNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutLoadInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutLoadInput
+  rating?: Prisma.RatingUncheckedCreateNestedOneWithoutLoadInput
 }
 
 export type LoadUpdateInput = {
@@ -483,12 +516,15 @@ export type LoadUpdateInput = {
   priceNegotiable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLoadStatusFieldUpdateOperationsInput | $Enums.LoadStatus
+  podUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  podNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutLoadsNestedInput
   publisher?: Prisma.UserUpdateOneRequiredWithoutLoadsNestedInput
   applications?: Prisma.ApplicationUpdateManyWithoutLoadNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutLoadNestedInput
+  rating?: Prisma.RatingUpdateOneWithoutLoadNestedInput
 }
 
 export type LoadUncheckedUpdateInput = {
@@ -507,10 +543,13 @@ export type LoadUncheckedUpdateInput = {
   priceNegotiable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLoadStatusFieldUpdateOperationsInput | $Enums.LoadStatus
+  podUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  podNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutLoadNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutLoadNestedInput
+  rating?: Prisma.RatingUncheckedUpdateOneWithoutLoadNestedInput
 }
 
 export type LoadCreateManyInput = {
@@ -529,6 +568,8 @@ export type LoadCreateManyInput = {
   priceNegotiable?: boolean
   notes?: string | null
   status?: $Enums.LoadStatus
+  podUrl?: string | null
+  podNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -547,6 +588,8 @@ export type LoadUpdateManyMutationInput = {
   priceNegotiable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLoadStatusFieldUpdateOperationsInput | $Enums.LoadStatus
+  podUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  podNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -567,6 +610,8 @@ export type LoadUncheckedUpdateManyInput = {
   priceNegotiable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLoadStatusFieldUpdateOperationsInput | $Enums.LoadStatus
+  podUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  podNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -597,6 +642,8 @@ export type LoadCountOrderByAggregateInput = {
   priceNegotiable?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  podUrl?: Prisma.SortOrder
+  podNote?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -623,6 +670,8 @@ export type LoadMaxOrderByAggregateInput = {
   priceNegotiable?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  podUrl?: Prisma.SortOrder
+  podNote?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -643,6 +692,8 @@ export type LoadMinOrderByAggregateInput = {
   priceNegotiable?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  podUrl?: Prisma.SortOrder
+  podNote?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -774,6 +825,20 @@ export type EnumLoadStatusFieldUpdateOperationsInput = {
   set?: $Enums.LoadStatus
 }
 
+export type LoadCreateNestedOneWithoutRatingInput = {
+  create?: Prisma.XOR<Prisma.LoadCreateWithoutRatingInput, Prisma.LoadUncheckedCreateWithoutRatingInput>
+  connectOrCreate?: Prisma.LoadCreateOrConnectWithoutRatingInput
+  connect?: Prisma.LoadWhereUniqueInput
+}
+
+export type LoadUpdateOneRequiredWithoutRatingNestedInput = {
+  create?: Prisma.XOR<Prisma.LoadCreateWithoutRatingInput, Prisma.LoadUncheckedCreateWithoutRatingInput>
+  connectOrCreate?: Prisma.LoadCreateOrConnectWithoutRatingInput
+  upsert?: Prisma.LoadUpsertWithoutRatingInput
+  connect?: Prisma.LoadWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LoadUpdateToOneWithWhereWithoutRatingInput, Prisma.LoadUpdateWithoutRatingInput>, Prisma.LoadUncheckedUpdateWithoutRatingInput>
+}
+
 export type LoadCreateNestedOneWithoutApplicationsInput = {
   create?: Prisma.XOR<Prisma.LoadCreateWithoutApplicationsInput, Prisma.LoadUncheckedCreateWithoutApplicationsInput>
   connectOrCreate?: Prisma.LoadCreateOrConnectWithoutApplicationsInput
@@ -816,11 +881,14 @@ export type LoadCreateWithoutPublisherInput = {
   priceNegotiable?: boolean
   notes?: string | null
   status?: $Enums.LoadStatus
+  podUrl?: string | null
+  podNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutLoadsInput
   applications?: Prisma.ApplicationCreateNestedManyWithoutLoadInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutLoadInput
+  rating?: Prisma.RatingCreateNestedOneWithoutLoadInput
 }
 
 export type LoadUncheckedCreateWithoutPublisherInput = {
@@ -838,10 +906,13 @@ export type LoadUncheckedCreateWithoutPublisherInput = {
   priceNegotiable?: boolean
   notes?: string | null
   status?: $Enums.LoadStatus
+  podUrl?: string | null
+  podNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutLoadInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutLoadInput
+  rating?: Prisma.RatingUncheckedCreateNestedOneWithoutLoadInput
 }
 
 export type LoadCreateOrConnectWithoutPublisherInput = {
@@ -888,6 +959,8 @@ export type LoadScalarWhereInput = {
   priceNegotiable?: Prisma.BoolFilter<"Load"> | boolean
   notes?: Prisma.StringNullableFilter<"Load"> | string | null
   status?: Prisma.EnumLoadStatusFilter<"Load"> | $Enums.LoadStatus
+  podUrl?: Prisma.StringNullableFilter<"Load"> | string | null
+  podNote?: Prisma.StringNullableFilter<"Load"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Load"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Load"> | Date | string
 }
@@ -906,11 +979,14 @@ export type LoadCreateWithoutCompanyInput = {
   priceNegotiable?: boolean
   notes?: string | null
   status?: $Enums.LoadStatus
+  podUrl?: string | null
+  podNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   publisher: Prisma.UserCreateNestedOneWithoutLoadsInput
   applications?: Prisma.ApplicationCreateNestedManyWithoutLoadInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutLoadInput
+  rating?: Prisma.RatingCreateNestedOneWithoutLoadInput
 }
 
 export type LoadUncheckedCreateWithoutCompanyInput = {
@@ -928,10 +1004,13 @@ export type LoadUncheckedCreateWithoutCompanyInput = {
   priceNegotiable?: boolean
   notes?: string | null
   status?: $Enums.LoadStatus
+  podUrl?: string | null
+  podNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutLoadInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutLoadInput
+  rating?: Prisma.RatingUncheckedCreateNestedOneWithoutLoadInput
 }
 
 export type LoadCreateOrConnectWithoutCompanyInput = {
@@ -959,6 +1038,118 @@ export type LoadUpdateManyWithWhereWithoutCompanyInput = {
   data: Prisma.XOR<Prisma.LoadUpdateManyMutationInput, Prisma.LoadUncheckedUpdateManyWithoutCompanyInput>
 }
 
+export type LoadCreateWithoutRatingInput = {
+  id?: string
+  origin: string
+  destination: string
+  pickupDate: Date | string
+  pickupWindow?: string | null
+  cargoType: $Enums.CargoType
+  weightKg: number
+  volumeM3?: number | null
+  requiredVehicle?: $Enums.VehicleType | null
+  priceEur?: number | null
+  priceNegotiable?: boolean
+  notes?: string | null
+  status?: $Enums.LoadStatus
+  podUrl?: string | null
+  podNote?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutLoadsInput
+  publisher: Prisma.UserCreateNestedOneWithoutLoadsInput
+  applications?: Prisma.ApplicationCreateNestedManyWithoutLoadInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutLoadInput
+}
+
+export type LoadUncheckedCreateWithoutRatingInput = {
+  id?: string
+  companyId: string
+  publishedBy: string
+  origin: string
+  destination: string
+  pickupDate: Date | string
+  pickupWindow?: string | null
+  cargoType: $Enums.CargoType
+  weightKg: number
+  volumeM3?: number | null
+  requiredVehicle?: $Enums.VehicleType | null
+  priceEur?: number | null
+  priceNegotiable?: boolean
+  notes?: string | null
+  status?: $Enums.LoadStatus
+  podUrl?: string | null
+  podNote?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutLoadInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutLoadInput
+}
+
+export type LoadCreateOrConnectWithoutRatingInput = {
+  where: Prisma.LoadWhereUniqueInput
+  create: Prisma.XOR<Prisma.LoadCreateWithoutRatingInput, Prisma.LoadUncheckedCreateWithoutRatingInput>
+}
+
+export type LoadUpsertWithoutRatingInput = {
+  update: Prisma.XOR<Prisma.LoadUpdateWithoutRatingInput, Prisma.LoadUncheckedUpdateWithoutRatingInput>
+  create: Prisma.XOR<Prisma.LoadCreateWithoutRatingInput, Prisma.LoadUncheckedCreateWithoutRatingInput>
+  where?: Prisma.LoadWhereInput
+}
+
+export type LoadUpdateToOneWithWhereWithoutRatingInput = {
+  where?: Prisma.LoadWhereInput
+  data: Prisma.XOR<Prisma.LoadUpdateWithoutRatingInput, Prisma.LoadUncheckedUpdateWithoutRatingInput>
+}
+
+export type LoadUpdateWithoutRatingInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  origin?: Prisma.StringFieldUpdateOperationsInput | string
+  destination?: Prisma.StringFieldUpdateOperationsInput | string
+  pickupDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pickupWindow?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cargoType?: Prisma.EnumCargoTypeFieldUpdateOperationsInput | $Enums.CargoType
+  weightKg?: Prisma.IntFieldUpdateOperationsInput | number
+  volumeM3?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  requiredVehicle?: Prisma.NullableEnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType | null
+  priceEur?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  priceNegotiable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumLoadStatusFieldUpdateOperationsInput | $Enums.LoadStatus
+  podUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  podNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutLoadsNestedInput
+  publisher?: Prisma.UserUpdateOneRequiredWithoutLoadsNestedInput
+  applications?: Prisma.ApplicationUpdateManyWithoutLoadNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutLoadNestedInput
+}
+
+export type LoadUncheckedUpdateWithoutRatingInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  publishedBy?: Prisma.StringFieldUpdateOperationsInput | string
+  origin?: Prisma.StringFieldUpdateOperationsInput | string
+  destination?: Prisma.StringFieldUpdateOperationsInput | string
+  pickupDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pickupWindow?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cargoType?: Prisma.EnumCargoTypeFieldUpdateOperationsInput | $Enums.CargoType
+  weightKg?: Prisma.IntFieldUpdateOperationsInput | number
+  volumeM3?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  requiredVehicle?: Prisma.NullableEnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType | null
+  priceEur?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  priceNegotiable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumLoadStatusFieldUpdateOperationsInput | $Enums.LoadStatus
+  podUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  podNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  applications?: Prisma.ApplicationUncheckedUpdateManyWithoutLoadNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutLoadNestedInput
+}
+
 export type LoadCreateWithoutApplicationsInput = {
   id?: string
   origin: string
@@ -973,11 +1164,14 @@ export type LoadCreateWithoutApplicationsInput = {
   priceNegotiable?: boolean
   notes?: string | null
   status?: $Enums.LoadStatus
+  podUrl?: string | null
+  podNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutLoadsInput
   publisher: Prisma.UserCreateNestedOneWithoutLoadsInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutLoadInput
+  rating?: Prisma.RatingCreateNestedOneWithoutLoadInput
 }
 
 export type LoadUncheckedCreateWithoutApplicationsInput = {
@@ -996,9 +1190,12 @@ export type LoadUncheckedCreateWithoutApplicationsInput = {
   priceNegotiable?: boolean
   notes?: string | null
   status?: $Enums.LoadStatus
+  podUrl?: string | null
+  podNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutLoadInput
+  rating?: Prisma.RatingUncheckedCreateNestedOneWithoutLoadInput
 }
 
 export type LoadCreateOrConnectWithoutApplicationsInput = {
@@ -1031,11 +1228,14 @@ export type LoadUpdateWithoutApplicationsInput = {
   priceNegotiable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLoadStatusFieldUpdateOperationsInput | $Enums.LoadStatus
+  podUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  podNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutLoadsNestedInput
   publisher?: Prisma.UserUpdateOneRequiredWithoutLoadsNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutLoadNestedInput
+  rating?: Prisma.RatingUpdateOneWithoutLoadNestedInput
 }
 
 export type LoadUncheckedUpdateWithoutApplicationsInput = {
@@ -1054,9 +1254,12 @@ export type LoadUncheckedUpdateWithoutApplicationsInput = {
   priceNegotiable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLoadStatusFieldUpdateOperationsInput | $Enums.LoadStatus
+  podUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  podNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutLoadNestedInput
+  rating?: Prisma.RatingUncheckedUpdateOneWithoutLoadNestedInput
 }
 
 export type LoadCreateWithoutNotificationsInput = {
@@ -1073,11 +1276,14 @@ export type LoadCreateWithoutNotificationsInput = {
   priceNegotiable?: boolean
   notes?: string | null
   status?: $Enums.LoadStatus
+  podUrl?: string | null
+  podNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutLoadsInput
   publisher: Prisma.UserCreateNestedOneWithoutLoadsInput
   applications?: Prisma.ApplicationCreateNestedManyWithoutLoadInput
+  rating?: Prisma.RatingCreateNestedOneWithoutLoadInput
 }
 
 export type LoadUncheckedCreateWithoutNotificationsInput = {
@@ -1096,9 +1302,12 @@ export type LoadUncheckedCreateWithoutNotificationsInput = {
   priceNegotiable?: boolean
   notes?: string | null
   status?: $Enums.LoadStatus
+  podUrl?: string | null
+  podNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutLoadInput
+  rating?: Prisma.RatingUncheckedCreateNestedOneWithoutLoadInput
 }
 
 export type LoadCreateOrConnectWithoutNotificationsInput = {
@@ -1131,11 +1340,14 @@ export type LoadUpdateWithoutNotificationsInput = {
   priceNegotiable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLoadStatusFieldUpdateOperationsInput | $Enums.LoadStatus
+  podUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  podNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutLoadsNestedInput
   publisher?: Prisma.UserUpdateOneRequiredWithoutLoadsNestedInput
   applications?: Prisma.ApplicationUpdateManyWithoutLoadNestedInput
+  rating?: Prisma.RatingUpdateOneWithoutLoadNestedInput
 }
 
 export type LoadUncheckedUpdateWithoutNotificationsInput = {
@@ -1154,9 +1366,12 @@ export type LoadUncheckedUpdateWithoutNotificationsInput = {
   priceNegotiable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLoadStatusFieldUpdateOperationsInput | $Enums.LoadStatus
+  podUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  podNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutLoadNestedInput
+  rating?: Prisma.RatingUncheckedUpdateOneWithoutLoadNestedInput
 }
 
 export type LoadCreateManyPublisherInput = {
@@ -1174,6 +1389,8 @@ export type LoadCreateManyPublisherInput = {
   priceNegotiable?: boolean
   notes?: string | null
   status?: $Enums.LoadStatus
+  podUrl?: string | null
+  podNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1192,11 +1409,14 @@ export type LoadUpdateWithoutPublisherInput = {
   priceNegotiable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLoadStatusFieldUpdateOperationsInput | $Enums.LoadStatus
+  podUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  podNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutLoadsNestedInput
   applications?: Prisma.ApplicationUpdateManyWithoutLoadNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutLoadNestedInput
+  rating?: Prisma.RatingUpdateOneWithoutLoadNestedInput
 }
 
 export type LoadUncheckedUpdateWithoutPublisherInput = {
@@ -1214,10 +1434,13 @@ export type LoadUncheckedUpdateWithoutPublisherInput = {
   priceNegotiable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLoadStatusFieldUpdateOperationsInput | $Enums.LoadStatus
+  podUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  podNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutLoadNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutLoadNestedInput
+  rating?: Prisma.RatingUncheckedUpdateOneWithoutLoadNestedInput
 }
 
 export type LoadUncheckedUpdateManyWithoutPublisherInput = {
@@ -1235,6 +1458,8 @@ export type LoadUncheckedUpdateManyWithoutPublisherInput = {
   priceNegotiable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLoadStatusFieldUpdateOperationsInput | $Enums.LoadStatus
+  podUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  podNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1254,6 +1479,8 @@ export type LoadCreateManyCompanyInput = {
   priceNegotiable?: boolean
   notes?: string | null
   status?: $Enums.LoadStatus
+  podUrl?: string | null
+  podNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1272,11 +1499,14 @@ export type LoadUpdateWithoutCompanyInput = {
   priceNegotiable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLoadStatusFieldUpdateOperationsInput | $Enums.LoadStatus
+  podUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  podNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   publisher?: Prisma.UserUpdateOneRequiredWithoutLoadsNestedInput
   applications?: Prisma.ApplicationUpdateManyWithoutLoadNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutLoadNestedInput
+  rating?: Prisma.RatingUpdateOneWithoutLoadNestedInput
 }
 
 export type LoadUncheckedUpdateWithoutCompanyInput = {
@@ -1294,10 +1524,13 @@ export type LoadUncheckedUpdateWithoutCompanyInput = {
   priceNegotiable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLoadStatusFieldUpdateOperationsInput | $Enums.LoadStatus
+  podUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  podNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutLoadNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutLoadNestedInput
+  rating?: Prisma.RatingUncheckedUpdateOneWithoutLoadNestedInput
 }
 
 export type LoadUncheckedUpdateManyWithoutCompanyInput = {
@@ -1315,6 +1548,8 @@ export type LoadUncheckedUpdateManyWithoutCompanyInput = {
   priceNegotiable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLoadStatusFieldUpdateOperationsInput | $Enums.LoadStatus
+  podUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  podNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1375,12 +1610,15 @@ export type LoadSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   priceNegotiable?: boolean
   notes?: boolean
   status?: boolean
+  podUrl?: boolean
+  podNote?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   publisher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   applications?: boolean | Prisma.Load$applicationsArgs<ExtArgs>
   notifications?: boolean | Prisma.Load$notificationsArgs<ExtArgs>
+  rating?: boolean | Prisma.Load$ratingArgs<ExtArgs>
   _count?: boolean | Prisma.LoadCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["load"]>
 
@@ -1400,6 +1638,8 @@ export type LoadSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   priceNegotiable?: boolean
   notes?: boolean
   status?: boolean
+  podUrl?: boolean
+  podNote?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
@@ -1422,6 +1662,8 @@ export type LoadSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   priceNegotiable?: boolean
   notes?: boolean
   status?: boolean
+  podUrl?: boolean
+  podNote?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
@@ -1444,16 +1686,19 @@ export type LoadSelectScalar = {
   priceNegotiable?: boolean
   notes?: boolean
   status?: boolean
+  podUrl?: boolean
+  podNote?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type LoadOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyId" | "publishedBy" | "origin" | "destination" | "pickupDate" | "pickupWindow" | "cargoType" | "weightKg" | "volumeM3" | "requiredVehicle" | "priceEur" | "priceNegotiable" | "notes" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["load"]>
+export type LoadOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyId" | "publishedBy" | "origin" | "destination" | "pickupDate" | "pickupWindow" | "cargoType" | "weightKg" | "volumeM3" | "requiredVehicle" | "priceEur" | "priceNegotiable" | "notes" | "status" | "podUrl" | "podNote" | "createdAt" | "updatedAt", ExtArgs["result"]["load"]>
 export type LoadInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   publisher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   applications?: boolean | Prisma.Load$applicationsArgs<ExtArgs>
   notifications?: boolean | Prisma.Load$notificationsArgs<ExtArgs>
+  rating?: boolean | Prisma.Load$ratingArgs<ExtArgs>
   _count?: boolean | Prisma.LoadCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LoadIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1472,6 +1717,7 @@ export type $LoadPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     publisher: Prisma.$UserPayload<ExtArgs>
     applications: Prisma.$ApplicationPayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
+    rating: Prisma.$RatingPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1489,6 +1735,8 @@ export type $LoadPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     priceNegotiable: boolean
     notes: string | null
     status: $Enums.LoadStatus
+    podUrl: string | null
+    podNote: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["load"]>
@@ -1889,6 +2137,7 @@ export interface Prisma__LoadClient<T, Null = never, ExtArgs extends runtime.Typ
   publisher<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   applications<T extends Prisma.Load$applicationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Load$applicationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.Load$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Load$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  rating<T extends Prisma.Load$ratingArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Load$ratingArgs<ExtArgs>>): Prisma.Prisma__RatingClient<runtime.Types.Result.GetResult<Prisma.$RatingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1933,6 +2182,8 @@ export interface LoadFieldRefs {
   readonly priceNegotiable: Prisma.FieldRef<"Load", 'Boolean'>
   readonly notes: Prisma.FieldRef<"Load", 'String'>
   readonly status: Prisma.FieldRef<"Load", 'LoadStatus'>
+  readonly podUrl: Prisma.FieldRef<"Load", 'String'>
+  readonly podNote: Prisma.FieldRef<"Load", 'String'>
   readonly createdAt: Prisma.FieldRef<"Load", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Load", 'DateTime'>
 }
@@ -2379,6 +2630,25 @@ export type Load$notificationsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
+}
+
+/**
+ * Load.rating
+ */
+export type Load$ratingArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Rating
+   */
+  select?: Prisma.RatingSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Rating
+   */
+  omit?: Prisma.RatingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RatingInclude<ExtArgs> | null
+  where?: Prisma.RatingWhereInput
 }
 
 /**

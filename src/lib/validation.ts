@@ -21,6 +21,14 @@ export const carrierProfileSchema = z.object({
   vehicleType: z.enum(VEHICLE_TYPES, { message: "Select your vehicle type" }),
   vehiclePlate: z.string().trim().min(2, "Enter your vehicle plate").optional().or(z.literal("")),
   professionalLicense: z.string().trim().min(3, "Enter your professional license").optional().or(z.literal("")),
+  licenseUrl: z.string().trim().url("Enter a valid URL").max(500, "URL is too long").optional().or(z.literal("")),
+  licenseExpiry: z
+    .string()
+    .trim()
+    .optional()
+    .or(z.literal(""))
+    .refine((v) => !v || !Number.isNaN(Date.parse(v)), { message: "Enter a valid date" })
+    .refine((v) => !v || new Date(v).getTime() > Date.now(), { message: "Expiry must be in the future" }),
   phone: z.string().trim().min(6, "Enter a phone number").optional().or(z.literal("")),
   currentRegion: z.enum(REGIONS, { message: "Select your home region" }),
   acceptsRegions: z.array(z.enum(REGIONS)).min(1, "Select at least one region you serve"),

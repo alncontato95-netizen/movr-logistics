@@ -8,6 +8,7 @@ export default async function ProfilePage() {
   const user = await requireCarrier();
   const acceptsRegions = regionsFor(user.acceptsRegions);
   const incomplete = !user.vehicleType || !user.currentRegion;
+  const licenseExpiryStr = user.licenseExpiry ? new Date(user.licenseExpiry).toISOString().slice(0, 10) : null;
 
   return (
     <div className="mx-auto max-w-lg space-y-6">
@@ -24,12 +25,21 @@ export default async function ProfilePage() {
         </div>
       )}
 
+      {!user.licenseUrl && (
+        <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+          Add your habilitação (C/E + Code 95) to earn the verified badge for high-value loads — optional now, soft trust signal.
+        </div>
+      )}
+
       <Card>
         <CarrierProfileForm
           initial={{
             vehicleType: user.vehicleType,
             vehiclePlate: user.vehiclePlate,
             professionalLicense: user.professionalLicense,
+            licenseUrl: user.licenseUrl,
+            licenseExpiry: licenseExpiryStr,
+            carrierVerified: user.carrierVerified,
             phone: user.phone,
             currentRegion: user.currentRegion,
             acceptsRegions,

@@ -68,6 +68,9 @@ model User {
   vehicleType  VehicleType?
   vehiclePlate String?
   professionalLicense String?
+  licenseUrl String?
+  licenseExpiry DateTime?
+  carrierVerified Boolean @default(false)
   currentRegion String?
   available    Boolean     @default(true)
   acceptsRegions String?
@@ -77,6 +80,7 @@ model User {
   applications Application[]
   sessions     Session[]
   notifications Notification[]
+  ratingsReceived Rating[] @relation("CarrierRatings")
 }
 
 model Company {
@@ -90,6 +94,7 @@ model Company {
   verified  Boolean  @default(false)
   createdAt DateTime @default(now())
   loads     Load[]
+  ratings   Rating[]
 }
 
 model Load {
@@ -110,10 +115,13 @@ model Load {
   priceNegotiable Boolean   @default(true)
   notes        String?
   status       LoadStatus @default(OPEN)
+  podUrl       String?
+  podNote      String?
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   applications Application[]
   notifications Notification[]
+  rating       Rating?
 
   @@index([status])
   @@index([origin])
@@ -123,6 +131,22 @@ model Load {
   @@index([companyId, status])
   @@index([publishedBy])
   @@index([createdAt])
+}
+
+model Rating {
+  id         String   @id @default(cuid())
+  loadId     String   @unique
+  load       Load     @relation(fields: [loadId], references: [id], onDelete: Cascade)
+  companyId  String
+  company    Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  carrierId  String
+  carrier    User     @relation("CarrierRatings", fields: [carrierId], references: [id], onDelete: Cascade)
+  score      Int
+  comment    String?
+  createdAt  DateTime @default(now())
+
+  @@index([carrierId])
+  @@index([companyId])
 }
 
 model Application {

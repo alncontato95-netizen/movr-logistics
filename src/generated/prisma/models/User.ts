@@ -34,6 +34,9 @@ export type UserMinAggregateOutputType = {
   vehicleType: $Enums.VehicleType | null
   vehiclePlate: string | null
   professionalLicense: string | null
+  licenseUrl: string | null
+  licenseExpiry: Date | null
+  carrierVerified: boolean | null
   currentRegion: string | null
   available: boolean | null
   acceptsRegions: string | null
@@ -50,6 +53,9 @@ export type UserMaxAggregateOutputType = {
   vehicleType: $Enums.VehicleType | null
   vehiclePlate: string | null
   professionalLicense: string | null
+  licenseUrl: string | null
+  licenseExpiry: Date | null
+  carrierVerified: boolean | null
   currentRegion: string | null
   available: boolean | null
   acceptsRegions: string | null
@@ -66,6 +72,9 @@ export type UserCountAggregateOutputType = {
   vehicleType: number
   vehiclePlate: number
   professionalLicense: number
+  licenseUrl: number
+  licenseExpiry: number
+  carrierVerified: number
   currentRegion: number
   available: number
   acceptsRegions: number
@@ -84,6 +93,9 @@ export type UserMinAggregateInputType = {
   vehicleType?: true
   vehiclePlate?: true
   professionalLicense?: true
+  licenseUrl?: true
+  licenseExpiry?: true
+  carrierVerified?: true
   currentRegion?: true
   available?: true
   acceptsRegions?: true
@@ -100,6 +112,9 @@ export type UserMaxAggregateInputType = {
   vehicleType?: true
   vehiclePlate?: true
   professionalLicense?: true
+  licenseUrl?: true
+  licenseExpiry?: true
+  carrierVerified?: true
   currentRegion?: true
   available?: true
   acceptsRegions?: true
@@ -116,6 +131,9 @@ export type UserCountAggregateInputType = {
   vehicleType?: true
   vehiclePlate?: true
   professionalLicense?: true
+  licenseUrl?: true
+  licenseExpiry?: true
+  carrierVerified?: true
   currentRegion?: true
   available?: true
   acceptsRegions?: true
@@ -205,6 +223,9 @@ export type UserGroupByOutputType = {
   vehicleType: $Enums.VehicleType | null
   vehiclePlate: string | null
   professionalLicense: string | null
+  licenseUrl: string | null
+  licenseExpiry: Date | null
+  carrierVerified: boolean
   currentRegion: string | null
   available: boolean
   acceptsRegions: string | null
@@ -242,6 +263,9 @@ export type UserWhereInput = {
   vehicleType?: Prisma.EnumVehicleTypeNullableFilter<"User"> | $Enums.VehicleType | null
   vehiclePlate?: Prisma.StringNullableFilter<"User"> | string | null
   professionalLicense?: Prisma.StringNullableFilter<"User"> | string | null
+  licenseUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  licenseExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  carrierVerified?: Prisma.BoolFilter<"User"> | boolean
   currentRegion?: Prisma.StringNullableFilter<"User"> | string | null
   available?: Prisma.BoolFilter<"User"> | boolean
   acceptsRegions?: Prisma.StringNullableFilter<"User"> | string | null
@@ -251,6 +275,7 @@ export type UserWhereInput = {
   applications?: Prisma.ApplicationListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
+  ratingsReceived?: Prisma.RatingListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -263,6 +288,9 @@ export type UserOrderByWithRelationInput = {
   vehicleType?: Prisma.SortOrderInput | Prisma.SortOrder
   vehiclePlate?: Prisma.SortOrderInput | Prisma.SortOrder
   professionalLicense?: Prisma.SortOrderInput | Prisma.SortOrder
+  licenseUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  licenseExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
+  carrierVerified?: Prisma.SortOrder
   currentRegion?: Prisma.SortOrderInput | Prisma.SortOrder
   available?: Prisma.SortOrder
   acceptsRegions?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -272,6 +300,7 @@ export type UserOrderByWithRelationInput = {
   applications?: Prisma.ApplicationOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
+  ratingsReceived?: Prisma.RatingOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -287,6 +316,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   vehicleType?: Prisma.EnumVehicleTypeNullableFilter<"User"> | $Enums.VehicleType | null
   vehiclePlate?: Prisma.StringNullableFilter<"User"> | string | null
   professionalLicense?: Prisma.StringNullableFilter<"User"> | string | null
+  licenseUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  licenseExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  carrierVerified?: Prisma.BoolFilter<"User"> | boolean
   currentRegion?: Prisma.StringNullableFilter<"User"> | string | null
   available?: Prisma.BoolFilter<"User"> | boolean
   acceptsRegions?: Prisma.StringNullableFilter<"User"> | string | null
@@ -296,6 +328,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   applications?: Prisma.ApplicationListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
+  ratingsReceived?: Prisma.RatingListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -308,6 +341,9 @@ export type UserOrderByWithAggregationInput = {
   vehicleType?: Prisma.SortOrderInput | Prisma.SortOrder
   vehiclePlate?: Prisma.SortOrderInput | Prisma.SortOrder
   professionalLicense?: Prisma.SortOrderInput | Prisma.SortOrder
+  licenseUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  licenseExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
+  carrierVerified?: Prisma.SortOrder
   currentRegion?: Prisma.SortOrderInput | Prisma.SortOrder
   available?: Prisma.SortOrder
   acceptsRegions?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -330,6 +366,9 @@ export type UserScalarWhereWithAggregatesInput = {
   vehicleType?: Prisma.EnumVehicleTypeNullableWithAggregatesFilter<"User"> | $Enums.VehicleType | null
   vehiclePlate?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   professionalLicense?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  licenseUrl?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  licenseExpiry?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  carrierVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   currentRegion?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   available?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   acceptsRegions?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
@@ -346,6 +385,9 @@ export type UserCreateInput = {
   vehicleType?: $Enums.VehicleType | null
   vehiclePlate?: string | null
   professionalLicense?: string | null
+  licenseUrl?: string | null
+  licenseExpiry?: Date | string | null
+  carrierVerified?: boolean
   currentRegion?: string | null
   available?: boolean
   acceptsRegions?: string | null
@@ -355,6 +397,7 @@ export type UserCreateInput = {
   applications?: Prisma.ApplicationCreateNestedManyWithoutTransporterInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  ratingsReceived?: Prisma.RatingCreateNestedManyWithoutCarrierInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -367,6 +410,9 @@ export type UserUncheckedCreateInput = {
   vehicleType?: $Enums.VehicleType | null
   vehiclePlate?: string | null
   professionalLicense?: string | null
+  licenseUrl?: string | null
+  licenseExpiry?: Date | string | null
+  carrierVerified?: boolean
   currentRegion?: string | null
   available?: boolean
   acceptsRegions?: string | null
@@ -376,6 +422,7 @@ export type UserUncheckedCreateInput = {
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutTransporterInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  ratingsReceived?: Prisma.RatingUncheckedCreateNestedManyWithoutCarrierInput
 }
 
 export type UserUpdateInput = {
@@ -388,6 +435,9 @@ export type UserUpdateInput = {
   vehicleType?: Prisma.NullableEnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType | null
   vehiclePlate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   professionalLicense?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -397,6 +447,7 @@ export type UserUpdateInput = {
   applications?: Prisma.ApplicationUpdateManyWithoutTransporterNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  ratingsReceived?: Prisma.RatingUpdateManyWithoutCarrierNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -409,6 +460,9 @@ export type UserUncheckedUpdateInput = {
   vehicleType?: Prisma.NullableEnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType | null
   vehiclePlate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   professionalLicense?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -418,6 +472,7 @@ export type UserUncheckedUpdateInput = {
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutTransporterNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  ratingsReceived?: Prisma.RatingUncheckedUpdateManyWithoutCarrierNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -430,6 +485,9 @@ export type UserCreateManyInput = {
   vehicleType?: $Enums.VehicleType | null
   vehiclePlate?: string | null
   professionalLicense?: string | null
+  licenseUrl?: string | null
+  licenseExpiry?: Date | string | null
+  carrierVerified?: boolean
   currentRegion?: string | null
   available?: boolean
   acceptsRegions?: string | null
@@ -446,6 +504,9 @@ export type UserUpdateManyMutationInput = {
   vehicleType?: Prisma.NullableEnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType | null
   vehiclePlate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   professionalLicense?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -462,6 +523,9 @@ export type UserUncheckedUpdateManyInput = {
   vehicleType?: Prisma.NullableEnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType | null
   vehiclePlate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   professionalLicense?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -478,6 +542,9 @@ export type UserCountOrderByAggregateInput = {
   vehicleType?: Prisma.SortOrder
   vehiclePlate?: Prisma.SortOrder
   professionalLicense?: Prisma.SortOrder
+  licenseUrl?: Prisma.SortOrder
+  licenseExpiry?: Prisma.SortOrder
+  carrierVerified?: Prisma.SortOrder
   currentRegion?: Prisma.SortOrder
   available?: Prisma.SortOrder
   acceptsRegions?: Prisma.SortOrder
@@ -494,6 +561,9 @@ export type UserMaxOrderByAggregateInput = {
   vehicleType?: Prisma.SortOrder
   vehiclePlate?: Prisma.SortOrder
   professionalLicense?: Prisma.SortOrder
+  licenseUrl?: Prisma.SortOrder
+  licenseExpiry?: Prisma.SortOrder
+  carrierVerified?: Prisma.SortOrder
   currentRegion?: Prisma.SortOrder
   available?: Prisma.SortOrder
   acceptsRegions?: Prisma.SortOrder
@@ -510,6 +580,9 @@ export type UserMinOrderByAggregateInput = {
   vehicleType?: Prisma.SortOrder
   vehiclePlate?: Prisma.SortOrder
   professionalLicense?: Prisma.SortOrder
+  licenseUrl?: Prisma.SortOrder
+  licenseExpiry?: Prisma.SortOrder
+  carrierVerified?: Prisma.SortOrder
   currentRegion?: Prisma.SortOrder
   available?: Prisma.SortOrder
   acceptsRegions?: Prisma.SortOrder
@@ -535,6 +608,10 @@ export type EnumRoleFieldUpdateOperationsInput = {
 
 export type NullableEnumVehicleTypeFieldUpdateOperationsInput = {
   set?: $Enums.VehicleType | null
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
 }
 
 export type BoolFieldUpdateOperationsInput = {
@@ -571,6 +648,20 @@ export type UserUpdateOneRequiredWithoutLoadsNestedInput = {
   upsert?: Prisma.UserUpsertWithoutLoadsInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutLoadsInput, Prisma.UserUpdateWithoutLoadsInput>, Prisma.UserUncheckedUpdateWithoutLoadsInput>
+}
+
+export type UserCreateNestedOneWithoutRatingsReceivedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRatingsReceivedInput, Prisma.UserUncheckedCreateWithoutRatingsReceivedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRatingsReceivedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutRatingsReceivedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRatingsReceivedInput, Prisma.UserUncheckedCreateWithoutRatingsReceivedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRatingsReceivedInput
+  upsert?: Prisma.UserUpsertWithoutRatingsReceivedInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRatingsReceivedInput, Prisma.UserUpdateWithoutRatingsReceivedInput>, Prisma.UserUncheckedUpdateWithoutRatingsReceivedInput>
 }
 
 export type UserCreateNestedOneWithoutApplicationsInput = {
@@ -625,6 +716,9 @@ export type UserCreateWithoutCompanyInput = {
   vehicleType?: $Enums.VehicleType | null
   vehiclePlate?: string | null
   professionalLicense?: string | null
+  licenseUrl?: string | null
+  licenseExpiry?: Date | string | null
+  carrierVerified?: boolean
   currentRegion?: string | null
   available?: boolean
   acceptsRegions?: string | null
@@ -633,6 +727,7 @@ export type UserCreateWithoutCompanyInput = {
   applications?: Prisma.ApplicationCreateNestedManyWithoutTransporterInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  ratingsReceived?: Prisma.RatingCreateNestedManyWithoutCarrierInput
 }
 
 export type UserUncheckedCreateWithoutCompanyInput = {
@@ -645,6 +740,9 @@ export type UserUncheckedCreateWithoutCompanyInput = {
   vehicleType?: $Enums.VehicleType | null
   vehiclePlate?: string | null
   professionalLicense?: string | null
+  licenseUrl?: string | null
+  licenseExpiry?: Date | string | null
+  carrierVerified?: boolean
   currentRegion?: string | null
   available?: boolean
   acceptsRegions?: string | null
@@ -653,6 +751,7 @@ export type UserUncheckedCreateWithoutCompanyInput = {
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutTransporterInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  ratingsReceived?: Prisma.RatingUncheckedCreateNestedManyWithoutCarrierInput
 }
 
 export type UserCreateOrConnectWithoutCompanyInput = {
@@ -681,6 +780,9 @@ export type UserUpdateWithoutCompanyInput = {
   vehicleType?: Prisma.NullableEnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType | null
   vehiclePlate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   professionalLicense?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -689,6 +791,7 @@ export type UserUpdateWithoutCompanyInput = {
   applications?: Prisma.ApplicationUpdateManyWithoutTransporterNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  ratingsReceived?: Prisma.RatingUpdateManyWithoutCarrierNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCompanyInput = {
@@ -701,6 +804,9 @@ export type UserUncheckedUpdateWithoutCompanyInput = {
   vehicleType?: Prisma.NullableEnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType | null
   vehiclePlate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   professionalLicense?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -709,6 +815,7 @@ export type UserUncheckedUpdateWithoutCompanyInput = {
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutTransporterNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  ratingsReceived?: Prisma.RatingUncheckedUpdateManyWithoutCarrierNestedInput
 }
 
 export type UserCreateWithoutLoadsInput = {
@@ -721,6 +828,9 @@ export type UserCreateWithoutLoadsInput = {
   vehicleType?: $Enums.VehicleType | null
   vehiclePlate?: string | null
   professionalLicense?: string | null
+  licenseUrl?: string | null
+  licenseExpiry?: Date | string | null
+  carrierVerified?: boolean
   currentRegion?: string | null
   available?: boolean
   acceptsRegions?: string | null
@@ -729,6 +839,7 @@ export type UserCreateWithoutLoadsInput = {
   applications?: Prisma.ApplicationCreateNestedManyWithoutTransporterInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  ratingsReceived?: Prisma.RatingCreateNestedManyWithoutCarrierInput
 }
 
 export type UserUncheckedCreateWithoutLoadsInput = {
@@ -741,6 +852,9 @@ export type UserUncheckedCreateWithoutLoadsInput = {
   vehicleType?: $Enums.VehicleType | null
   vehiclePlate?: string | null
   professionalLicense?: string | null
+  licenseUrl?: string | null
+  licenseExpiry?: Date | string | null
+  carrierVerified?: boolean
   currentRegion?: string | null
   available?: boolean
   acceptsRegions?: string | null
@@ -749,6 +863,7 @@ export type UserUncheckedCreateWithoutLoadsInput = {
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutTransporterInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  ratingsReceived?: Prisma.RatingUncheckedCreateNestedManyWithoutCarrierInput
 }
 
 export type UserCreateOrConnectWithoutLoadsInput = {
@@ -777,6 +892,9 @@ export type UserUpdateWithoutLoadsInput = {
   vehicleType?: Prisma.NullableEnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType | null
   vehiclePlate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   professionalLicense?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -785,6 +903,7 @@ export type UserUpdateWithoutLoadsInput = {
   applications?: Prisma.ApplicationUpdateManyWithoutTransporterNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  ratingsReceived?: Prisma.RatingUpdateManyWithoutCarrierNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLoadsInput = {
@@ -797,11 +916,127 @@ export type UserUncheckedUpdateWithoutLoadsInput = {
   vehicleType?: Prisma.NullableEnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType | null
   vehiclePlate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   professionalLicense?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUncheckedUpdateOneWithoutUserNestedInput
+  applications?: Prisma.ApplicationUncheckedUpdateManyWithoutTransporterNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  ratingsReceived?: Prisma.RatingUncheckedUpdateManyWithoutCarrierNestedInput
+}
+
+export type UserCreateWithoutRatingsReceivedInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name: string
+  phone?: string | null
+  role: $Enums.Role
+  vehicleType?: $Enums.VehicleType | null
+  vehiclePlate?: string | null
+  professionalLicense?: string | null
+  licenseUrl?: string | null
+  licenseExpiry?: Date | string | null
+  carrierVerified?: boolean
+  currentRegion?: string | null
+  available?: boolean
+  acceptsRegions?: string | null
+  createdAt?: Date | string
+  company?: Prisma.CompanyCreateNestedOneWithoutUserInput
+  loads?: Prisma.LoadCreateNestedManyWithoutPublisherInput
+  applications?: Prisma.ApplicationCreateNestedManyWithoutTransporterInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutRatingsReceivedInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name: string
+  phone?: string | null
+  role: $Enums.Role
+  vehicleType?: $Enums.VehicleType | null
+  vehiclePlate?: string | null
+  professionalLicense?: string | null
+  licenseUrl?: string | null
+  licenseExpiry?: Date | string | null
+  carrierVerified?: boolean
+  currentRegion?: string | null
+  available?: boolean
+  acceptsRegions?: string | null
+  createdAt?: Date | string
+  company?: Prisma.CompanyUncheckedCreateNestedOneWithoutUserInput
+  loads?: Prisma.LoadUncheckedCreateNestedManyWithoutPublisherInput
+  applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutTransporterInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutRatingsReceivedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutRatingsReceivedInput, Prisma.UserUncheckedCreateWithoutRatingsReceivedInput>
+}
+
+export type UserUpsertWithoutRatingsReceivedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutRatingsReceivedInput, Prisma.UserUncheckedUpdateWithoutRatingsReceivedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutRatingsReceivedInput, Prisma.UserUncheckedCreateWithoutRatingsReceivedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutRatingsReceivedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutRatingsReceivedInput, Prisma.UserUncheckedUpdateWithoutRatingsReceivedInput>
+}
+
+export type UserUpdateWithoutRatingsReceivedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  vehicleType?: Prisma.NullableEnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType | null
+  vehiclePlate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  professionalLicense?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  available?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneWithoutUserNestedInput
+  loads?: Prisma.LoadUpdateManyWithoutPublisherNestedInput
+  applications?: Prisma.ApplicationUpdateManyWithoutTransporterNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutRatingsReceivedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  vehicleType?: Prisma.NullableEnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType | null
+  vehiclePlate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  professionalLicense?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  available?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUncheckedUpdateOneWithoutUserNestedInput
+  loads?: Prisma.LoadUncheckedUpdateManyWithoutPublisherNestedInput
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutTransporterNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -817,6 +1052,9 @@ export type UserCreateWithoutApplicationsInput = {
   vehicleType?: $Enums.VehicleType | null
   vehiclePlate?: string | null
   professionalLicense?: string | null
+  licenseUrl?: string | null
+  licenseExpiry?: Date | string | null
+  carrierVerified?: boolean
   currentRegion?: string | null
   available?: boolean
   acceptsRegions?: string | null
@@ -825,6 +1063,7 @@ export type UserCreateWithoutApplicationsInput = {
   loads?: Prisma.LoadCreateNestedManyWithoutPublisherInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  ratingsReceived?: Prisma.RatingCreateNestedManyWithoutCarrierInput
 }
 
 export type UserUncheckedCreateWithoutApplicationsInput = {
@@ -837,6 +1076,9 @@ export type UserUncheckedCreateWithoutApplicationsInput = {
   vehicleType?: $Enums.VehicleType | null
   vehiclePlate?: string | null
   professionalLicense?: string | null
+  licenseUrl?: string | null
+  licenseExpiry?: Date | string | null
+  carrierVerified?: boolean
   currentRegion?: string | null
   available?: boolean
   acceptsRegions?: string | null
@@ -845,6 +1087,7 @@ export type UserUncheckedCreateWithoutApplicationsInput = {
   loads?: Prisma.LoadUncheckedCreateNestedManyWithoutPublisherInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  ratingsReceived?: Prisma.RatingUncheckedCreateNestedManyWithoutCarrierInput
 }
 
 export type UserCreateOrConnectWithoutApplicationsInput = {
@@ -873,6 +1116,9 @@ export type UserUpdateWithoutApplicationsInput = {
   vehicleType?: Prisma.NullableEnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType | null
   vehiclePlate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   professionalLicense?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -881,6 +1127,7 @@ export type UserUpdateWithoutApplicationsInput = {
   loads?: Prisma.LoadUpdateManyWithoutPublisherNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  ratingsReceived?: Prisma.RatingUpdateManyWithoutCarrierNestedInput
 }
 
 export type UserUncheckedUpdateWithoutApplicationsInput = {
@@ -893,6 +1140,9 @@ export type UserUncheckedUpdateWithoutApplicationsInput = {
   vehicleType?: Prisma.NullableEnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType | null
   vehiclePlate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   professionalLicense?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -901,6 +1151,7 @@ export type UserUncheckedUpdateWithoutApplicationsInput = {
   loads?: Prisma.LoadUncheckedUpdateManyWithoutPublisherNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  ratingsReceived?: Prisma.RatingUncheckedUpdateManyWithoutCarrierNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -913,6 +1164,9 @@ export type UserCreateWithoutSessionsInput = {
   vehicleType?: $Enums.VehicleType | null
   vehiclePlate?: string | null
   professionalLicense?: string | null
+  licenseUrl?: string | null
+  licenseExpiry?: Date | string | null
+  carrierVerified?: boolean
   currentRegion?: string | null
   available?: boolean
   acceptsRegions?: string | null
@@ -921,6 +1175,7 @@ export type UserCreateWithoutSessionsInput = {
   loads?: Prisma.LoadCreateNestedManyWithoutPublisherInput
   applications?: Prisma.ApplicationCreateNestedManyWithoutTransporterInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  ratingsReceived?: Prisma.RatingCreateNestedManyWithoutCarrierInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -933,6 +1188,9 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   vehicleType?: $Enums.VehicleType | null
   vehiclePlate?: string | null
   professionalLicense?: string | null
+  licenseUrl?: string | null
+  licenseExpiry?: Date | string | null
+  carrierVerified?: boolean
   currentRegion?: string | null
   available?: boolean
   acceptsRegions?: string | null
@@ -941,6 +1199,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   loads?: Prisma.LoadUncheckedCreateNestedManyWithoutPublisherInput
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutTransporterInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  ratingsReceived?: Prisma.RatingUncheckedCreateNestedManyWithoutCarrierInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -969,6 +1228,9 @@ export type UserUpdateWithoutSessionsInput = {
   vehicleType?: Prisma.NullableEnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType | null
   vehiclePlate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   professionalLicense?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -977,6 +1239,7 @@ export type UserUpdateWithoutSessionsInput = {
   loads?: Prisma.LoadUpdateManyWithoutPublisherNestedInput
   applications?: Prisma.ApplicationUpdateManyWithoutTransporterNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  ratingsReceived?: Prisma.RatingUpdateManyWithoutCarrierNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -989,6 +1252,9 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   vehicleType?: Prisma.NullableEnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType | null
   vehiclePlate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   professionalLicense?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -997,6 +1263,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   loads?: Prisma.LoadUncheckedUpdateManyWithoutPublisherNestedInput
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutTransporterNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  ratingsReceived?: Prisma.RatingUncheckedUpdateManyWithoutCarrierNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
@@ -1009,6 +1276,9 @@ export type UserCreateWithoutNotificationsInput = {
   vehicleType?: $Enums.VehicleType | null
   vehiclePlate?: string | null
   professionalLicense?: string | null
+  licenseUrl?: string | null
+  licenseExpiry?: Date | string | null
+  carrierVerified?: boolean
   currentRegion?: string | null
   available?: boolean
   acceptsRegions?: string | null
@@ -1017,6 +1287,7 @@ export type UserCreateWithoutNotificationsInput = {
   loads?: Prisma.LoadCreateNestedManyWithoutPublisherInput
   applications?: Prisma.ApplicationCreateNestedManyWithoutTransporterInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  ratingsReceived?: Prisma.RatingCreateNestedManyWithoutCarrierInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -1029,6 +1300,9 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   vehicleType?: $Enums.VehicleType | null
   vehiclePlate?: string | null
   professionalLicense?: string | null
+  licenseUrl?: string | null
+  licenseExpiry?: Date | string | null
+  carrierVerified?: boolean
   currentRegion?: string | null
   available?: boolean
   acceptsRegions?: string | null
@@ -1037,6 +1311,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   loads?: Prisma.LoadUncheckedCreateNestedManyWithoutPublisherInput
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutTransporterInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  ratingsReceived?: Prisma.RatingUncheckedCreateNestedManyWithoutCarrierInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -1065,6 +1340,9 @@ export type UserUpdateWithoutNotificationsInput = {
   vehicleType?: Prisma.NullableEnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType | null
   vehiclePlate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   professionalLicense?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1073,6 +1351,7 @@ export type UserUpdateWithoutNotificationsInput = {
   loads?: Prisma.LoadUpdateManyWithoutPublisherNestedInput
   applications?: Prisma.ApplicationUpdateManyWithoutTransporterNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  ratingsReceived?: Prisma.RatingUpdateManyWithoutCarrierNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -1085,6 +1364,9 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   vehicleType?: Prisma.NullableEnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType | null
   vehiclePlate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   professionalLicense?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1093,6 +1375,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   loads?: Prisma.LoadUncheckedUpdateManyWithoutPublisherNestedInput
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutTransporterNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  ratingsReceived?: Prisma.RatingUncheckedUpdateManyWithoutCarrierNestedInput
 }
 
 
@@ -1105,6 +1388,7 @@ export type UserCountOutputType = {
   applications: number
   sessions: number
   notifications: number
+  ratingsReceived: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1112,6 +1396,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   applications?: boolean | UserCountOutputTypeCountApplicationsArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
+  ratingsReceived?: boolean | UserCountOutputTypeCountRatingsReceivedArgs
 }
 
 /**
@@ -1152,6 +1437,13 @@ export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Ty
   where?: Prisma.NotificationWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountRatingsReceivedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RatingWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1163,6 +1455,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   vehicleType?: boolean
   vehiclePlate?: boolean
   professionalLicense?: boolean
+  licenseUrl?: boolean
+  licenseExpiry?: boolean
+  carrierVerified?: boolean
   currentRegion?: boolean
   available?: boolean
   acceptsRegions?: boolean
@@ -1172,6 +1467,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   applications?: boolean | Prisma.User$applicationsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
+  ratingsReceived?: boolean | Prisma.User$ratingsReceivedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1185,6 +1481,9 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   vehicleType?: boolean
   vehiclePlate?: boolean
   professionalLicense?: boolean
+  licenseUrl?: boolean
+  licenseExpiry?: boolean
+  carrierVerified?: boolean
   currentRegion?: boolean
   available?: boolean
   acceptsRegions?: boolean
@@ -1201,6 +1500,9 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   vehicleType?: boolean
   vehiclePlate?: boolean
   professionalLicense?: boolean
+  licenseUrl?: boolean
+  licenseExpiry?: boolean
+  carrierVerified?: boolean
   currentRegion?: boolean
   available?: boolean
   acceptsRegions?: boolean
@@ -1217,19 +1519,23 @@ export type UserSelectScalar = {
   vehicleType?: boolean
   vehiclePlate?: boolean
   professionalLicense?: boolean
+  licenseUrl?: boolean
+  licenseExpiry?: boolean
+  carrierVerified?: boolean
   currentRegion?: boolean
   available?: boolean
   acceptsRegions?: boolean
   createdAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "passwordHash" | "name" | "phone" | "role" | "vehicleType" | "vehiclePlate" | "professionalLicense" | "currentRegion" | "available" | "acceptsRegions" | "createdAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "passwordHash" | "name" | "phone" | "role" | "vehicleType" | "vehiclePlate" | "professionalLicense" | "licenseUrl" | "licenseExpiry" | "carrierVerified" | "currentRegion" | "available" | "acceptsRegions" | "createdAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.User$companyArgs<ExtArgs>
   loads?: boolean | Prisma.User$loadsArgs<ExtArgs>
   applications?: boolean | Prisma.User$applicationsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
+  ratingsReceived?: boolean | Prisma.User$ratingsReceivedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1243,6 +1549,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     applications: Prisma.$ApplicationPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
+    ratingsReceived: Prisma.$RatingPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1254,6 +1561,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     vehicleType: $Enums.VehicleType | null
     vehiclePlate: string | null
     professionalLicense: string | null
+    licenseUrl: string | null
+    licenseExpiry: Date | null
+    carrierVerified: boolean
     currentRegion: string | null
     available: boolean
     acceptsRegions: string | null
@@ -1657,6 +1967,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   applications<T extends Prisma.User$applicationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$applicationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  ratingsReceived<T extends Prisma.User$ratingsReceivedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ratingsReceivedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RatingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1695,6 +2006,9 @@ export interface UserFieldRefs {
   readonly vehicleType: Prisma.FieldRef<"User", 'VehicleType'>
   readonly vehiclePlate: Prisma.FieldRef<"User", 'String'>
   readonly professionalLicense: Prisma.FieldRef<"User", 'String'>
+  readonly licenseUrl: Prisma.FieldRef<"User", 'String'>
+  readonly licenseExpiry: Prisma.FieldRef<"User", 'DateTime'>
+  readonly carrierVerified: Prisma.FieldRef<"User", 'Boolean'>
   readonly currentRegion: Prisma.FieldRef<"User", 'String'>
   readonly available: Prisma.FieldRef<"User", 'Boolean'>
   readonly acceptsRegions: Prisma.FieldRef<"User", 'String'>
@@ -2202,6 +2516,30 @@ export type User$notificationsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
+}
+
+/**
+ * User.ratingsReceived
+ */
+export type User$ratingsReceivedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Rating
+   */
+  select?: Prisma.RatingSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Rating
+   */
+  omit?: Prisma.RatingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RatingInclude<ExtArgs> | null
+  where?: Prisma.RatingWhereInput
+  orderBy?: Prisma.RatingOrderByWithRelationInput | Prisma.RatingOrderByWithRelationInput[]
+  cursor?: Prisma.RatingWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RatingScalarFieldEnum | Prisma.RatingScalarFieldEnum[]
 }
 
 /**

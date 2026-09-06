@@ -43,7 +43,8 @@ export const LoadStatus = {
   CONFIRMED: 'CONFIRMED',
   PICKED_UP: 'PICKED_UP',
   DELIVERED: 'DELIVERED',
-  COMPLETED: 'COMPLETED'
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
 } as const
 
 export type LoadStatus = (typeof LoadStatus)[keyof typeof LoadStatus]
@@ -69,7 +70,9 @@ export const NotificationType = {
   CONFIRMED: 'CONFIRMED',
   PICKED_UP: 'PICKED_UP',
   DELIVERED: 'DELIVERED',
-  COMPLETED: 'COMPLETED'
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
+  NEW_LOAD: 'NEW_LOAD'
 } as const
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
