@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import { cookies } from "next/headers";
 import "./globals.css";
 import { LOCALE_COOKIE, resolveLocale } from "@/lib/i18n";
+import { CookieBanner } from "@/components/cookie-banner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,7 +24,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   } catch {}
   return (
     <html lang={lang} className={`${geistSans.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-transparent text-ink">{children}</body>
+      <body className="min-h-full flex flex-col bg-transparent text-ink">
+        {children}
+        <CookieBanner />
+      </body>
     </html>
   );
 }

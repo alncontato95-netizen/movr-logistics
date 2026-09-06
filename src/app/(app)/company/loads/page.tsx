@@ -4,13 +4,17 @@ import { LoadCard } from "@/components/load-card";
 import { PollRefresh } from "@/components/poll-refresh";
 import { ButtonLink, Card, Badge } from "@/components/ui";
 import Link from "next/link";
-import { LOAD_STATUS_LABELS } from "@/lib/constants";
+import { getLoadStatusLabels } from "@/lib/constants";
 import { formatMoney } from "@/lib/format";
+import { LoadsViewToggle } from "@/components/loads-view-toggle";
+import { getDictionary, getLocale } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic";
 
 export default async function CompanyLoadsPage({ searchParams }: { searchParams: Promise<{ status?: string; q?: string; sort?: string }> }) {
   const { status, q, sort } = await searchParams;
+  const locale = await getLocale();
+  const t = getDictionary(locale);
   const user = await requireCompany();
   const company = await prisma.company.findUnique({ where: { userId: user.id } });
 
@@ -82,7 +86,7 @@ export default async function CompanyLoadsPage({ searchParams }: { searchParams:
             <div className="flex flex-wrap gap-1.5">
               <Link href={buildHref({ status: undefined })} className={`rounded-full px-3 py-1 text-xs font-semibold border ${!status ? "bg-brand text-white border-brand" : "bg-white text-muted border-border hover:border-brand/30"}`}>All</Link>
               { (["OPEN","SELECTED","CONFIRMED","COMPLETED","CANCELLED"] as const).map((s) => (
-                <Link key={s} href={buildHref({ status: s })} className={`rounded-full px-3 py-1 text-xs font-semibold border ${status===s ? "bg-brand text-white border-brand" : "bg-white text-muted border-border hover:border-brand/30"}`}>{LOAD_STATUS_LABELS[s]}</Link>
+                <Link key={s} href={buildHref({ status: s })} className={`rounded-full px-3 py-1 text-xs font-semibold border ${status===s ? "bg-brand text-white border-brand" : "bg-white text-muted border-border hover:border-brand/30"}`}>{getLoadStatusLabels(locale)[s]}</Link>
               ))}
             </div>
             <div className="flex items-center gap-2">
@@ -112,11 +116,19 @@ export default async function CompanyLoadsPage({ searchParams }: { searchParams:
           {allLoads.length === 0 ? "No loads yet. Publish your first load to find carriers." : "No loads match filters."}
         </div>
       ) : (
-        <div className="grid gap-3">
-          {loads.map((load) => (
-            <LoadCard key={load.id} load={load} href={`/company/loads/${load.id}`} />
-          ))}
-        </div>
+        <LoadsViewToggle
+          loads={loads}
+          variant="company"
+          listLabel={t.loads.list}
+          mapLabel={t.loads.map}
+          listContent={
+            <div className="grid gap-3">
+              {loads.map((load) => (
+                <LoadCard key={load.id} load={load} href={`/company/loads/${load.id}`} locale={locale} />
+              ))}
+            </div>
+          }
+        />
       )}
     </div>
   );

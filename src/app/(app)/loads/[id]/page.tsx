@@ -7,6 +7,8 @@ import { PollRefresh } from "@/components/poll-refresh";
 import { Badge, LoadStatusBadge } from "@/components/ui";
 import { CARGO_LABELS, VEHICLE_LABELS } from "@/lib/constants";
 import { formatDate, formatMoney } from "@/lib/format";
+import { RouteMap } from "@/components/route-map-wrapper";
+import { getDictionary, getLocale } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic";
 
@@ -25,6 +27,8 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
   });
 
   const rating = load.status === "COMPLETED" ? await prisma.rating.findUnique({ where: { loadId: load.id } }) : null;
+  const locale = await getLocale();
+  const t = getDictionary(locale);
 
   const isOpen = load.status === "OPEN";
   const canApply = isOpen && (!myApplication || myApplication.status === "CANCELLED");
@@ -72,7 +76,7 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
           <h1 className="text-2xl font-extrabold text-ink">
             {load.origin} <span className="text-brand-dark">→</span> {load.destination}
           </h1>
-          <LoadStatusBadge status={load.status} />
+          <LoadStatusBadge status={load.status} locale={locale} />
         </div>
         <p className="mt-1 text-muted">Pickup {formatDate(load.pickupDate)}</p>
 
@@ -89,6 +93,11 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
           {load.pickupWindow ? <Row label="Pickup window" value={load.pickupWindow} /> : null}
           {load.notes ? <Row label="Notes" value={load.notes} /> : null}
         </dl>
+      </div>
+
+      <div className="space-y-1">
+        <RouteMap origin={load.origin} destination={load.destination} />
+        <p className="text-center text-xs text-muted">{t.loads.approximateRoute}</p>
       </div>
 
       <div className="rounded-2xl border border-black/8 bg-white p-6">
@@ -130,9 +139,10 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
       {myApplication?.status === "ACCEPTED" && (load.status === "PICKED_UP" || load.status === "DELIVERED") && !load.podUrl && (
         <form action={submitPod} className="rounded-2xl border border-black/8 bg-white p-4 space-y-3">
           <h3 className="font-semibold text-ink">Proof of delivery</h3>
-          <p className="text-sm text-muted">Add a link to the POD photo or document.</p>
+          <p className="text-sm text-muted">Upload a photo/PDF (max 5MB) or paste a link.</p>
           <input type="hidden" name="loadId" value={load.id} />
-          <input name="podUrl" placeholder="https://... image URL" className="w-full rounded-[var(--radius-input)] border border-border bg-white px-3 py-2 text-sm outline-none focus:border-brand" />
+          <input name="podFile" type="file" accept="image/jpeg,image/png,image/webp,application/pdf" className="w-full rounded-[var(--radius-input)] border border-border bg-white px-3 py-2 text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-brand-light file:px-3 file:py-1 file:text-sm file:font-semibold file:text-brand-dark" />
+          <input name="podUrl" placeholder="https://... image URL (or leave empty if file above)" className="w-full rounded-[var(--radius-input)] border border-border bg-white px-3 py-2 text-sm outline-none focus:border-brand" />
           <input name="podNote" placeholder="Note (optional)" className="w-full rounded-[var(--radius-input)] border border-border bg-white px-3 py-2 text-sm outline-none focus:border-brand" />
           <button type="submit" className="w-full rounded-xl bg-brand py-2.5 text-sm font-bold text-white hover:bg-brand-dark">
             Upload POD

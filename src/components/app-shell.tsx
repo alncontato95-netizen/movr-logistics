@@ -2,6 +2,7 @@ import Link from "next/link";
 import { LogoutButton } from "@/components/logout-button";
 import { LangSwitcher } from "@/components/lang-switcher";
 import { NotificationBell } from "@/components/notification-bell";
+import { MobileNav } from "@/components/mobile-nav";
 import { getDictionary, getLocale } from "@/lib/i18n";
 
 export async function AppShell({
@@ -19,26 +20,31 @@ export async function AppShell({
   return (
     <div className="flex min-h-full flex-col bg-transparent">
       <header className="sticky top-0 z-20 border-b border-white/60 bg-white/70 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60">
-        <div className="mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-3">
+        <div className="relative mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-3">
           <Link href={isCompany ? "/company/loads" : "/loads"} className="text-base font-extrabold tracking-tight text-ink">
             MO<span className="text-brand">V</span>R
           </Link>
           <nav className="flex items-center gap-1">
-            {isCompany ? (
-              <>
-                <NavLink href="/company/loads">{t.nav.loads}</NavLink>
-                <NavLink href="/company/settings">{t.nav.business}</NavLink>
-              </>
-            ) : (
-              <>
-                <NavLink href="/loads">{t.nav.loads}</NavLink>
-                <NavLink href="/applications">{t.nav.applications}</NavLink>
-                <NavLink href="/profile">{t.nav.profile}</NavLink>
-              </>
-            )}
+            <div className="hidden items-center gap-1 sm:flex">
+              {isCompany ? (
+                <>
+                  <NavLink href="/company/loads">{t.nav.loads}</NavLink>
+                  <NavLink href="/company/settings">{t.nav.business}</NavLink>
+                </>
+              ) : (
+                <>
+                  <NavLink href="/loads">{t.nav.loads}</NavLink>
+                  <NavLink href="/applications">{t.nav.applications}</NavLink>
+                  <NavLink href="/profile">{t.nav.profile}</NavLink>
+                </>
+              )}
+            </div>
             <NotificationBell unread={unread} href="/notifications" label={t.nav.notifications} />
             <LangSwitcher />
-            <LogoutButton label={t.nav.logout} />
+            <div className="hidden sm:block">
+              <LogoutButton label={t.nav.logout} />
+            </div>
+            <MobileNav isCompany={isCompany} t={{ loads: t.nav.loads, business: t.nav.business, applications: t.nav.applications, profile: t.nav.profile, logout: t.nav.logout }} />
           </nav>
         </div>
       </header>

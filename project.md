@@ -672,19 +672,19 @@ PRODUTO
 MOVR Logistics
 
 ESTÁGIO
-Pré-MVP
+MVP LOAD piloto funcional (SQLite)
 
 MERCADO INICIAL
 Venlo / Limburg / Países Baixos
 
 TIPO
-Plataforma de tecnologia logística
+Plataforma de tecnologia logística — módulo LOAD (Company ↔ Carrier)
 
 STATUS
-Em fase de descoberta e arquitetura
+Em testes com dados reais (verificação manual via Prisma Studio, sem admin/KVK)
 
 DESENVOLVIMENTO
-Ainda não iniciado
+Em evolução iterativa a partir de piloto (ver AGENTS.md: Escopo Atual do MVP)
 ```
 
 ---

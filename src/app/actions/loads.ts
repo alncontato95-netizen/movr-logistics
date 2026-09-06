@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/lib/dal";
 import { prisma } from "@/lib/prisma";
+import { z } from "zod";
 import { loadSchema } from "@/lib/validation";
 import { createNotification } from "@/lib/notify";
 import { isCompatible } from "@/lib/matching";
@@ -549,15 +550,38 @@ export async function submitPod(formData: FormData) {
   const user = await getCurrentUser();
   if (user.role !== "CARRIER") redirect("/login");
   const loadId = formData.get("loadId") as string;
-  const podUrl = (formData.get("podUrl") as string)?.trim();
-  const podNote = (formData.get("podNote") as string)?.trim();
+  const podUrlRaw = (formData.get("podUrl") as string)?.trim();
+  const podNoteRaw = (formData.get("podNote") as string)?.trim();
+  const podFile = formData.get("podFile") as File | null;
   if (!loadId) redirect("/loads");
+  let podUrl: string | null = null;
+  if (podFile && podFile.size > 0) {
+    const allowed = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
+    if (!allowed.includes(podFile.type)) redirect(`/loads/${loadId}?pod-error=1`);
+    if (podFile.size > 5 * 1024 * 1024) redirect(`/loads/${loadId}?pod-error=1`);
+    const bytes = await podFile.arrayBuffer();
+    const ext = podFile.type === "application/pdf" ? "pdf" : podFile.type.split("/")[1] || "jpg";
+    const name = `${loadId}-${Date.now()}.${ext}`;
+    const { writeFile, mkdir } = await import("fs/promises");
+    const { join } = await import("path");
+    const dir = join(process.cwd(), "public", "uploads");
+    await mkdir(dir, { recursive: true });
+    await writeFile(join(dir, name), Buffer.from(bytes));
+    podUrl = `/uploads/${name}`;
+  } else if (podUrlRaw) {
+    const parsed = z.string().trim().url("Enter a valid URL (https://...)").max(500).safeParse(podUrlRaw);
+    if (!parsed.success) redirect(`/loads/${loadId}?pod-error=1`);
+    if (!/^https?:\/\//i.test(podUrlRaw)) redirect(`/loads/${loadId}?pod-error=1`);
+    podUrl = podUrlRaw;
+  }
+  if (podNoteRaw && podNoteRaw.length > 500) redirect(`/loads/${loadId}?pod-error=1`);
+  const podNote = podNoteRaw || null;
   const load = await prisma.load.findUnique({ where: { id: loadId } });
   if (!load) redirect("/loads");
   const app = await prisma.application.findUnique({ where: { loadId_transporterId: { loadId, transporterId: user.id } } });
   if (!app || app.status !== "ACCEPTED") redirect(`/loads/${loadId}`);
   if (load.status !== "DELIVERED" && load.status !== "PICKED_UP") redirect(`/loads/${loadId}`);
-  await prisma.load.update({ where: { id: loadId }, data: { podUrl: podUrl || null, podNote: podNote || null } });
+  await prisma.load.update({ where: { id: loadId }, data: { podUrl, podNote } });
   revalidatePath(`/loads/${loadId}`);
   revalidatePath(`/company/loads/${loadId}`);
   redirect(`/loads/${loadId}?pod=1`);
@@ -595,10 +619,14 @@ export async function updateLoadStatus(formData: FormData) {
     }
   }
 
-  // Completion requires the carrier to have confirmed delivery.
+  // Completion requires the carrier to have confirmed delivery and POD.
   if (status === "COMPLETED" && load.status !== "DELIVERED") {
     revalidatePath(`/company/loads/${loadId}`);
     redirect(`/company/loads/${loadId}`);
+  }
+  if (status === "COMPLETED" && !load.podUrl) {
+    revalidatePath(`/company/loads/${loadId}`);
+    redirect(`/company/loads/${loadId}?pod-required=1`);
   }
 
   try {
@@ -607,6 +635,7 @@ export async function updateLoadStatus(formData: FormData) {
       if (!fresh || fresh.companyId !== company.id) throw new Error("Invalid load");
       if (status === "CONFIRMED" && fresh.status !== "SELECTED") throw new Error("Invalid transition");
       if (status === "COMPLETED" && fresh.status !== "DELIVERED") throw new Error("Invalid transition");
+      if (status === "COMPLETED" && !fresh.podUrl) throw new Error("POD required");
       if (status === "CONFIRMED") {
         const acc = await tx.application.findFirst({ where: { loadId, status: "ACCEPTED" } });
         if (!acc) throw new Error("No acceptance");

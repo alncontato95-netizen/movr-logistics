@@ -4,11 +4,15 @@ import { filterCompatible, regionsFor } from "@/lib/matching";
 import { LoadCard } from "@/components/load-card";
 import { PollRefresh } from "@/components/poll-refresh";
 import { ButtonLink } from "@/components/ui";
+import { LoadsViewToggle } from "@/components/loads-view-toggle";
+import { getDictionary, getLocale } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic";
 
 export default async function LoadsPage() {
   const user = await requireCarrier();
+  const locale = await getLocale();
+  const t = getDictionary(locale);
   const incomplete = !user.vehicleType || !user.currentRegion;
 
   const allLoads = await prisma.load.findMany({
@@ -18,6 +22,19 @@ export default async function LoadsPage() {
 
   const compatible = filterCompatible(user, allLoads);
   const serves = regionsFor(user.acceptsRegions);
+
+  const listContent =
+    compatible.length === 0 ? (
+      <div className="rounded-2xl border border-dashed border-black/15 p-10 text-center text-sm text-muted">
+        No compatible loads right now. Check back soon or widen the regions you serve.
+      </div>
+    ) : (
+      <div className="grid gap-3">
+        {compatible.map((load) => (
+          <LoadCard key={load.id} load={load} href={`/loads/${load.id}`} matchLabel="Compatible with you" locale={locale} />
+        ))}
+      </div>
+    );
 
   return (
     <div className="space-y-6">
@@ -64,16 +81,8 @@ export default async function LoadsPage() {
             <ButtonLink href="/profile">Go to profile</ButtonLink>
           </div>
         </div>
-      ) : compatible.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-black/15 p-10 text-center text-sm text-muted">
-          No compatible loads right now. Check back soon or widen the regions you serve.
-        </div>
       ) : (
-        <div className="grid gap-3">
-          {compatible.map((load) => (
-            <LoadCard key={load.id} load={load} href={`/loads/${load.id}`} matchLabel="Compatible with you" />
-          ))}
-        </div>
+        <LoadsViewToggle loads={compatible} variant="carrier" listLabel={t.loads.list} mapLabel={t.loads.map} listContent={listContent} />
       )}
     </div>
   );

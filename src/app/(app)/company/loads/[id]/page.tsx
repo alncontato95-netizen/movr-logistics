@@ -9,12 +9,16 @@ import { Badge, LoadStatusBadge } from "@/components/ui";
 import { CARGO_LABELS, VEHICLE_LABELS, LOAD_STATUS_LABELS, type VehicleType } from "@/lib/constants";
 import { formatDate, formatMoney } from "@/lib/format";
 import { RatingForm } from "@/components/rating-form";
+import { RouteMap } from "@/components/route-map-wrapper";
+import { getDictionary, getLocale } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic";
 
-export default async function CompanyLoadDetailPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ selected?: string; undone?: string; "awaiting-acceptance"?: string; cancelled?: string; updated?: string; duplicated?: string; rated?: string }> }) {
-  const [{ id }, { selected, undone, "awaiting-acceptance": awaitingAcceptance, cancelled, updated, duplicated, rated }] = await Promise.all([params, searchParams]);
+export default async function CompanyLoadDetailPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ selected?: string; undone?: string; "awaiting-acceptance"?: string; cancelled?: string; updated?: string; duplicated?: string; rated?: string; "pod-required"?: string }> }) {
+  const [{ id }, { selected, undone, "awaiting-acceptance": awaitingAcceptance, cancelled, updated, duplicated, rated, "pod-required": podRequired }] = await Promise.all([params, searchParams]);
   const user = await requireCompany();
+  const locale = await getLocale();
+  const t = getDictionary(locale);
   const company = await prisma.company.findUnique({ where: { userId: user.id } });
 
   const load = await prisma.load.findUnique({
@@ -92,12 +96,18 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
         </div>
       )}
 
+      {podRequired && (
+        <div className="rounded-2xl bg-amber-50 p-4 text-sm font-semibold text-amber-800">
+          POD required — carrier must upload proof of delivery before completing.
+        </div>
+      )}
+
       <div className="rounded-2xl border border-black/8 bg-white p-6">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-extrabold text-ink">
             {load.origin} <span className="text-brand-dark">→</span> {load.destination}
           </h1>
-          <LoadStatusBadge status={load.status} />
+          <LoadStatusBadge status={load.status} locale={locale} />
         </div>
         <p className="mt-1 text-muted">Pickup {formatDate(load.pickupDate)}</p>
 
@@ -109,6 +119,11 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
           <Row label="Pricing" value={load.priceNegotiable ? "Negotiable" : "Fixed"} />
           {load.notes ? <Row label="Notes" value={load.notes} /> : null}
         </dl>
+      </div>
+
+      <div className="space-y-1">
+        <RouteMap origin={load.origin} destination={load.destination} />
+        <p className="text-center text-xs text-muted">{t.loads.approximateRoute}</p>
       </div>
 
       <div className="flex gap-3">

@@ -92,6 +92,9 @@ model Company {
   address   String
   phone     String
   verified  Boolean  @default(false)
+  verifiedAt DateTime?
+  verifiedBy String?
+  verificationNote String?
   createdAt DateTime @default(now())
   loads     Load[]
   ratings   Rating[]

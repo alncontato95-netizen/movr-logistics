@@ -77,6 +77,11 @@ export type Messages = {
     edit: string;
     delete: string;
   };
+  loads: {
+    approximateRoute: string;
+    list: string;
+    map: string;
+  };
 };
 
 const en: Messages = {
@@ -142,6 +147,11 @@ const en: Messages = {
     save: "Save",
     edit: "Edit",
     delete: "Delete",
+  },
+  loads: {
+    approximateRoute: "Approximate route",
+    list: "List",
+    map: "Map",
   },
 };
 
@@ -209,6 +219,11 @@ const nl: Messages = {
     edit: "Bewerken",
     delete: "Verwijderen",
   },
+  loads: {
+    approximateRoute: "Geschatte route",
+    list: "Lijst",
+    map: "Kaart",
+  },
 };
 
 const pt: Messages = {
@@ -274,6 +289,11 @@ const pt: Messages = {
     save: "Salvar",
     edit: "Editar",
     delete: "Excluir",
+  },
+  loads: {
+    approximateRoute: "Rota aproximada",
+    list: "Lista",
+    map: "Mapa",
   },
 };
 
@@ -341,6 +361,11 @@ const de: Messages = {
     edit: "Bearbeiten",
     delete: "Löschen",
   },
+  loads: {
+    approximateRoute: "Ungefähre Route",
+    list: "Liste",
+    map: "Karte",
+  },
 };
 
 const pl: Messages = {
@@ -406,6 +431,11 @@ const pl: Messages = {
     save: "Zapisz",
     edit: "Edytuj",
     delete: "Usuń",
+  },
+  loads: {
+    approximateRoute: "Przybliżona trasa",
+    list: "Lista",
+    map: "Mapa",
   },
 };
 

@@ -4,9 +4,12 @@ import { cn } from "@/lib/cn";
 import {
   LOAD_STATUS_LABELS,
   APPLICATION_STATUS_LABELS,
+  getLoadStatusLabels,
+  getApplicationStatusLabels,
   type LoadStatus,
   type ApplicationStatus,
 } from "@/lib/constants";
+import type { Locale } from "@/lib/i18n";
 
 export function Button({
   variant = "primary",
@@ -150,12 +153,14 @@ const applicationStatusTone: Record<ApplicationStatus, "brand" | "amber" | "neut
   CANCELLED: "neutral",
 };
 
-export function LoadStatusBadge({ status }: { status: LoadStatus }) {
-  return <Badge tone={loadStatusTone[status]}>{LOAD_STATUS_LABELS[status]}</Badge>;
+export function LoadStatusBadge({ status, locale }: { status: LoadStatus; locale?: Locale }) {
+  const labels = locale ? getLoadStatusLabels(locale) : LOAD_STATUS_LABELS;
+  return <Badge tone={loadStatusTone[status]}>{labels[status]}</Badge>;
 }
 
-export function ApplicationStatusBadge({ status }: { status: ApplicationStatus }) {
-  return <Badge tone={applicationStatusTone[status]}>{APPLICATION_STATUS_LABELS[status]}</Badge>;
+export function ApplicationStatusBadge({ status, locale }: { status: ApplicationStatus; locale?: Locale }) {
+  const labels = locale ? getApplicationStatusLabels(locale) : APPLICATION_STATUS_LABELS;
+  return <Badge tone={applicationStatusTone[status]}>{labels[status]}</Badge>;
 }
 
 export function FormField({ label, children, error }: { label: string; children: ReactNode; error?: string }) {

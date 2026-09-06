@@ -1007,6 +1007,9 @@ export const CompanyScalarFieldEnum = {
   address: 'address',
   phone: 'phone',
   verified: 'verified',
+  verifiedAt: 'verifiedAt',
+  verifiedBy: 'verifiedBy',
+  verificationNote: 'verificationNote',
   createdAt: 'createdAt'
 } as const
 

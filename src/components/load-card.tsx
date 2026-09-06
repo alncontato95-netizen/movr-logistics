@@ -1,18 +1,23 @@
 import Link from "next/link";
 import type { Load } from "@/generated/prisma/client";
 import { Badge, LoadStatusBadge } from "@/components/ui";
-import { CARGO_LABELS, VEHICLE_LABELS } from "@/lib/constants";
+import { CARGO_LABELS, VEHICLE_LABELS, getCargoLabels, getVehicleLabels } from "@/lib/constants";
 import { formatDate, formatMoney } from "@/lib/format";
+import type { Locale } from "@/lib/i18n";
 
 export function LoadCard({
   load,
   href,
   matchLabel,
+  locale,
 }: {
   load: Load;
   href: string;
   matchLabel?: string;
+  locale?: Locale;
 }) {
+  const cargoLabels = locale ? getCargoLabels(locale) : CARGO_LABELS;
+  const vehicleLabels = locale ? getVehicleLabels(locale) : VEHICLE_LABELS;
   return (
     <Link
       href={href}
@@ -25,16 +30,16 @@ export function LoadCard({
               {load.origin} <span className="text-brand" aria-hidden>→</span> {load.destination}
             </p>
           </div>
-          <p className="mt-0.5 text-sm text-muted">{formatDate(load.pickupDate)}</p>
+          <p className="mt-0.5 text-sm text-muted">{formatDate(load.pickupDate, locale)}</p>
         </div>
-        <LoadStatusBadge status={load.status} />
+        <LoadStatusBadge status={load.status} locale={locale} />
       </div>
 
       <div className="mt-3 flex flex-wrap gap-2">
-        <Badge>{CARGO_LABELS[load.cargoType]}</Badge>
+        <Badge>{cargoLabels[load.cargoType]}</Badge>
         <Badge>{load.weightKg} kg</Badge>
-        {load.requiredVehicle && <Badge>{VEHICLE_LABELS[load.requiredVehicle]}</Badge>}
-        {load.priceEur ? <Badge tone="green">{formatMoney(load.priceEur)}</Badge> : <Badge>Price negotiable</Badge>}
+        {load.requiredVehicle && <Badge>{vehicleLabels[load.requiredVehicle]}</Badge>}
+        {load.priceEur ? <Badge tone="green">{formatMoney(load.priceEur, locale)}</Badge> : <Badge>Price negotiable</Badge>}
       </div>
 
       {matchLabel && (

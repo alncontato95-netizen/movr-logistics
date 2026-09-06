@@ -36,7 +36,16 @@ export default async function CompanySettingsPage() {
 
       {company && !company.verified && (
         <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-medium text-amber-800">
-          Your company is pending verification. Publishing will be enabled once approved.
+          <p>Your company is pending verification. Publishing will be enabled once approved.</p>
+          <p className="mt-1 text-xs text-amber-700">
+            Submitted {company.createdAt.toLocaleDateString("en-GB")} · Verification via Prisma Studio (verified, verifiedAt) — SLA 4h.
+          </p>
+          {company.verificationNote && <p className="mt-1 text-xs italic">Note: {company.verificationNote}</p>}
+        </div>
+      )}
+      {company?.verified && company.verifiedAt && (
+        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-medium text-emerald-800">
+          Verified {new Date(company.verifiedAt).toLocaleDateString("en-GB")} {company.verifiedBy ? `by ${company.verifiedBy}` : ""}.
         </div>
       )}
 

@@ -32,3 +32,16 @@ Thumbs.db
 
 # Vercel
 .vercel/
+
+# Test database (isolated from dev.db)
+prisma/test.db
+prisma/test.db-journal
+prisma/test.db-wal
+prisma/test.db-shm
+
+# Prisma databases and generated client
+prisma/*.db
+prisma/*.db-journal
+prisma/*.db-wal
+prisma/*.db-shm
+src/generated/
