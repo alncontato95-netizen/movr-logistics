@@ -28,6 +28,7 @@ export async function AppShell({
             <div className="hidden items-center gap-1 sm:flex">
               {isCompany ? (
                 <>
+                  <NavLink href="/company/dashboard">{t.nav.dashboard}</NavLink>
                   <NavLink href="/company/loads">{t.nav.loads}</NavLink>
                   <NavLink href="/company/settings">{t.nav.business}</NavLink>
                 </>
@@ -44,7 +45,7 @@ export async function AppShell({
             <div className="hidden sm:block">
               <LogoutButton label={t.nav.logout} />
             </div>
-            <MobileNav isCompany={isCompany} t={{ loads: t.nav.loads, business: t.nav.business, applications: t.nav.applications, profile: t.nav.profile, logout: t.nav.logout }} />
+            <MobileNav isCompany={isCompany} t={{ loads: t.nav.loads, business: t.nav.business, applications: t.nav.applications, profile: t.nav.profile, dashboard: t.nav.dashboard, logout: t.nav.logout }} />
           </nav>
         </div>
       </header>

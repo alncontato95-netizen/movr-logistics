@@ -82,6 +82,32 @@ export type Messages = {
     list: string;
     map: string;
   };
+  dashboard: {
+    title: string;
+    subtitle: string;
+    countersTitle: string;
+    recentActivityTitle: string;
+    noRecentActivity: string;
+    attentionTitle: string;
+    attentionSubtitle: string;
+    awaitingCarrier: string;
+    awaitingCompletion: string;
+    emptyAttention: string;
+    viewLoad: string;
+    viewAllLoads: string;
+    viewAllNotifications: string;
+    compatibleTitle: string;
+    compatibleSubtitle: string;
+    compatibleEmpty: string;
+    applicationsTitle: string;
+    inTransitTitle: string;
+    historyTitle: string;
+    pendingActionsTitle: string;
+    noPendingActions: string;
+    awaitingAccept: string;
+    awaitingPickup: string;
+    awaitingDelivery: string;
+  };
 };
 
 const en: Messages = {
@@ -152,6 +178,32 @@ const en: Messages = {
     approximateRoute: "Approximate route",
     list: "List",
     map: "Map",
+  },
+  dashboard: {
+    title: "Dashboard",
+    subtitle: "Overview of your operations",
+    countersTitle: "Loads by status",
+    recentActivityTitle: "Recent activity",
+    noRecentActivity: "No recent activity",
+    attentionTitle: "Loads needing attention",
+    attentionSubtitle: "These loads are waiting for your action",
+    awaitingCarrier: "Awaiting carrier acceptance",
+    awaitingCompletion: "Awaiting completion",
+    emptyAttention: "No loads need attention at the moment",
+    viewLoad: "View load",
+    viewAllLoads: "View all loads",
+    viewAllNotifications: "View all notifications",
+    compatibleTitle: "Available loads for you",
+    compatibleSubtitle: "Loads matching your vehicle and regions",
+    compatibleEmpty: "No compatible loads right now",
+    applicationsTitle: "Your applications",
+    inTransitTitle: "In transit",
+    historyTitle: "History",
+    pendingActionsTitle: "Pending actions",
+    noPendingActions: "No pending actions",
+    awaitingAccept: "Awaiting your acceptance",
+    awaitingPickup: "Awaiting pickup confirmation",
+    awaitingDelivery: "Awaiting delivery confirmation",
   },
 };
 
@@ -224,6 +276,32 @@ const nl: Messages = {
     list: "Lijst",
     map: "Kaart",
   },
+  dashboard: {
+    title: "Dashboard",
+    subtitle: "Overzicht van je operaties",
+    countersTitle: "Ladingen per status",
+    recentActivityTitle: "Recente activiteit",
+    noRecentActivity: "Geen recente activiteit",
+    attentionTitle: "Ladingen die aandacht nodig hebben",
+    attentionSubtitle: "Deze ladingen wachten op jouw actie",
+    awaitingCarrier: "Wachten op acceptatie vervoerder",
+    awaitingCompletion: "Wachten op afronding",
+    emptyAttention: "Geen ladingen hebben aandacht nodig",
+    viewLoad: "Bekijk lading",
+    viewAllLoads: "Bekijk alle ladingen",
+    viewAllNotifications: "Bekijk alle meldingen",
+    compatibleTitle: "Beschikbare ladingen voor jou",
+    compatibleSubtitle: "Ladingen die passen bij je voertuig en regio's",
+    compatibleEmpty: "Geen compatibele ladingen op dit moment",
+    applicationsTitle: "Jouw sollicitaties",
+    inTransitTitle: "Onderweg",
+    historyTitle: "Geschiedenis",
+    pendingActionsTitle: "Acties in afwachting",
+    noPendingActions: "Geen acties in afwachting",
+    awaitingAccept: "Wachten op jouw acceptatie",
+    awaitingPickup: "Wachten op bevestiging ophalen",
+    awaitingDelivery: "Wachten op bevestiging aflevering",
+  },
 };
 
 const pt: Messages = {
@@ -294,6 +372,32 @@ const pt: Messages = {
     approximateRoute: "Rota aproximada",
     list: "Lista",
     map: "Mapa",
+  },
+  dashboard: {
+    title: "Painel",
+    subtitle: "Visão geral das suas operações",
+    countersTitle: "Cargas por status",
+    recentActivityTitle: "Atividade recente",
+    noRecentActivity: "Nenhuma atividade recente",
+    attentionTitle: "Cargas que precisam de atenção",
+    attentionSubtitle: "Estas cargas aguardam sua ação",
+    awaitingCarrier: "Aguardando aceite do transportador",
+    awaitingCompletion: "Aguardando conclusão",
+    emptyAttention: "Nenhuma carga precisa de atenção no momento",
+    viewLoad: "Ver carga",
+    viewAllLoads: "Ver todas as cargas",
+    viewAllNotifications: "Ver todas as notificações",
+    compatibleTitle: "Cargas disponíveis para você",
+    compatibleSubtitle: "Cargas compatíveis com seu veículo e regiões",
+    compatibleEmpty: "Nenhuma carga compatível no momento",
+    applicationsTitle: "Suas candidaturas",
+    inTransitTitle: "Em trânsito",
+    historyTitle: "Histórico",
+    pendingActionsTitle: "Ações pendentes",
+    noPendingActions: "Nenhuma ação pendente",
+    awaitingAccept: "Aguardando seu aceite",
+    awaitingPickup: "Aguardando confirmação de coleta",
+    awaitingDelivery: "Aguardando confirmação de entrega",
   },
 };
 
@@ -366,6 +470,32 @@ const de: Messages = {
     list: "Liste",
     map: "Karte",
   },
+  dashboard: {
+    title: "Dashboard",
+    subtitle: "Überblick deiner Operationen",
+    countersTitle: "Ladungen nach Status",
+    recentActivityTitle: "Letzte Aktivitäten",
+    noRecentActivity: "Keine aktuellen Aktivitäten",
+    attentionTitle: "Ladungen erfordern Aufmerksamkeit",
+    attentionSubtitle: "Diese Ladungen warten auf deine Aktion",
+    awaitingCarrier: "Warten auf Spediteurannahme",
+    awaitingCompletion: "Warten auf Abschluss",
+    emptyAttention: "Keine Ladungen benötigen Aufmerksamkeit",
+    viewLoad: "Ladung ansehen",
+    viewAllLoads: "Alle Ladungen ansehen",
+    viewAllNotifications: "Alle Benachrichtigungen ansehen",
+    compatibleTitle: "Verfügbare Ladungen für dich",
+    compatibleSubtitle: "Ladungen passend zu deinem Fahrzeug und Regionen",
+    compatibleEmpty: "Keine passenden Ladungen im Moment",
+    applicationsTitle: "Deine Bewerbungen",
+    inTransitTitle: "Unterwegs",
+    historyTitle: "Verlauf",
+    pendingActionsTitle: "Ausstehende Aktionen",
+    noPendingActions: "Keine ausstehenden Aktionen",
+    awaitingAccept: "Warten auf deine Annahme",
+    awaitingPickup: "Warten auf Abholbestätigung",
+    awaitingDelivery: "Warten auf Lieferbestätigung",
+  },
 };
 
 const pl: Messages = {
@@ -436,6 +566,32 @@ const pl: Messages = {
     approximateRoute: "Przybliżona trasa",
     list: "Lista",
     map: "Mapa",
+  },
+  dashboard: {
+    title: "Panel",
+    subtitle: "Przegląd operacji",
+    countersTitle: "Ładunki według statusu",
+    recentActivityTitle: "Ostatnia aktywność",
+    noRecentActivity: "Brak ostatniej aktywności",
+    attentionTitle: "Ładunki wymagające uwagi",
+    attentionSubtitle: "Te ładunki czekają na twoje działanie",
+    awaitingCarrier: "Oczekiwanie na akceptację przewoźnika",
+    awaitingCompletion: "Oczekiwanie na zakończenie",
+    emptyAttention: "Żaden ładunek nie wymaga uwagi",
+    viewLoad: "Zobacz ładunek",
+    viewAllLoads: "Zobacz wszystkie ładunki",
+    viewAllNotifications: "Zobacz wszystkie powiadomienia",
+    compatibleTitle: "Dostępne ładunki dla Ciebie",
+    compatibleSubtitle: "Ładunki pasujące do pojazdu i regionów",
+    compatibleEmpty: "Brak pasujących ładunków",
+    applicationsTitle: "Twoje zgłoszenia",
+    inTransitTitle: "W transporcie",
+    historyTitle: "Historia",
+    pendingActionsTitle: "Oczekujące działania",
+    noPendingActions: "Brak oczekujących działań",
+    awaitingAccept: "Oczekiwanie na Twoją akceptację",
+    awaitingPickup: "Oczekiwanie na potwierdzenie odbioru",
+    awaitingDelivery: "Oczekiwanie na potwierdzenie dostawy",
   },
 };
 

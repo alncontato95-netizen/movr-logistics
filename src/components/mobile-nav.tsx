@@ -11,6 +11,7 @@ type Props = {
     business: string;
     applications: string;
     profile: string;
+    dashboard: string;
     logout: string;
   };
 };
@@ -37,6 +38,7 @@ export function MobileNav({ isCompany, t }: Props) {
           <nav className="mx-auto flex max-w-5xl flex-col gap-1 px-4 py-3">
             {isCompany ? (
               <>
+                <MobileLink href="/company/dashboard" onClick={() => setOpen(false)}>{t.dashboard}</MobileLink>
                 <MobileLink href="/company/loads" onClick={() => setOpen(false)}>{t.loads}</MobileLink>
                 <MobileLink href="/company/settings" onClick={() => setOpen(false)}>{t.business}</MobileLink>
               </>
