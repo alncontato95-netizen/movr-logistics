@@ -108,6 +108,22 @@ export type Messages = {
     awaitingPickup: string;
     awaitingDelivery: string;
   };
+  actionCenter: {
+    title: string;
+    subtitle: string;
+    empty: string;
+    bookingRequest: string;
+    pickupNeeds: string;
+    deliveryNeeds: string;
+    transporterSelected: string;
+    deliveryCompleted: string;
+    accept: string;
+    decline: string;
+    confirmPickup: string;
+    confirmDelivery: string;
+    confirmBooking: string;
+    markCompleted: string;
+  };
 };
 
 const en: Messages = {
@@ -204,6 +220,22 @@ const en: Messages = {
     awaitingAccept: "Awaiting your acceptance",
     awaitingPickup: "Awaiting pickup confirmation",
     awaitingDelivery: "Awaiting delivery confirmation",
+  },
+  actionCenter: {
+    title: "Action Center",
+    subtitle: "Actions requiring your attention",
+    empty: "You're all caught up",
+    accept: "Accept",
+    decline: "Decline",
+    confirmPickup: "Confirm pickup",
+    confirmDelivery: "Confirm delivery",
+    confirmBooking: "Confirm booking",
+    markCompleted: "Mark as completed",
+    transporterSelected: "You were selected for",
+    bookingRequest: "Carrier accepted the offer for",
+    pickupNeeds: "Pending pickup",
+    deliveryNeeds: "Pending delivery",
+    deliveryCompleted: "Delivery completed",
   },
 };
 
@@ -302,6 +334,22 @@ const nl: Messages = {
     awaitingPickup: "Wachten op bevestiging ophalen",
     awaitingDelivery: "Wachten op bevestiging aflevering",
   },
+  actionCenter: {
+    title: "Actiecentrum",
+    subtitle: "Acties die om uw aandacht vragen",
+    empty: "Je bent bijgewerkt",
+    accept: "Accepteren",
+    decline: "Weigeren",
+    confirmPickup: "Ophalen bevestigen",
+    confirmDelivery: "Aflevering bevestigen",
+    confirmBooking: "Boeking bevestigen",
+    markCompleted: "Voltooien als gemerkt",
+    transporterSelected: "Geselecteerd voor",
+    bookingRequest: "Vervoerder heeft aangeboden voor",
+    pickupNeeds: "Wacht op ophalen",
+    deliveryNeeds: "Wacht op aflevering",
+    deliveryCompleted: "Aflevering voltooid",
+  },
 };
 
 const pt: Messages = {
@@ -398,6 +446,22 @@ const pt: Messages = {
     awaitingAccept: "Aguardando seu aceite",
     awaitingPickup: "Aguardando confirmação de coleta",
     awaitingDelivery: "Aguardando confirmação de entrega",
+  },
+  actionCenter: {
+    title: "Centro de Ações",
+    subtitle: "Ações que exigem sua atenção",
+    empty: "Você está atualizado",
+    accept: "Aceitar",
+    decline: "Recusar",
+    confirmPickup: "Confirmar coleta",
+    confirmDelivery: "Confirmar entrega",
+    confirmBooking: "Confirmar reserva",
+    markCompleted: "Marcar como concluído",
+    transporterSelected: "Selecionado para",
+    bookingRequest: "Transportador aceitou a oferta para",
+    pickupNeeds: "Pendente de coleta",
+    deliveryNeeds: "Pendente de entrega",
+    deliveryCompleted: "Entrega concluída",
   },
 };
 
@@ -496,6 +560,22 @@ const de: Messages = {
     awaitingPickup: "Warten auf Abholbestätigung",
     awaitingDelivery: "Warten auf Lieferbestätigung",
   },
+  actionCenter: {
+    title: "Aktionszentrum",
+    subtitle: "Aktionen, die Aufmerksamkeit erfordern",
+    empty: "Sie sind auf dem Laufenden",
+    accept: "Akzeptieren",
+    decline: "Ablehnen",
+    confirmPickup: "Abholung bestätigen",
+    confirmDelivery: "Lieferung bestätigen",
+    confirmBooking: "Buchung bestätigen",
+    markCompleted: "Als abgeschlossen markieren",
+    transporterSelected: "Für ausgewählt",
+    bookingRequest: "Spediteur hat Angebot angenommen für",
+    pickupNeeds: "Warte auf Abholung",
+    deliveryNeeds: "Warte auf Lieferung",
+    deliveryCompleted: "Lieferung abgeschlossen",
+  },
 };
 
 const pl: Messages = {
@@ -592,6 +672,22 @@ const pl: Messages = {
     awaitingAccept: "Oczekiwanie na Twoją akceptację",
     awaitingPickup: "Oczekiwanie na potwierdzenie odbioru",
     awaitingDelivery: "Oczekiwanie na potwierdzenie dostawy",
+  },
+  actionCenter: {
+    title: "Centrum działań",
+    subtitle: "Działania wymagające uwagi",
+    empty: "Jesteś na bieżąco",
+    accept: "Zaakceptuj",
+    decline: "Odmów",
+    confirmPickup: "Potwierdź odbiór",
+    confirmDelivery: "Potwierdź dostawę",
+    confirmBooking: "Potwierdź rezerwację",
+    markCompleted: "Oznacz jako completed",
+    transporterSelected: "Wybrane dla",
+    bookingRequest: "Przewoźnik zaakceptował ofertę dla",
+    pickupNeeds: "Czekający na odbiór",
+    deliveryNeeds: "Czekający na dostawę",
+    deliveryCompleted: "Dostawa zakończona",
   },
 };
 

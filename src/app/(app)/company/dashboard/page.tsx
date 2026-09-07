@@ -6,6 +6,7 @@ import { getLoadStatusLabels } from "@/lib/constants";
 import { Card, Badge, LoadStatusBadge } from "@/components/ui";
 import { NOTIFICATION_ICONS } from "@/lib/constants";
 import { formatMoney } from "@/lib/format";
+import { ActionCenter } from "@/components/action-center";
 
 export const dynamic = "force-dynamic";
 
@@ -69,6 +70,8 @@ export default async function CompanyDashboardPage() {
         <h1 className="text-2xl font-bold text-ink">{t.dashboard.title}</h1>
         <p className="mt-1 text-sm text-muted">{t.dashboard.subtitle}</p>
       </div>
+
+      <ActionCenter />
 
       {/* Counters */}
       <section>
