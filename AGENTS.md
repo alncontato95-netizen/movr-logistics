@@ -1,3 +1,14 @@
+## ATUALIZAÇÃO DE MERCADO (substitui seções anteriores sobre Holanda/Venlo)
+
+- **Mercado atual:** Região Sudeste do Brasil (São Paulo, Rio de Janeiro, Minas Gerais) — substituiu completamente o plano original de Venlo/Limburg/Países Baixos.
+- **Idioma:** apenas português (pt-BR). Não reintroduzir outros idiomas sem decisão explícita.
+- **Moeda:** Real brasileiro (BRL).
+- **Identificação de empresa:** CNPJ (não mais KVK).
+- **Categorias de veículo:** VUC, Toco, Truck, Bitruck, Carreta, Bitrem (nomenclatura brasileira de transporte rodoviário).
+- **Todas as seções anteriores do documento que mencionam Venlo, Limburg, Países Baixos, KVK, ou moeda em Euro devem ser lidas como HISTÓRICO/OBSOLETO, não como estado atual do projeto.**
+
+---
+
 # ESCOPO ATUAL DO MVP (decidido)
 
 > Esta seção substitui e tem prioridade sobre as seções mais genéricas e especulativas do restante do documento. Não implemente o que está listado como futuro sem uma decisão explícita nova do fundador.

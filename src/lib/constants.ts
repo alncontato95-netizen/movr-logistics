@@ -1,5 +1,3 @@
-import type { Locale } from "@/lib/i18n";
-
 export const VEHICLE_TYPES = ["VUC", "TOCO", "TRUCK", "BITRUCK", "CARRETA", "BITREM"] as const;
 export type VehicleType = (typeof VEHICLE_TYPES)[number];
 
@@ -47,7 +45,7 @@ export const APPLICATION_STATUS_LABELS: Record<ApplicationStatus, string> = {
   CANCELLED: "Cancelled",
 };
 
-export function getCargoLabels(locale: Locale): Record<CargoType, string> {
+export function getCargoLabels(locale: string): Record<CargoType, string> {
   switch (locale) {
     case "nl":
       return { PALLET: "Pallets", CONTAINER: "Container", BULK: "Bulk", OTHER: "Overig" };
@@ -60,7 +58,7 @@ export function getCargoLabels(locale: Locale): Record<CargoType, string> {
   }
 }
 
-export function getVehicleLabels(locale: Locale): Record<VehicleType, string> {
+export function getVehicleLabels(locale: string): Record<VehicleType, string> {
   switch (locale) {
     case "nl":
       return {
@@ -94,7 +92,7 @@ export function getVehicleLabels(locale: Locale): Record<VehicleType, string> {
   }
 }
 
-export function getLoadStatusLabels(locale: Locale): Record<LoadStatus, string> {
+export function getLoadStatusLabels(locale: string): Record<LoadStatus, string> {
   switch (locale) {
     case "nl":
       return {
@@ -131,7 +129,7 @@ export function getLoadStatusLabels(locale: Locale): Record<LoadStatus, string> 
   }
 }
 
-export function getApplicationStatusLabels(locale: Locale): Record<ApplicationStatus, string> {
+export function getApplicationStatusLabels(locale: string): Record<ApplicationStatus, string> {
   switch (locale) {
     case "nl":
       return {

@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { LogoutButton } from "@/components/logout-button";
-import { LangSwitcher } from "@/components/lang-switcher";
 import { getCurrentUser } from "@/lib/dal";
 import { getDictionary, getLocale } from "@/lib/i18n";
 import { Card } from "@/components/ui";
@@ -47,7 +46,6 @@ export default async function HomePage() {
           MO<span className="text-brand">V</span>R
         </Link>
         <nav className="flex items-center gap-2">
-          <LangSwitcher />
           {currentUser ? (
             <div className="flex items-center gap-2">
               <Link

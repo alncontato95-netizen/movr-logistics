@@ -30,6 +30,14 @@ export const carrierProfileSchema = z.object({
     .refine((v) => !v || !Number.isNaN(Date.parse(v)), { message: "Enter a valid date" })
     .refine((v) => !v || new Date(v).getTime() > Date.now(), { message: "Expiry must be in the future" }),
   phone: z.string().trim().min(6, "Enter a phone number").optional().or(z.literal("")),
+  rntrc: z
+    .string()
+    .trim()
+    .optional()
+    .or(z.literal(""))
+    .refine((v) => !v || /^\d{1,14}$/.test(v), {
+      message: "RNTRC must contain only digits (up to 14)",
+    }),
   currentRegion: z.enum(REGIONS, { message: "Select your home region" }),
   acceptsRegions: z.array(z.enum(REGIONS)).min(1, "Select at least one region you serve"),
   available: z.boolean().optional().default(true),

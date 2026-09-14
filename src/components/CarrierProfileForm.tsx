@@ -7,6 +7,9 @@ import { VEHICLE_LABELS, VEHICLE_TYPES, REGIONS } from "@/lib/constants";
 
 export function CarrierProfileForm({
   initial,
+  rntrcLabel,
+  rntrcDescription,
+  rntrcPlaceholder,
 }: {
   initial: {
     vehicleType: string | null;
@@ -15,11 +18,15 @@ export function CarrierProfileForm({
     licenseUrl: string | null;
     licenseExpiry: string | null;
     carrierVerified: boolean;
+    rntrc: string | null;
     phone: string | null;
     currentRegion: string | null;
     acceptsRegions: string[];
     available: boolean;
   };
+  rntrcLabel: string;
+  rntrcDescription: string;
+  rntrcPlaceholder: string;
 }) {
   const [state, action, pending] = useActionState<ProfileState, FormData>(updateCarrierProfile, undefined);
 
@@ -63,6 +70,20 @@ export function CarrierProfileForm({
           ) : (
             <p className="text-xs text-muted">Optional now, required for high-value loads trust badge.</p>
           )}
+        </div>
+      </div>
+
+      <div className="rounded-xl border border-brand/10 bg-brand-light/30 p-3">
+        <p className="text-sm font-semibold text-brand-dark">{rntrcLabel}</p>
+        <p className="text-xs text-muted">{rntrcDescription}</p>
+        <div className="mt-3 space-y-1">
+          <Input
+            name="rntrc"
+            inputMode="numeric"
+            defaultValue={initial.rntrc ?? ""}
+            placeholder={rntrcPlaceholder}
+          />
+          <FieldError>{state?.errors?.rntrc?.[0]}</FieldError>
         </div>
       </div>
 

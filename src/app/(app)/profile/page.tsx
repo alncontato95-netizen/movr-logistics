@@ -96,11 +96,15 @@ export default async function ProfilePage() {
             licenseUrl: user.licenseUrl,
             licenseExpiry: licenseExpiryStr,
             carrierVerified: user.carrierVerified,
+            rntrc: user.rntrc,
             phone: user.phone,
             currentRegion: user.currentRegion,
             acceptsRegions,
             available: user.available,
           }}
+          rntrcLabel={t.profile.rntrcLabel}
+          rntrcDescription={t.profile.rntrcDescription}
+          rntrcPlaceholder={t.profile.rntrcPlaceholder}
         />
       </Card>
 

@@ -52,3 +52,8 @@ export type Session = Prisma.SessionModel
  * 
  */
 export type Notification = Prisma.NotificationModel
+/**
+ * Model AuditEvent
+ * 
+ */
+export type AuditEvent = Prisma.AuditEventModel

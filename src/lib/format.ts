@@ -1,5 +1,7 @@
 function localeTag(locale?: string): string {
   switch (locale) {
+    case "pt":
+      return "pt-BR";
     case "nl":
       return "nl-NL";
     case "de":
@@ -7,7 +9,7 @@ function localeTag(locale?: string): string {
     case "es":
       return "es-ES";
     default:
-      return "en-GB";
+      return "pt-BR";
   }
 }
 

@@ -10,6 +10,7 @@ import { createNotification } from "@/lib/notify";
 import { isCompatible } from "@/lib/matching";
 import { canConfirmPickup } from "@/lib/schedule";
 import { rateLimit } from "@/lib/rate-limit";
+import { createAuditEvent } from "@/lib/audit";
 
 export type LoadState = { errors?: Record<string, string[] | undefined>; message?: string } | undefined;
 
@@ -49,22 +50,32 @@ export async function createLoad(_state: LoadState, formData: FormData): Promise
   }
 
   const data = parsed.data;
-  const load = await prisma.load.create({
-    data: {
-      companyId: company.id,
-      publishedBy: user.id,
-      origin: data.origin,
-      destination: data.destination,
-      pickupDate: new Date(data.pickupDate),
-      pickupWindow: data.pickupWindow,
-      cargoType: data.cargoType,
-      weightKg: data.weightKg,
-      volumeM3: data.volumeM3,
-      requiredVehicle: data.requiredVehicle,
-      priceEur: data.priceEur,
-      priceNegotiable: data.priceNegotiable,
-      notes: data.notes,
-    },
+  const load = await prisma.$transaction(async (tx) => {
+    const created = await tx.load.create({
+      data: {
+        companyId: company.id,
+        publishedBy: user.id,
+        origin: data.origin,
+        destination: data.destination,
+        pickupDate: new Date(data.pickupDate),
+        pickupWindow: data.pickupWindow,
+        cargoType: data.cargoType,
+        weightKg: data.weightKg,
+        volumeM3: data.volumeM3,
+        requiredVehicle: data.requiredVehicle,
+        priceEur: data.priceEur,
+        priceNegotiable: data.priceNegotiable,
+        notes: data.notes,
+      },
+    });
+    await createAuditEvent(tx, {
+      entityType: "Load",
+      entityId: created.id,
+      eventType: "LOAD_CREATED",
+      actorUserId: user.id,
+      metadata: { newStatus: created.status },
+    });
+    return created;
   });
 
   // Notify compatible carriers (fire-and-forget, non-blocking, ignore failures)
@@ -288,6 +299,13 @@ export async function declineOffer(formData: FormData) {
       where: { id: loadId },
       data: { status: "OPEN" },
     });
+    await createAuditEvent(tx, {
+      entityType: "Load",
+      entityId: loadId,
+      eventType: "OFFER_DECLINED",
+      actorUserId: user.id,
+      metadata: { previousStatus: "SELECTED", newStatus: "OPEN", applicationId: existing.id },
+    });
   });
 
   if (load) {
@@ -321,7 +339,16 @@ export async function confirmPickup(formData: FormData) {
   // A service can only be executed from the scheduled pickup time onward.
   if (!canConfirmPickup(load.pickupDate, load.pickupWindow)) redirect(`/loads/${loadId}?early-pickup=1`);
 
-  await prisma.load.update({ where: { id: loadId }, data: { status: "PICKED_UP" } });
+  await prisma.$transaction(async (tx) => {
+    await tx.load.update({ where: { id: loadId }, data: { status: "PICKED_UP" } });
+    await createAuditEvent(tx, {
+      entityType: "Load",
+      entityId: loadId,
+      eventType: "PICKUP_CONFIRMED",
+      actorUserId: user.id,
+      metadata: { previousStatus: "CONFIRMED", newStatus: "PICKED_UP" },
+    });
+  });
 
   await createNotification({
     userId: load.publishedBy,
@@ -351,7 +378,16 @@ export async function confirmDelivery(formData: FormData) {
   // A service can only be executed from the scheduled pickup time onward.
   if (!canConfirmPickup(load.pickupDate, load.pickupWindow)) redirect(`/loads/${loadId}?early-pickup=1`);
 
-  await prisma.load.update({ where: { id: loadId }, data: { status: "DELIVERED" } });
+  await prisma.$transaction(async (tx) => {
+    await tx.load.update({ where: { id: loadId }, data: { status: "DELIVERED" } });
+    await createAuditEvent(tx, {
+      entityType: "Load",
+      entityId: loadId,
+      eventType: "DELIVERY_CONFIRMED",
+      actorUserId: user.id,
+      metadata: { previousStatus: "PICKED_UP", newStatus: "DELIVERED" },
+    });
+  });
 
   await createNotification({
     userId: load.publishedBy,
@@ -401,6 +437,13 @@ export async function selectTransporter(formData: FormData) {
       await tx.load.update({
         where: { id: loadId },
         data: { status: "SELECTED" },
+      });
+      await createAuditEvent(tx, {
+        entityType: "Load",
+        entityId: loadId,
+        eventType: "CARRIER_SELECTED",
+        actorUserId: user.id,
+        metadata: { previousStatus: "OPEN", newStatus: "SELECTED", carrierUserId: application.transporterId },
       });
     });
   } catch {
@@ -453,6 +496,13 @@ export async function undoSelection(formData: FormData) {
         where: { id: loadId },
         data: { status: "OPEN" },
       });
+      await createAuditEvent(tx, {
+        entityType: "Load",
+        entityId: loadId,
+        eventType: "SELECTION_UNDONE",
+        actorUserId: user.id,
+        metadata: { previousStatus: "SELECTED", newStatus: "OPEN" },
+      });
     });
   } catch {
     redirect(`/company/loads/${loadId}`);
@@ -498,6 +548,13 @@ export async function cancelLoad(formData: FormData) {
       data: { status: "CANCELLED" },
     });
     await tx.load.update({ where: { id: loadId }, data: { status: "CANCELLED" } });
+    await createAuditEvent(tx, {
+      entityType: "Load",
+      entityId: loadId,
+      eventType: "LOAD_CANCELLED",
+      actorUserId: user.id,
+      metadata: { previousStatus: fresh.status, newStatus: "CANCELLED" },
+    });
   });
 
   if (selectedApp) {
@@ -525,22 +582,32 @@ export async function duplicateLoad(formData: FormData) {
   if (!orig || orig.companyId !== company.id) redirect("/company/loads");
   if (!company.verified) redirect("/company/loads");
   const newPickup = new Date(Date.now() + 2 * 24 * 3600 * 1000);
-  const load = await prisma.load.create({
-    data: {
-      companyId: company.id,
-      publishedBy: user.id,
-      origin: orig.origin,
-      destination: orig.destination,
-      pickupDate: newPickup,
-      pickupWindow: orig.pickupWindow,
-      cargoType: orig.cargoType,
-      weightKg: orig.weightKg,
-      volumeM3: orig.volumeM3,
-      requiredVehicle: orig.requiredVehicle,
-      priceEur: orig.priceEur,
-      priceNegotiable: orig.priceNegotiable,
-      notes: orig.notes,
-    },
+  const load = await prisma.$transaction(async (tx) => {
+    const created = await tx.load.create({
+      data: {
+        companyId: company.id,
+        publishedBy: user.id,
+        origin: orig.origin,
+        destination: orig.destination,
+        pickupDate: newPickup,
+        pickupWindow: orig.pickupWindow,
+        cargoType: orig.cargoType,
+        weightKg: orig.weightKg,
+        volumeM3: orig.volumeM3,
+        requiredVehicle: orig.requiredVehicle,
+        priceEur: orig.priceEur,
+        priceNegotiable: orig.priceNegotiable,
+        notes: orig.notes,
+      },
+    });
+    await createAuditEvent(tx, {
+      entityType: "Load",
+      entityId: created.id,
+      eventType: "LOAD_CREATED",
+      actorUserId: user.id,
+      metadata: { newStatus: created.status },
+    });
+    return created;
   });
   revalidatePath("/company/loads");
   redirect(`/company/loads/${load.id}?duplicated=1`);
@@ -667,6 +734,13 @@ export async function updateLoadStatus(formData: FormData) {
         if (!acc) throw new Error("No acceptance");
       }
       await tx.load.update({ where: { id: loadId }, data: { status: status as "CONFIRMED" | "COMPLETED" } });
+      await createAuditEvent(tx, {
+        entityType: "Load",
+        entityId: loadId,
+        eventType: status === "CONFIRMED" ? "BOOKING_CONFIRMED" : "LOAD_COMPLETED",
+        actorUserId: user.id,
+        metadata: { previousStatus: fresh.status, newStatus: status },
+      });
     });
   } catch {
     revalidatePath(`/company/loads/${loadId}`);

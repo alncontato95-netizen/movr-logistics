@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { LogoutButton } from "@/components/logout-button";
-import { LangSwitcher } from "@/components/lang-switcher";
 import { NotificationBell } from "@/components/notification-bell";
 import { MobileNav } from "@/components/mobile-nav";
 import { Navbar } from "@/components/navbar";
@@ -43,7 +42,6 @@ export async function AppShell({
               )}
             </div>
             <NotificationBell unread={unread} href="/notifications" label={t.nav.notifications} />
-            <LangSwitcher />
             <div className="hidden sm:block">
               <LogoutButton label={t.nav.logout} />
             </div>

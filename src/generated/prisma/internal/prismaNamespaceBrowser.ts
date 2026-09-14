@@ -57,7 +57,8 @@ export const ModelName = {
   Rating: 'Rating',
   Application: 'Application',
   Session: 'Session',
-  Notification: 'Notification'
+  Notification: 'Notification',
+  AuditEvent: 'AuditEvent'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -86,6 +87,7 @@ export const UserScalarFieldEnum = {
   licenseUrl: 'licenseUrl',
   licenseExpiry: 'licenseExpiry',
   carrierVerified: 'carrierVerified',
+  rntrc: 'rntrc',
   currentRegion: 'currentRegion',
   available: 'available',
   acceptsRegions: 'acceptsRegions',
@@ -184,6 +186,19 @@ export const NotificationScalarFieldEnum = {
 } as const
 
 export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const AuditEventScalarFieldEnum = {
+  id: 'id',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  eventType: 'eventType',
+  actorUserId: 'actorUserId',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
+} as const
+
+export type AuditEventScalarFieldEnum = (typeof AuditEventScalarFieldEnum)[keyof typeof AuditEventScalarFieldEnum]
 
 
 export const SortOrder = {

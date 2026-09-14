@@ -3,18 +3,15 @@ import { setLocaleAction } from "@/app/actions/locale";
 import { cookies } from "next/headers";
 
 const LOCALE_LABELS: Record<string, string> = {
-  en: "English",
-  nl: "Nederlands",
-  de: "Deutsch",
-  es: "Español",
+  pt: "Português (Brasil)",
 };
 
 export async function LangSwitcher() {
-  let current = "en";
+  let current = "pt";
   try {
-    current = (await cookies()).get(LOCALE_COOKIE)?.value ?? "en";
+    current = (await cookies()).get(LOCALE_COOKIE)?.value ?? "pt";
   } catch {
-    current = "en";
+    current = "pt";
   }
   return (
     <form action={setLocaleAction} className="relative">

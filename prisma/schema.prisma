@@ -73,6 +73,7 @@ model User {
   licenseUrl String?
   licenseExpiry DateTime?
   carrierVerified Boolean @default(false)
+  rntrc String?
   currentRegion String?
   available    Boolean     @default(true)
   acceptsRegions String?
@@ -197,4 +198,17 @@ model Notification {
   @@index([userId, read])
   @@index([userId, createdAt])
   @@index([loadId])
+}
+
+model AuditEvent {
+  id         String   @id @default(cuid())
+  entityType String
+  entityId   String
+  eventType  String
+  actorUserId String?
+  metadata   String?
+  createdAt  DateTime @default(now())
+
+  @@index([entityType, entityId])
+  @@index([createdAt])
 }
