@@ -2,7 +2,7 @@ import { requireCompany } from "@/lib/dal";
 import { prisma } from "@/lib/prisma";
 import { LoadCard } from "@/components/load-card";
 import { PollRefresh } from "@/components/poll-refresh";
-import { ButtonLink, Card, Badge } from "@/components/ui";
+import { ButtonLink, Card } from "@/components/ui";
 import Link from "next/link";
 import { getLoadStatusLabels } from "@/lib/constants";
 import { formatMoney } from "@/lib/format";
@@ -89,14 +89,14 @@ export default async function CompanyLoadsPage({ searchParams }: { searchParams:
                 <Link key={s} href={buildHref({ status: s })} className={`rounded-full px-3 py-1 text-xs font-semibold border ${status===s ? "bg-brand text-white border-brand" : "bg-white text-muted border-border hover:border-brand/30"}`}>{getLoadStatusLabels(locale)[s]}</Link>
               ))}
             </div>
-            <div className="flex items-center gap-2">
-              <input name="q" defaultValue={q ?? ""} placeholder="Search origin/destination" className="rounded-[var(--radius-input)] border border-border bg-white px-3 py-1.5 text-sm outline-none focus:border-brand" />
-              <select name="sort" defaultValue={sort ?? "created"} className="rounded-[var(--radius-input)] border border-border bg-white px-2 py-1.5 text-sm">
+            <div className="flex w-full items-center gap-2 sm:w-auto">
+              <input name="q" defaultValue={q ?? ""} placeholder="Search origin/destination" className="min-w-0 flex-1 rounded-[var(--radius-input)] border border-border bg-white px-3 py-2 text-sm outline-none focus:border-brand" />
+              <select name="sort" defaultValue={sort ?? "created"} className="rounded-[var(--radius-input)] border border-border bg-white px-2 py-2 text-sm">
                 <option value="created">Newest</option>
                 <option value="pickup">Pickup date</option>
                 <option value="price">Price high</option>
               </select>
-              <button type="submit" className="rounded-[var(--radius-input)] bg-brand px-3 py-1.5 text-sm font-semibold text-white">Filter</button>
+              <button type="submit" className="rounded-[var(--radius-input)] bg-brand px-3 py-2 text-sm font-semibold text-white">Filter</button>
             </div>
           </form>
         </Card>

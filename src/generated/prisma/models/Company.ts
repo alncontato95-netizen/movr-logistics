@@ -28,7 +28,7 @@ export type CompanyMinAggregateOutputType = {
   id: string | null
   userId: string | null
   name: string | null
-  kvk: string | null
+  cnpj: string | null
   address: string | null
   phone: string | null
   verified: boolean | null
@@ -42,7 +42,7 @@ export type CompanyMaxAggregateOutputType = {
   id: string | null
   userId: string | null
   name: string | null
-  kvk: string | null
+  cnpj: string | null
   address: string | null
   phone: string | null
   verified: boolean | null
@@ -56,7 +56,7 @@ export type CompanyCountAggregateOutputType = {
   id: number
   userId: number
   name: number
-  kvk: number
+  cnpj: number
   address: number
   phone: number
   verified: number
@@ -72,7 +72,7 @@ export type CompanyMinAggregateInputType = {
   id?: true
   userId?: true
   name?: true
-  kvk?: true
+  cnpj?: true
   address?: true
   phone?: true
   verified?: true
@@ -86,7 +86,7 @@ export type CompanyMaxAggregateInputType = {
   id?: true
   userId?: true
   name?: true
-  kvk?: true
+  cnpj?: true
   address?: true
   phone?: true
   verified?: true
@@ -100,7 +100,7 @@ export type CompanyCountAggregateInputType = {
   id?: true
   userId?: true
   name?: true
-  kvk?: true
+  cnpj?: true
   address?: true
   phone?: true
   verified?: true
@@ -187,7 +187,7 @@ export type CompanyGroupByOutputType = {
   id: string
   userId: string
   name: string
-  kvk: string
+  cnpj: string
   address: string
   phone: string
   verified: boolean
@@ -222,7 +222,7 @@ export type CompanyWhereInput = {
   id?: Prisma.StringFilter<"Company"> | string
   userId?: Prisma.StringFilter<"Company"> | string
   name?: Prisma.StringFilter<"Company"> | string
-  kvk?: Prisma.StringFilter<"Company"> | string
+  cnpj?: Prisma.StringFilter<"Company"> | string
   address?: Prisma.StringFilter<"Company"> | string
   phone?: Prisma.StringFilter<"Company"> | string
   verified?: Prisma.BoolFilter<"Company"> | boolean
@@ -239,7 +239,7 @@ export type CompanyOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  kvk?: Prisma.SortOrder
+  cnpj?: Prisma.SortOrder
   address?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   verified?: Prisma.SortOrder
@@ -259,7 +259,7 @@ export type CompanyWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.CompanyWhereInput[]
   NOT?: Prisma.CompanyWhereInput | Prisma.CompanyWhereInput[]
   name?: Prisma.StringFilter<"Company"> | string
-  kvk?: Prisma.StringFilter<"Company"> | string
+  cnpj?: Prisma.StringFilter<"Company"> | string
   address?: Prisma.StringFilter<"Company"> | string
   phone?: Prisma.StringFilter<"Company"> | string
   verified?: Prisma.BoolFilter<"Company"> | boolean
@@ -276,7 +276,7 @@ export type CompanyOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  kvk?: Prisma.SortOrder
+  cnpj?: Prisma.SortOrder
   address?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   verified?: Prisma.SortOrder
@@ -296,7 +296,7 @@ export type CompanyScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Company"> | string
   userId?: Prisma.StringWithAggregatesFilter<"Company"> | string
   name?: Prisma.StringWithAggregatesFilter<"Company"> | string
-  kvk?: Prisma.StringWithAggregatesFilter<"Company"> | string
+  cnpj?: Prisma.StringWithAggregatesFilter<"Company"> | string
   address?: Prisma.StringWithAggregatesFilter<"Company"> | string
   phone?: Prisma.StringWithAggregatesFilter<"Company"> | string
   verified?: Prisma.BoolWithAggregatesFilter<"Company"> | boolean
@@ -309,7 +309,7 @@ export type CompanyScalarWhereWithAggregatesInput = {
 export type CompanyCreateInput = {
   id?: string
   name: string
-  kvk: string
+  cnpj: string
   address: string
   phone: string
   verified?: boolean
@@ -326,7 +326,7 @@ export type CompanyUncheckedCreateInput = {
   id?: string
   userId: string
   name: string
-  kvk: string
+  cnpj: string
   address: string
   phone: string
   verified?: boolean
@@ -341,7 +341,7 @@ export type CompanyUncheckedCreateInput = {
 export type CompanyUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  kvk?: Prisma.StringFieldUpdateOperationsInput | string
+  cnpj?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -358,7 +358,7 @@ export type CompanyUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  kvk?: Prisma.StringFieldUpdateOperationsInput | string
+  cnpj?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -374,7 +374,7 @@ export type CompanyCreateManyInput = {
   id?: string
   userId: string
   name: string
-  kvk: string
+  cnpj: string
   address: string
   phone: string
   verified?: boolean
@@ -387,7 +387,7 @@ export type CompanyCreateManyInput = {
 export type CompanyUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  kvk?: Prisma.StringFieldUpdateOperationsInput | string
+  cnpj?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -401,7 +401,7 @@ export type CompanyUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  kvk?: Prisma.StringFieldUpdateOperationsInput | string
+  cnpj?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -420,7 +420,7 @@ export type CompanyCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  kvk?: Prisma.SortOrder
+  cnpj?: Prisma.SortOrder
   address?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   verified?: Prisma.SortOrder
@@ -434,7 +434,7 @@ export type CompanyMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  kvk?: Prisma.SortOrder
+  cnpj?: Prisma.SortOrder
   address?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   verified?: Prisma.SortOrder
@@ -448,7 +448,7 @@ export type CompanyMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  kvk?: Prisma.SortOrder
+  cnpj?: Prisma.SortOrder
   address?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   verified?: Prisma.SortOrder
@@ -526,7 +526,7 @@ export type CompanyUpdateOneRequiredWithoutRatingsNestedInput = {
 export type CompanyCreateWithoutUserInput = {
   id?: string
   name: string
-  kvk: string
+  cnpj: string
   address: string
   phone: string
   verified?: boolean
@@ -541,7 +541,7 @@ export type CompanyCreateWithoutUserInput = {
 export type CompanyUncheckedCreateWithoutUserInput = {
   id?: string
   name: string
-  kvk: string
+  cnpj: string
   address: string
   phone: string
   verified?: boolean
@@ -572,7 +572,7 @@ export type CompanyUpdateToOneWithWhereWithoutUserInput = {
 export type CompanyUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  kvk?: Prisma.StringFieldUpdateOperationsInput | string
+  cnpj?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -587,7 +587,7 @@ export type CompanyUpdateWithoutUserInput = {
 export type CompanyUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  kvk?: Prisma.StringFieldUpdateOperationsInput | string
+  cnpj?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -602,7 +602,7 @@ export type CompanyUncheckedUpdateWithoutUserInput = {
 export type CompanyCreateWithoutLoadsInput = {
   id?: string
   name: string
-  kvk: string
+  cnpj: string
   address: string
   phone: string
   verified?: boolean
@@ -618,7 +618,7 @@ export type CompanyUncheckedCreateWithoutLoadsInput = {
   id?: string
   userId: string
   name: string
-  kvk: string
+  cnpj: string
   address: string
   phone: string
   verified?: boolean
@@ -648,7 +648,7 @@ export type CompanyUpdateToOneWithWhereWithoutLoadsInput = {
 export type CompanyUpdateWithoutLoadsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  kvk?: Prisma.StringFieldUpdateOperationsInput | string
+  cnpj?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -664,7 +664,7 @@ export type CompanyUncheckedUpdateWithoutLoadsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  kvk?: Prisma.StringFieldUpdateOperationsInput | string
+  cnpj?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -678,7 +678,7 @@ export type CompanyUncheckedUpdateWithoutLoadsInput = {
 export type CompanyCreateWithoutRatingsInput = {
   id?: string
   name: string
-  kvk: string
+  cnpj: string
   address: string
   phone: string
   verified?: boolean
@@ -694,7 +694,7 @@ export type CompanyUncheckedCreateWithoutRatingsInput = {
   id?: string
   userId: string
   name: string
-  kvk: string
+  cnpj: string
   address: string
   phone: string
   verified?: boolean
@@ -724,7 +724,7 @@ export type CompanyUpdateToOneWithWhereWithoutRatingsInput = {
 export type CompanyUpdateWithoutRatingsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  kvk?: Prisma.StringFieldUpdateOperationsInput | string
+  cnpj?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -740,7 +740,7 @@ export type CompanyUncheckedUpdateWithoutRatingsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  kvk?: Prisma.StringFieldUpdateOperationsInput | string
+  cnpj?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -795,7 +795,7 @@ export type CompanySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   id?: boolean
   userId?: boolean
   name?: boolean
-  kvk?: boolean
+  cnpj?: boolean
   address?: boolean
   phone?: boolean
   verified?: boolean
@@ -813,7 +813,7 @@ export type CompanySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id?: boolean
   userId?: boolean
   name?: boolean
-  kvk?: boolean
+  cnpj?: boolean
   address?: boolean
   phone?: boolean
   verified?: boolean
@@ -828,7 +828,7 @@ export type CompanySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id?: boolean
   userId?: boolean
   name?: boolean
-  kvk?: boolean
+  cnpj?: boolean
   address?: boolean
   phone?: boolean
   verified?: boolean
@@ -843,7 +843,7 @@ export type CompanySelectScalar = {
   id?: boolean
   userId?: boolean
   name?: boolean
-  kvk?: boolean
+  cnpj?: boolean
   address?: boolean
   phone?: boolean
   verified?: boolean
@@ -853,7 +853,7 @@ export type CompanySelectScalar = {
   createdAt?: boolean
 }
 
-export type CompanyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "name" | "kvk" | "address" | "phone" | "verified" | "verifiedAt" | "verifiedBy" | "verificationNote" | "createdAt", ExtArgs["result"]["company"]>
+export type CompanyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "name" | "cnpj" | "address" | "phone" | "verified" | "verifiedAt" | "verifiedBy" | "verificationNote" | "createdAt", ExtArgs["result"]["company"]>
 export type CompanyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   loads?: boolean | Prisma.Company$loadsArgs<ExtArgs>
@@ -878,7 +878,7 @@ export type $CompanyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     id: string
     userId: string
     name: string
-    kvk: string
+    cnpj: string
     address: string
     phone: string
     verified: boolean
@@ -1315,7 +1315,7 @@ export interface CompanyFieldRefs {
   readonly id: Prisma.FieldRef<"Company", 'String'>
   readonly userId: Prisma.FieldRef<"Company", 'String'>
   readonly name: Prisma.FieldRef<"Company", 'String'>
-  readonly kvk: Prisma.FieldRef<"Company", 'String'>
+  readonly cnpj: Prisma.FieldRef<"Company", 'String'>
   readonly address: Prisma.FieldRef<"Company", 'String'>
   readonly phone: Prisma.FieldRef<"Company", 'String'>
   readonly verified: Prisma.FieldRef<"Company", 'Boolean'>

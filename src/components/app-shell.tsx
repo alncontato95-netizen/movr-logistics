@@ -3,6 +3,7 @@ import { LogoutButton } from "@/components/logout-button";
 import { LangSwitcher } from "@/components/lang-switcher";
 import { NotificationBell } from "@/components/notification-bell";
 import { MobileNav } from "@/components/mobile-nav";
+import { Navbar } from "@/components/navbar";
 import { getDictionary, getLocale } from "@/lib/i18n";
 
 export async function AppShell({
@@ -19,7 +20,7 @@ export async function AppShell({
   const isCompany = user.role === "COMPANY";
   return (
     <div className="flex min-h-full flex-col bg-transparent">
-      <header className="sticky top-0 z-20 border-b border-white/60 bg-white/70 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60">
+      <Navbar>
         <div className="relative mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-3">
           <Link href={isCompany ? "/company/loads" : "/loads"} className="text-base font-extrabold tracking-tight text-ink">
             MO<span className="text-brand">V</span>R
@@ -34,6 +35,7 @@ export async function AppShell({
                 </>
               ) : (
                 <>
+                  <NavLink href="/carrier/dashboard">{t.nav.dashboard}</NavLink>
                   <NavLink href="/loads">{t.nav.loads}</NavLink>
                   <NavLink href="/applications">{t.nav.applications}</NavLink>
                   <NavLink href="/profile">{t.nav.profile}</NavLink>
@@ -48,7 +50,7 @@ export async function AppShell({
             <MobileNav isCompany={isCompany} t={{ loads: t.nav.loads, business: t.nav.business, applications: t.nav.applications, profile: t.nav.profile, dashboard: t.nav.dashboard, logout: t.nav.logout }} />
           </nav>
         </div>
-      </header>
+      </Navbar>
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 pb-16">{children}</main>
     </div>
   );

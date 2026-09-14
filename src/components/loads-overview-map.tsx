@@ -73,8 +73,8 @@ export function LoadsOverviewMap({ loads, variant, height = 400 }: Props) {
   return (
     <div style={{ height }} className="overflow-hidden rounded-[var(--radius-card)] border border-border">
       <MapContainer
-        bounds={bounds as any}
-        boundsOptions={{ padding: [32, 32] } as any}
+        bounds={bounds as L.LatLngBoundsExpression}
+        boundsOptions={{ padding: [32, 32] } as L.ZoomPanOptions}
         center={single ? points[0].coords : undefined}
         zoom={single ? 10 : undefined}
         style={{ height: "100%", width: "100%" }}

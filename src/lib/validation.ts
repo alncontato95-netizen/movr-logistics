@@ -35,9 +35,16 @@ export const carrierProfileSchema = z.object({
   available: z.boolean().optional().default(true),
 });
 
+const cnpj = z
+  .string()
+  .trim()
+  .regex(/^(\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}|\d{14})$/, {
+    message: "Enter a valid CNPJ (00.000.000/0000-00 or 14 digits)",
+  });
+
 export const companyProfileSchema = z.object({
   name: z.string().trim().min(2, "Please enter your company name").max(120, "Name is too long"),
-  kvk: z.string().trim().min(3, "Please enter your KVK number").max(20, "KVK is too long"),
+  cnpj,
   address: z.string().trim().min(3, "Please enter your address").max(200, "Address is too long"),
   phone: z.string().trim().min(6, "Please enter a phone number").max(30, "Phone is too long"),
 });

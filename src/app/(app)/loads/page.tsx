@@ -62,7 +62,7 @@ export default async function LoadsPage() {
       )}
 
       {!user.available && (
-        <div className="rounded-2xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-800">
+        <div className="rounded-2xl border border-warning-300 bg-warning-50 p-4 text-sm text-warning-800">
           <p className="font-semibold">You&apos;re currently marked unavailable.</p>
           <p className="mt-1">Enable &quot;Available for loads now&quot; on your profile to be matched with new loads.</p>
           <div className="mt-3">
@@ -72,9 +72,9 @@ export default async function LoadsPage() {
       )}
 
       {serves.length === 0 ? (
-        <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6 text-center">
-          <p className="font-semibold text-amber-800">Complete your profile to see available loads</p>
-          <p className="mt-1 text-sm text-amber-700">
+        <div className="rounded-2xl border border-warning-200 bg-warning-50 p-6 text-center">
+          <p className="font-semibold text-warning-800">Complete your profile to see available loads</p>
+          <p className="mt-1 text-sm text-warning-700">
             Select the regions you serve in your profile so we can show you loads that match your routes.
           </p>
           <div className="mt-4">

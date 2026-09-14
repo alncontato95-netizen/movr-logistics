@@ -3,6 +3,9 @@ import { LogoutButton } from "@/components/logout-button";
 import { LangSwitcher } from "@/components/lang-switcher";
 import { getCurrentUser } from "@/lib/dal";
 import { getDictionary, getLocale } from "@/lib/i18n";
+import { Card } from "@/components/ui";
+import { prisma } from "@/lib/prisma";
+import type { Load } from "@/generated/prisma/client";
 
 export default async function HomePage() {
   const locale = await getLocale();
@@ -12,6 +15,29 @@ export default async function HomePage() {
     currentUser = await getCurrentUser();
   } catch {
     currentUser = null;
+  }
+
+  let pendingApplications = 0;
+  let inTransitLoads = 0;
+  let completedLoads = 0;
+
+  if (currentUser) {
+    if (currentUser.role === "COMPANY") {
+      const company = await prisma.company.findUnique({ where: { userId: currentUser.id } });
+      if (company) {
+        const pending = await prisma.application.count({ where: { load: { companyId: company.id }, status: "PENDING" } });
+        const delivered = await prisma.load.count({ where: { companyId: company.id, status: "DELIVERED" } });
+        const inTransit = await prisma.load.count({ where: { companyId: company.id, status: "PICKED_UP" } });
+        pendingApplications = pending;
+        inTransitLoads = inTransit;
+        completedLoads = delivered;
+      }
+    } else {
+      pendingApplications = await prisma.application.count({ where: { transporterId: currentUser.id, status: "PENDING" } });
+      const acceptedLoads: Load[] = await prisma.load.findMany({ where: { applications: { some: { transporterId: currentUser.id, status: "ACCEPTED" } } } });
+      inTransitLoads = acceptedLoads.filter(l => l.pickupDate && new Date(l.pickupDate) > new Date()).length;
+      completedLoads = acceptedLoads.filter(l => l.status === "DELIVERED").length;
+    }
   }
 
   return (
@@ -61,41 +87,66 @@ export default async function HomePage() {
             >
               {t.landing.carrierCta}
             </Link>
-          <Link
-                href="/register?role=company"
-                className="rounded-[var(--radius-input)] border border-border bg-surface-strong px-6 py-3 text-center font-semibold text-ink hover:border-brand hover:bg-brand-light/40"
-              >
+            <Link
+              href="/register?role=company"
+              className="rounded-[var(--radius-input)] border border-border bg-surface-strong px-6 py-3 text-center font-semibold text-ink hover:border-brand hover:bg-brand-light/40"
+            >
               {t.landing.companyCta}
-            </Link>
-          </div>
-        </section>
+              </Link>
+            </div>
+          </section>
 
-        <section className="grid gap-4 sm:grid-cols-3">
-          <Feature title={t.landing.featureCarrierTitle} body={t.landing.featureCarrierBody} />
-          <Feature title={t.landing.featureCompanyTitle} body={t.landing.featureCompanyBody} />
-          <Feature title={t.landing.featureEmptyTitle} body={t.landing.featureEmptyBody} />
-        </section>
+          <section className="grid gap-4 sm:grid-cols-3">
+            <Feature title={t.landing.featureCarrierTitle} body={t.landing.featureCarrierBody} />
+            <Feature title={t.landing.featureCompanyTitle} body={t.landing.featureCompanyBody} />
+            <Feature title={t.landing.featureEmptyTitle} body={t.landing.featureEmptyBody} />
+          </section>
 
-        <section className="mt-12 rounded-[var(--radius-card)] border border-brand/10 bg-brand-light p-6 sm:p-10">
-          <div className="flex items-center gap-2">
+          <section className="mt-6 grid gap-4 sm:grid-cols-2">
+            <Card>
+              <h3 className="font-semibold text-ink mb-3">Minhas cargas</h3>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="rounded-[var(--radius-card)] border border-brand/10 bg-brand-light p-3">
+                  <p className="text-3xl font-bold text-brand">{pendingApplications}</p>
+                  <p className="text-sm text-muted">{t.dashboard.pendingApplications}</p>
+                </div>
+                <div className="rounded-[var(--radius-card)] border border-brand/10 bg-brand-light p-3">
+                  <p className="text-3xl font-bold text-brand">{inTransitLoads}</p>
+                  <p className="text-sm text-muted">{t.dashboard.inTransit}</p>
+                </div>
+              </div>
+            </Card>
+            <Card>
+              <h3 className="font-semibold text-ink mb-3">Cargas concluídas</h3>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="rounded-[var(--radius-card)] border border-brand/10 bg-brand-light p-3">
+                  <p className="text-3xl font-bold text-brand">{completedLoads}</p>
+                  <p className="text-sm text-muted">{t.dashboard.completedLoads}</p>
+                </div>
+              </div>
+            </Card>
+          </section>
+
+          <section className="mt-12 rounded-[var(--radius-card)] border border-brand/10 bg-brand-light p-6 sm:p-10">
+            <div className="flex items-center gap-2">
+              <span className="h-px w-6 bg-brand/40" aria-hidden />
+              <h2 className="text-xl font-bold tracking-tight text-ink">{t.landing.howTitle}</h2>
+            </div>
+            <ol className="mt-4 grid gap-4 sm:grid-cols-3">
+              <Step n={1} title={t.landing.step1Title} body={t.landing.step1Body} />
+              <Step n={2} title={t.landing.step2Title} body={t.landing.step2Body} />
+              <Step n={3} title={t.landing.step3Title} body={t.landing.step3Body} />
+            </ol>
+          </section>
+        </main>
+
+        <footer className="border-t border-border px-4 py-6 text-center">
+          <div className="flex items-center justify-center gap-2">
             <span className="h-px w-6 bg-brand/40" aria-hidden />
-            <h2 className="text-xl font-bold tracking-tight text-ink">{t.landing.howTitle}</h2>
+            <span className="text-sm font-semibold tracking-[0.2em] text-muted">MOVR LOGISTICS — São Paulo, Rio de Janeiro, Minas Gerais</span>
+            <span className="h-px w-6 bg-brand/40" aria-hidden />
           </div>
-          <ol className="mt-4 grid gap-4 sm:grid-cols-3">
-            <Step n={1} title={t.landing.step1Title} body={t.landing.step1Body} />
-            <Step n={2} title={t.landing.step2Title} body={t.landing.step2Body} />
-            <Step n={3} title={t.landing.step3Title} body={t.landing.step3Body} />
-          </ol>
-        </section>
-      </main>
-
-      <footer className="border-t border-border py-6 text-center">
-        <div className="flex items-center justify-center gap-2">
-          <span className="h-px w-6 bg-brand/40" aria-hidden />
-          <span className="text-sm font-semibold tracking-[0.2em] text-muted">MOVR LOGISTICS — Venlo, Limburg, NL</span>
-          <span className="h-px w-6 bg-brand/40" aria-hidden />
-        </div>
-      </footer>
+        </footer>
     </div>
   );
 }

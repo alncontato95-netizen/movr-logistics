@@ -35,16 +35,16 @@ export default async function CompanySettingsPage() {
       </div>
 
       {company && !company.verified && (
-        <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-medium text-amber-800">
+        <div className="rounded-2xl border border-warning-200 bg-warning-50 p-4 text-sm font-medium text-warning-800">
           <p>Your company is pending verification. Publishing will be enabled once approved.</p>
-          <p className="mt-1 text-xs text-amber-700">
+          <p className="mt-1 text-xs text-warning-700">
             Submitted {company.createdAt.toLocaleDateString("en-GB")} · Verification via Prisma Studio (verified, verifiedAt) — SLA 4h.
           </p>
           {company.verificationNote && <p className="mt-1 text-xs italic">Note: {company.verificationNote}</p>}
         </div>
       )}
       {company?.verified && company.verifiedAt && (
-        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-medium text-emerald-800">
+        <div className="rounded-2xl border border-success-200 bg-success-light p-4 text-sm font-medium text-success-700">
           Verified {new Date(company.verifiedAt).toLocaleDateString("en-GB")} {company.verifiedBy ? `by ${company.verifiedBy}` : ""}.
         </div>
       )}
@@ -60,7 +60,7 @@ export default async function CompanySettingsPage() {
         <CompanySettingsForm
           initial={{
             name: company?.name ?? "",
-            kvk: company?.kvk ?? "",
+            cnpj: company?.cnpj ?? "",
             address: company?.address ?? "",
             phone: company?.phone ?? "",
           }}
@@ -96,8 +96,8 @@ export default async function CompanySettingsPage() {
 function Metric({ label, value, tone }: { label: string; value: number; tone?: "brand" | "amber" | "green" }) {
   const toneClass: Record<string, string> = {
     brand: "text-brand-dark",
-    amber: "text-amber-600",
-    green: "text-emerald-600",
+    amber: "text-warning-600",
+    green: "text-success-600",
   };
   return (
     <div className="rounded-2xl border border-black/8 bg-white p-4">

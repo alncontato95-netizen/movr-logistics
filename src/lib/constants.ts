@@ -1,6 +1,6 @@
 import type { Locale } from "@/lib/i18n";
 
-export const VEHICLE_TYPES = ["VAN", "LIGHT_TRUCK", "TRUCK", "TRACTOR_TRAILER"] as const;
+export const VEHICLE_TYPES = ["VUC", "TOCO", "TRUCK", "BITRUCK", "CARRETA", "BITREM"] as const;
 export type VehicleType = (typeof VEHICLE_TYPES)[number];
 
 export const CARGO_TYPES = ["PALLET", "CONTAINER", "BULK", "OTHER"] as const;
@@ -13,10 +13,12 @@ export const APPLICATION_STATUSES = ["PENDING", "SELECTED", "ACCEPTED", "DECLINE
 export type ApplicationStatus = (typeof APPLICATION_STATUSES)[number];
 
 export const VEHICLE_LABELS: Record<VehicleType, string> = {
-  VAN: "Van (≤3.5t)",
-  LIGHT_TRUCK: "Light truck (3.5–7.5t)",
-  TRUCK: "Truck (7.5–25t)",
-  TRACTOR_TRAILER: "Tractor + trailer (40t)",
+  VUC: "VUC (até 3,5t)",
+  TOCO: "Toco (2 eixos)",
+  TRUCK: "Truck (3 eixos)",
+  BITRUCK: "Bitruck (4 eixos)",
+  CARRETA: "Carreta (simples)",
+  BITREM: "Bitrem",
 };
 
 export const CARGO_LABELS: Record<CargoType, string> = {
@@ -51,10 +53,8 @@ export function getCargoLabels(locale: Locale): Record<CargoType, string> {
       return { PALLET: "Pallets", CONTAINER: "Container", BULK: "Bulk", OTHER: "Overig" };
     case "de":
       return { PALLET: "Paletten", CONTAINER: "Container", BULK: "Schüttgut", OTHER: "Sonstiges" };
-    case "pl":
-      return { PALLET: "Palety", CONTAINER: "Kontener", BULK: "Luzem", OTHER: "Inne" };
-    case "pt":
-      return { PALLET: "Paletes", CONTAINER: "Contêiner", BULK: "Granel", OTHER: "Outro" };
+    case "es":
+      return { PALLET: "Palés", CONTAINER: "Contenedor", BULK: "Granel", OTHER: "Otro" };
     default:
       return CARGO_LABELS;
   }
@@ -64,31 +64,30 @@ export function getVehicleLabels(locale: Locale): Record<VehicleType, string> {
   switch (locale) {
     case "nl":
       return {
-        VAN: "Bestelwagen (≤3,5t)",
-        LIGHT_TRUCK: "Lichte vrachtwagen (3,5–7,5t)",
-        TRUCK: "Vrachtwagen (7,5–25t)",
-        TRACTOR_TRAILER: "Trekker + oplegger (40t)",
+        VUC: "VUC (até 3,5t)",
+        TOCO: "Toco (2 eixos)",
+        TRUCK: "Truck (3 eixos)",
+        BITRUCK: "Bitruck (4 eixos)",
+        CARRETA: "Carreta (simples)",
+        BITREM: "Bitrem",
       };
     case "de":
       return {
-        VAN: "Transporter (≤3,5t)",
-        LIGHT_TRUCK: "Leicht-LKW (3,5–7,5t)",
-        TRUCK: "LKW (7,5–25t)",
-        TRACTOR_TRAILER: "Sattelzug (40t)",
+        VUC: "VUC (até 3,5t)",
+        TOCO: "Toco (2 eixos)",
+        TRUCK: "Truck (3 eixos)",
+        BITRUCK: "Bitruck (4 eixos)",
+        CARRETA: "Carreta (simples)",
+        BITREM: "Bitrem",
       };
-    case "pl":
+    case "es":
       return {
-        VAN: "Van (≤3,5t)",
-        LIGHT_TRUCK: "Lekka ciężarówka (3,5–7,5t)",
-        TRUCK: "Ciężarówka (7,5–25t)",
-        TRACTOR_TRAILER: "Ciągnik + naczepa (40t)",
-      };
-    case "pt":
-      return {
-        VAN: "Van (≤3,5t)",
-        LIGHT_TRUCK: "Caminhão leve (3,5–7,5t)",
-        TRUCK: "Caminhão (7,5–25t)",
-        TRACTOR_TRAILER: "Cavalo + carreta (40t)",
+        VUC: "VUC (até 3,5t)",
+        TOCO: "Toco (2 eixos)",
+        TRUCK: "Truck (3 eixos)",
+        BITRUCK: "Bitruck (4 eixos)",
+        CARRETA: "Carreta (simples)",
+        BITREM: "Bitrem",
       };
     default:
       return VEHICLE_LABELS;
@@ -117,24 +116,14 @@ export function getLoadStatusLabels(locale: Locale): Record<LoadStatus, string> 
         COMPLETED: "Abgeschlossen",
         CANCELLED: "Storniert",
       };
-    case "pl":
+    case "es":
       return {
-        OPEN: "Otwarte",
-        SELECTED: "Przewoźnik wybrany",
-        CONFIRMED: "Potwierdzone",
-        PICKED_UP: "Odebrane",
-        DELIVERED: "Dostarczone",
-        COMPLETED: "Zakończone",
-        CANCELLED: "Anulowane",
-      };
-    case "pt":
-      return {
-        OPEN: "Aberta",
-        SELECTED: "Transportador selecionado",
+        OPEN: "Abierta",
+        SELECTED: "Transportista seleccionado",
         CONFIRMED: "Confirmada",
-        PICKED_UP: "Coletada",
-        DELIVERED: "Entregue",
-        COMPLETED: "Concluída",
+        PICKED_UP: "Recogida",
+        DELIVERED: "Entregada",
+        COMPLETED: "Completada",
         CANCELLED: "Cancelada",
       };
     default:
@@ -162,22 +151,13 @@ export function getApplicationStatusLabels(locale: Locale): Record<ApplicationSt
         REJECTED: "Nicht ausgewählt",
         CANCELLED: "Storniert",
       };
-    case "pl":
+    case "es":
       return {
-        PENDING: "Oczekujące",
-        SELECTED: "Wybrane",
-        ACCEPTED: "Zaakceptowane",
-        DECLINED: "Odrzucone",
-        REJECTED: "Nie wybrano",
-        CANCELLED: "Anulowane",
-      };
-    case "pt":
-      return {
-        PENDING: "Pendente",
-        SELECTED: "Selecionada",
-        ACCEPTED: "Aceita",
-        DECLINED: "Recusada",
-        REJECTED: "Não selecionada",
+        PENDING: "Pendiente",
+        SELECTED: "Seleccionada",
+        ACCEPTED: "Aceptada",
+        DECLINED: "Rechazada",
+        REJECTED: "No seleccionada",
         CANCELLED: "Cancelada",
       };
     default:
@@ -186,22 +166,43 @@ export function getApplicationStatusLabels(locale: Locale): Record<ApplicationSt
 }
 
 export const REGIONS = [
-  "Venlo",
-  "Venray",
-  "Roermond",
-  "Weert",
-  "Helmond",
-  "Eindhoven",
-  "Nijmegen",
-  "Duiven",
-  "Tilburg",
-  "Breda",
-  "Moerdijk",
-  "Rotterdam",
+  "São Paulo",
+  "Guarulhos",
+  "Campinas",
+  "Jundiaí",
+  "Sorocaba",
+  "São José dos Campos",
+  "Santos",
+  "Ribeirão Preto",
+  "São José do Rio Preto",
+  "Rio de Janeiro",
+  "Duque de Caxias",
+  "Niterói",
+  "Volta Redonda",
+  "Campos dos Goytacazes",
+  "Petrópolis",
+  "Belo Horizonte",
+  "Uberlândia",
+  "Contagem",
+  "Betim",
+  "Juiz de Fora",
+  "Uberaba",
 ] as const;
 
 export const REGION_OPTIONS = REGIONS.map((r) => ({ value: r, label: r }));
 export type Region = (typeof REGIONS)[number];
+
+/**
+ * Default regions for the São Paulo/Rio de Janeiro/Belo Horizonte freight market.
+ * 
+ * To add new regions:
+ * 1. Add the region name to this array
+ * 2. Add translations to LOCALE_FLAGS in i18n.ts if needed
+ * 3. Rerun type checking
+ * 
+ * Note: For production multi-market setups, consider making regions
+ * configurable per user or storing them in a database table.
+ */
 
 export const ORGANIZATION = "MOVR Logistics";
 export const TAGLINE = "Return loads, real partners.";

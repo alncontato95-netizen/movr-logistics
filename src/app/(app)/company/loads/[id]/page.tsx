@@ -3,8 +3,10 @@ import Link from "next/link";
 import { requireCompany } from "@/lib/dal";
 import { prisma } from "@/lib/prisma";
 import { regionsFor } from "@/lib/matching";
-import { cancelLoad, duplicateLoad, selectTransporter, submitRating, undoSelection, updateLoadStatus } from "@/app/actions/loads";
+import { getCarrierOverviews, type CarrierOverview } from "@/lib/carrier-stats";
+import { cancelLoad, duplicateLoad, selectTransporter, undoSelection, updateLoadStatus } from "@/app/actions/loads";
 import { PollRefresh } from "@/components/poll-refresh";
+import { LoadLifecycle } from "@/components/load-lifecycle";
 import { Badge, LoadStatusBadge } from "@/components/ui";
 import { CARGO_LABELS, VEHICLE_LABELS, LOAD_STATUS_LABELS, type VehicleType } from "@/lib/constants";
 import { formatDate, formatMoney } from "@/lib/format";
@@ -37,10 +39,7 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
     : null;
 
   const candidateIds = pending.map((a) => a.transporter.id);
-  const groupedRatings = candidateIds.length
-    ? await prisma.rating.groupBy({ by: ["carrierId"], where: { carrierId: { in: candidateIds } }, _avg: { score: true }, _count: { _all: true } })
-    : [];
-  const ratingsByCarrier = new Map(groupedRatings.map((g) => [g.carrierId, { avg: g._avg.score ?? 0, count: g._count._all }]));
+  const overviewsByCarrier = await getCarrierOverviews(candidateIds);
 
   const showSelect = load.status === "OPEN";
   const carrierAccepted = chosen?.status === "ACCEPTED";
@@ -67,7 +66,7 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
       )}
 
       {awaitingAcceptance && (
-        <div className="rounded-2xl bg-amber-50 p-4 text-sm font-semibold text-amber-800">
+        <div className="rounded-2xl bg-warning-50 p-4 text-sm font-semibold text-warning-800">
           The booking can&apos;t be confirmed yet — the selected carrier must accept the offer first.
         </div>
       )}
@@ -91,13 +90,13 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
       )}
 
       {rated && (
-        <div className="rounded-2xl bg-emerald-50 p-4 text-sm font-semibold text-emerald-800">
+        <div className="rounded-2xl bg-success-light p-4 text-sm font-semibold text-success-700">
           Rating saved. Thank you!
         </div>
       )}
 
       {podRequired && (
-        <div className="rounded-2xl bg-amber-50 p-4 text-sm font-semibold text-amber-800">
+        <div className="rounded-2xl bg-warning-50 p-4 text-sm font-semibold text-warning-800">
           POD required — carrier must upload proof of delivery before completing.
         </div>
       )}
@@ -146,9 +145,9 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
       </div>
 
       {load.podUrl && (
-        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
-          <p className="font-semibold text-emerald-800">Proof of delivery</p>
-          <a href={load.podUrl} target="_blank" rel="noopener noreferrer" className="break-all text-sm text-emerald-700 underline">
+        <div className="rounded-2xl border border-success-200 bg-success-light p-4">
+          <p className="font-semibold text-success-700">Proof of delivery</p>
+          <a href={load.podUrl} target="_blank" rel="noopener noreferrer" className="break-all text-sm text-success-700 underline">
             {load.podUrl}
           </a>
           {load.podNote && <p className="mt-1 text-sm text-muted">{load.podNote}</p>}
@@ -164,8 +163,21 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
             </div>
           ) : (
             pending.map((app) => {
-              const r = ratingsByCarrier.get(app.transporter.id);
-              return <CandidateRow key={app.id} app={app} loadId={load.id} rating={r} />;
+              const stats = overviewsByCarrier.get(app.transporter.id);
+              return (
+                <CandidateRow
+                  key={app.id}
+                  app={app}
+                  loadId={load.id}
+                  stats={stats}
+                  labels={{
+                    relevance: t.history.relevance,
+                    ratings: t.history.ratings,
+                    completed: t.history.completedLoads,
+                    viewHistory: t.history.viewHistory,
+                  }}
+                />
+              );
             })
           )}
         </section>
@@ -176,23 +188,24 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
           <h2 className="text-lg font-bold text-ink">Selected carrier</h2>
           <CarrierInfo app={chosen} revealContact />
           {chosen.status === "ACCEPTED" && (
-            <p className="text-sm font-semibold text-emerald-700">Offer accepted by the carrier — you can confirm the booking.</p>
+            <p className="text-sm font-semibold text-success-700">Offer accepted by the carrier — you can confirm the booking.</p>
           )}
           {chosen.status === "SELECTED" && (
-            <p className="text-sm font-semibold text-amber-700">Waiting for the carrier to accept this offer.</p>
+            <p className="text-sm font-semibold text-warning-700">Waiting for the carrier to accept this offer.</p>
           )}
           {chosen.status === "DECLINED" && (
-            <p className="text-sm font-semibold text-red-700">The carrier declined the offer. The load is open for applications again.</p>
+            <p className="text-sm font-semibold text-error-700">The carrier declined the offer. The load is open for applications again.</p>
           )}
           {load.status === "CONFIRMED" && (
-            <p className="text-sm font-semibold text-sky-700">Booking confirmed — awaiting carrier pickup.</p>
+            <p className="text-sm font-semibold text-info-700">Booking confirmed — awaiting carrier pickup.</p>
           )}
           {load.status === "PICKED_UP" && (
-            <p className="text-sm font-semibold text-sky-700">Carrier has picked up the load — in transit.</p>
+            <p className="text-sm font-semibold text-info-700">Carrier has picked up the load — in transit.</p>
           )}
           {load.status === "DELIVERED" && (
-            <p className="text-sm font-semibold text-emerald-700">Load delivered — you can mark this booking as completed.</p>
+            <p className="text-sm font-semibold text-success-700">Load delivered — you can mark this booking as completed.</p>
           )}
+          {progressStatus && <LoadLifecycle status={load.status} applied selected={!!chosen} locale={locale} />}
           {progressStatus && <ProgressFlow loadId={load.id} status={progressStatus} carrierConfirmed={carrierAccepted} />}
           {load.status === "SELECTED" && chosen.status !== "DECLINED" && <UndoSelection loadId={load.id} />}
         </section>
@@ -244,23 +257,53 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
   );
 }
 
-function CandidateRow({ app, loadId, rating }: { app: { id: string; transporter: { id: string; name: string; vehicleType: VehicleType | null; currentRegion: string | null; acceptsRegions: string | null; available: boolean; carrierVerified?: boolean; licenseUrl?: string | null } }; loadId: string; rating?: { avg: number; count: number } }) {
+function CandidateRow({ app, loadId, stats, labels }: { app: { id: string; transporter: { id: string; name: string; vehicleType: VehicleType | null; currentRegion: string | null; acceptsRegions: string | null; available: boolean; carrierVerified?: boolean; licenseUrl?: string | null } }; loadId: string; stats?: CarrierOverview; labels: { relevance: string; ratings: string; completed: string; viewHistory: string } }) {
   return (
-    <div className="flex items-center justify-between gap-3 rounded-2xl border border-black/8 bg-white p-4">
-      <div className="min-w-0">
-        <CarrierInfo app={app} compact />
-        {rating && <p className="mt-1 text-xs text-muted">★ {rating.avg.toFixed(1)} ({rating.count}) trusted</p>}
+    <div className="rounded-2xl border border-black/8 bg-white p-4">
+      <div className="flex items-center justify-between gap-3">
+        <div className="min-w-0 flex-1">
+          <CarrierInfo app={app} compact />
+        </div>
+        <form action={selectTransporter} className="flex-none">
+          <input type="hidden" name="loadId" value={loadId} />
+          <input type="hidden" name="applicationId" value={app.id} />
+          <button
+            type="submit"
+            className="rounded-xl bg-brand px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-dark"
+          >
+            Select
+          </button>
+        </form>
       </div>
-      <form action={selectTransporter}>
-        <input type="hidden" name="loadId" value={loadId} />
-        <input type="hidden" name="applicationId" value={app.id} />
-        <button
-          type="submit"
-          className="flex-none rounded-xl bg-brand px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-dark"
-        >
-          Select
-        </button>
-      </form>
+      {stats && (
+        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-xl bg-brand-light/50 px-3 py-2.5">
+          <span className="inline-flex items-center gap-2">
+            <span
+              className={`inline-flex h-9 min-w-9 items-center justify-center rounded-full px-2 text-sm font-extrabold text-white ${
+                stats.relevance >= 70 ? "bg-brand" : stats.relevance >= 40 ? "bg-warning" : "bg-error"
+              }`}
+            >
+              {stats.relevance}
+            </span>
+            <span className="text-xs font-semibold text-brand-dark">{labels.relevance}</span>
+          </span>
+          <span className="text-sm font-semibold text-ink">
+            ★ {stats.avgRating ? stats.avgRating.toFixed(1) : "—"}
+            <span className="ml-1 text-xs font-medium text-muted">
+              ({stats.ratingCount} {labels.ratings})
+            </span>
+          </span>
+          <span className="text-sm text-muted">
+            {stats.completedLoads} {labels.completed}
+          </span>
+          <Link
+            href={`/company/carriers/${app.transporter.id}`}
+            className="ml-auto text-sm font-semibold text-brand-dark underline-offset-2 hover:underline"
+          >
+            {labels.viewHistory} →
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
@@ -299,8 +342,8 @@ function CarrierInfo({
       {revealContact && (
         <div className="mt-3 rounded-xl bg-brand-light/60 p-3 text-sm">
           <p className="font-semibold text-brand-dark">Contact details</p>
-          {app.transporter.phone && <p className="mt-1 text-ink">Phone: {app.transporter.phone}</p>}
-          {app.transporter.email && <p className="text-ink">Email: {app.transporter.email}</p>}
+          {app.transporter.phone && <p className="mt-1 break-words text-ink">Phone: {app.transporter.phone}</p>}
+          {app.transporter.email && <p className="break-all text-ink">Email: {app.transporter.email}</p>}
           <p className="mt-1 text-xs text-muted">They&apos;re expecting to hear from you about this load.</p>
         </div>
       )}
@@ -349,7 +392,7 @@ function UndoSelection({ loadId }: { loadId: string }) {
       <input type="hidden" name="loadId" value={loadId} />
       <button
         type="submit"
-        className="w-full rounded-xl border border-black/10 bg-white py-2.5 text-sm font-semibold text-muted hover:border-red-400 hover:text-red-600"
+        className="w-full rounded-xl border border-black/10 bg-white py-2.5 text-sm font-semibold text-muted hover:border-error-400 hover:text-error-600"
       >
         Undo selection
       </button>
@@ -363,7 +406,7 @@ function CancelLoad({ loadId }: { loadId: string }) {
       <input type="hidden" name="loadId" value={loadId} />
       <button
         type="submit"
-        className="w-full rounded-xl border border-black/10 bg-white py-2.5 text-sm font-semibold text-muted hover:border-red-400 hover:text-red-600"
+        className="w-full rounded-xl border border-black/10 bg-white py-2.5 text-sm font-semibold text-muted hover:border-error-400 hover:text-error-600"
       >
         Cancel load
       </button>

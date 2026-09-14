@@ -31,7 +31,7 @@ export function RouteMap({ origin, destination, height = 220 }: Props) {
     <div style={{ height }} className="overflow-hidden rounded-[var(--radius-card)] border border-border">
       <MapContainer
         bounds={bounds}
-        boundsOptions={{ padding: [24, 24] } as any}
+        boundsOptions={{ padding: [24, 24] } as L.ZoomPanOptions}
         style={{ height: "100%", width: "100%" }}
         scrollWheelZoom={false}
         dragging={true}

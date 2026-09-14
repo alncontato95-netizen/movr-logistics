@@ -99,7 +99,7 @@ export const CompanyScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   name: 'name',
-  kvk: 'kvk',
+  cnpj: 'cnpj',
   address: 'address',
   phone: 'phone',
   verified: 'verified',

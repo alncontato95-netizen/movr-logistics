@@ -9,6 +9,7 @@
     "lint": "eslint",
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
+    "db:seed:history": "tsx prisma/seed-carrier-history.ts",
     "pretest": "cross-env DATABASE_URL=file:./prisma/test.db node scripts/reset-test-db.mjs",
     "test": "cross-env DATABASE_URL=file:./prisma/test.db tsx --test tests/*.test.ts"
   },

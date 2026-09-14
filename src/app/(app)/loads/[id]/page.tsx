@@ -2,18 +2,21 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { requireCarrier } from "@/lib/dal";
 import { prisma } from "@/lib/prisma";
-import { applyToLoad, cancelApplication, acceptOffer, declineOffer, confirmPickup, confirmDelivery, submitPod } from "@/app/actions/loads";
+import { applyToLoad, cancelApplication, acceptOffer, declineOffer, confirmPickup, confirmDelivery } from "@/app/actions/loads";
 import { PollRefresh } from "@/components/poll-refresh";
+import { PodUpload } from "@/components/pod-upload";
+import { LoadLifecycle, OperationPanel } from "@/components/load-lifecycle";
 import { Badge, LoadStatusBadge } from "@/components/ui";
 import { CARGO_LABELS, VEHICLE_LABELS } from "@/lib/constants";
-import { formatDate, formatMoney } from "@/lib/format";
+import { formatDate, formatDayTime, formatMoney } from "@/lib/format";
+import { canConfirmPickup, pickupReadyAt } from "@/lib/schedule";
 import { RouteMap } from "@/components/route-map-wrapper";
 import { getDictionary, getLocale } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic";
 
-export default async function LoadDetailPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ applied?: string; accepted?: string; declined?: string; "picked-up"?: string; delivered?: string }> }) {
-  const [{ id }, { applied, accepted, declined, "picked-up": pickedUp, delivered }] = await Promise.all([params, searchParams]);
+export default async function LoadDetailPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ applied?: string; accepted?: string; declined?: string; "picked-up"?: string; delivered?: string; "pod-error"?: string; "early-pickup"?: string }> }) {
+  const [{ id }, { applied, accepted, declined, "picked-up": pickedUp, delivered, "pod-error": podError, "early-pickup": earlyPickup }] = await Promise.all([params, searchParams]);
   const user = await requireCarrier();
 
   const load = await prisma.load.findUnique({
@@ -34,6 +37,17 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
   const canApply = isOpen && (!myApplication || myApplication.status === "CANCELLED");
   const appliedPending = myApplication?.status === "PENDING";
 
+  const activeParticipation = !!myApplication && ["PENDING", "SELECTED", "ACCEPTED"].includes(myApplication.status);
+  const selectedByCompany = myApplication?.status === "SELECTED" || myApplication?.status === "ACCEPTED";
+  const operationalStatus =
+    myApplication?.status === "ACCEPTED" &&
+    (load.status === "CONFIRMED" || load.status === "PICKED_UP" || load.status === "DELIVERED")
+      ? load.status
+      : null;
+
+  const pickupReady = canConfirmPickup(load.pickupDate, load.pickupWindow);
+  const pickupReadyMoment = pickupReadyAt(load.pickupDate, load.pickupWindow);
+
   return (
     <div className="mx-auto max-w-2xl space-y-5">
       <PollRefresh intervalMs={10000} />
@@ -47,26 +61,38 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
         </div>
       )}
 
+      {podError && (
+        <div className="rounded-2xl bg-error-light p-4 text-sm font-semibold text-error">
+          POD upload failed. Use a JPG/PNG/WebP image or PDF up to 5MB, or a valid https:// link.
+        </div>
+      )}
+
+      {earlyPickup && (
+        <div className="rounded-2xl bg-warning-50 p-4 text-sm font-semibold text-warning-800">
+          {t.journey.earlyPickup}
+        </div>
+      )}
+
       {accepted && (
-        <div className="rounded-2xl bg-emerald-50 p-4 text-sm font-semibold text-emerald-800">
+        <div className="rounded-2xl bg-success-light p-4 text-sm font-semibold text-success-700">
           Offer accepted. The company will confirm the booking.
         </div>
       )}
 
       {declined && (
-        <div className="rounded-2xl bg-red-50 p-4 text-sm font-semibold text-red-700">
+        <div className="rounded-2xl bg-error-light p-4 text-sm font-semibold text-error-700">
           You declined the offer. This load is open for other carriers.
         </div>
       )}
 
       {pickedUp && (
-        <div className="rounded-2xl bg-sky-50 p-4 text-sm font-semibold text-sky-800">
+        <div className="rounded-2xl bg-info-50 p-4 text-sm font-semibold text-info-800">
           Pickup confirmed. The load is on its way.
         </div>
       )}
 
       {delivered && (
-        <div className="rounded-2xl bg-emerald-50 p-4 text-sm font-semibold text-emerald-800">
+        <div className="rounded-2xl bg-success-light p-4 text-sm font-semibold text-success-700">
           Delivery confirmed. Awaiting company confirmation.
         </div>
       )}
@@ -95,6 +121,21 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
         </dl>
       </div>
 
+      {activeParticipation && load.status !== "OPEN" && load.status !== "CANCELLED" && (
+        <LoadLifecycle status={load.status} applied selected={selectedByCompany} locale={locale} />
+      )}
+
+      {operationalStatus && (
+        <OperationPanel
+          status={operationalStatus}
+          origin={load.origin}
+          destination={load.destination}
+          pickupDate={load.pickupDate}
+          pickupWindow={load.pickupWindow}
+          locale={locale}
+        />
+      )}
+
       <div className="space-y-1">
         <RouteMap origin={load.origin} destination={load.destination} />
         <p className="text-center text-xs text-muted">{t.loads.approximateRoute}</p>
@@ -112,17 +153,17 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
             load.status === "DELIVERED") && (
             <div className="mt-3 rounded-xl bg-brand-light/60 p-3 text-sm">
               <p className="font-semibold text-brand-dark">Contact details</p>
-              {load.company.phone && <p className="mt-1 text-ink">Phone: {load.company.phone}</p>}
-              {load.company.user.email && <p className="text-ink">Email: {load.company.user.email}</p>}
+              {load.company.phone && <p className="mt-1 break-words text-ink">Phone: {load.company.phone}</p>}
+              {load.company.user.email && <p className="break-all text-ink">Email: {load.company.user.email}</p>}
               <p className="mt-1 text-xs text-muted">Contact to arrange pickup — they&apos;re expecting to hear from you about this load.</p>
             </div>
           )}
       </div>
 
       {load.podUrl && (
-        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
-          <p className="font-semibold text-emerald-800">Proof of delivery</p>
-          <a href={load.podUrl} target="_blank" rel="noopener noreferrer" className="break-all text-sm text-emerald-700 underline">
+        <div className="rounded-2xl border border-success-200 bg-success-light p-4">
+          <p className="font-semibold text-success-700">Proof of delivery</p>
+          <a href={load.podUrl} target="_blank" rel="noopener noreferrer" className="break-all text-sm text-success-700 underline">
             {load.podUrl}
           </a>
           {load.podNote && <p className="mt-1 text-sm text-muted">{load.podNote}</p>}
@@ -137,23 +178,13 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
       )}
 
       {myApplication?.status === "ACCEPTED" && (load.status === "PICKED_UP" || load.status === "DELIVERED") && !load.podUrl && (
-        <form action={submitPod} className="rounded-2xl border border-black/8 bg-white p-4 space-y-3">
-          <h3 className="font-semibold text-ink">Proof of delivery</h3>
-          <p className="text-sm text-muted">Upload a photo/PDF (max 5MB) or paste a link.</p>
-          <input type="hidden" name="loadId" value={load.id} />
-          <input name="podFile" type="file" accept="image/jpeg,image/png,image/webp,application/pdf" className="w-full rounded-[var(--radius-input)] border border-border bg-white px-3 py-2 text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-brand-light file:px-3 file:py-1 file:text-sm file:font-semibold file:text-brand-dark" />
-          <input name="podUrl" placeholder="https://... image URL (or leave empty if file above)" className="w-full rounded-[var(--radius-input)] border border-border bg-white px-3 py-2 text-sm outline-none focus:border-brand" />
-          <input name="podNote" placeholder="Note (optional)" className="w-full rounded-[var(--radius-input)] border border-border bg-white px-3 py-2 text-sm outline-none focus:border-brand" />
-          <button type="submit" className="w-full rounded-xl bg-brand py-2.5 text-sm font-bold text-white hover:bg-brand-dark">
-            Upload POD
-          </button>
-        </form>
+        <PodUpload loadId={load.id} />
       )}
 
-      <div className="sticky bottom-4">
+      <div className="sticky bottom-4 z-[45] rounded-2xl bg-surface/90 p-2 shadow-[0_8px_24px_rgba(5,5,7,0.10)] backdrop-blur-xl">
         {myApplication?.status === "SELECTED" ? (
           <div className="space-y-2">
-            <p className="rounded-xl bg-amber-50 p-3 text-center text-sm font-semibold text-amber-800">
+            <p className="rounded-xl bg-warning-50 p-3 text-center text-sm font-semibold text-warning-800">
               The company selected you for this load. Accept the offer to book it.
             </p>
             <div className="flex gap-2">
@@ -161,7 +192,7 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
                 <input type="hidden" name="loadId" value={load.id} />
                 <button
                   type="submit"
-                  className="w-full rounded-xl border border-black/10 bg-white py-3.5 text-sm font-semibold text-ink hover:border-red-400 hover:text-red-600"
+                  className="w-full rounded-xl border border-black/10 bg-white py-3.5 text-sm font-semibold text-ink hover:border-error-400 hover:text-error-600"
                 >
                   Decline
                 </button>
@@ -178,15 +209,30 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
             </div>
           </div>
         ) : load.status === "CONFIRMED" && myApplication?.status === "ACCEPTED" ? (
-          <form action={confirmPickup}>
-            <input type="hidden" name="loadId" value={load.id} />
-            <button
-              type="submit"
-              className="w-full rounded-xl bg-brand py-3.5 text-sm font-bold text-white shadow-lg shadow-brand/30 hover:bg-brand-dark"
-            >
-              Confirm pickup
-            </button>
-          </form>
+          pickupReady ? (
+            <form action={confirmPickup}>
+              <input type="hidden" name="loadId" value={load.id} />
+              <button
+                type="submit"
+                className="w-full rounded-xl bg-brand py-3.5 text-sm font-bold text-white shadow-lg shadow-brand/30 hover:bg-brand-dark"
+              >
+                {t.actionCenter.confirmPickup}
+              </button>
+            </form>
+          ) : (
+            <div className="space-y-1.5">
+              <p className="rounded-xl bg-brand-light/60 px-3 py-2 text-center text-xs font-semibold text-brand-dark">
+                {t.journey.pickupOpensAt} {formatDayTime(pickupReadyMoment, locale)}
+              </p>
+              <button
+                type="button"
+                disabled
+                className="w-full cursor-not-allowed rounded-xl bg-black/10 py-3.5 text-sm font-semibold text-black/40"
+              >
+                {t.actionCenter.confirmPickup}
+              </button>
+            </div>
+          )
         ) : load.status === "PICKED_UP" && myApplication?.status === "ACCEPTED" ? (
           <form action={confirmDelivery}>
             <input type="hidden" name="loadId" value={load.id} />
@@ -202,7 +248,7 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
             <input type="hidden" name="loadId" value={load.id} />
             <button
               type="submit"
-              className="w-full rounded-xl border border-black/10 bg-white py-3.5 text-sm font-semibold text-ink hover:border-red-400 hover:text-red-600"
+              className="w-full rounded-xl border border-black/10 bg-white py-3.5 text-sm font-semibold text-ink hover:border-error-400 hover:text-error-600"
             >
               Withdraw interest
             </button>

@@ -4,20 +4,20 @@ export default function PrivacyPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-10">
       <h1 className="text-3xl font-extrabold text-ink">Privacy Policy (AVG / GDPR)</h1>
-      <p className="mt-2 text-sm text-muted">Last updated: {new Date().toLocaleDateString("en-GB")} — Pilot Venlo/Limburg</p>
+      <p className="mt-2 text-sm text-muted">Last updated: {new Date().toLocaleDateString("en-GB")} — Pilot SP/RJ/MG</p>
 
       <div className="mt-8 space-y-6 text-sm leading-relaxed text-ink">
         <section>
           <h2 className="font-semibold">1. Data we collect</h2>
-          <p className="mt-1 text-muted">Email, name, phone, vehicle/region preferences (Carrier), KVK, address, phone (Company), loads and applications you create. Cookies: <code>movr_session</code> (auth, 30d, httpOnly) and <code>movr_locale</code> (language).</p>
+          <p className="mt-1 text-muted">Email, name, phone, vehicle/region preferences (Carrier), CNPJ, address, phone (Company), loads and applications you create. Cookies: <code>movr_session</code> (auth, 30d, httpOnly) and <code>movr_locale</code> (language).</p>
         </section>
         <section>
           <h2 className="font-semibold">2. Purpose</h2>
-          <p className="mt-1 text-muted">Match return loads between Companies and Carriers in Venlo region, manage bookings (OPEN→COMPLETED), and contact only after SELECTED.</p>
+          <p className="mt-1 text-muted">Match return loads between Companies and Carriers in Southeast Brazil (SP, RJ, MG), manage bookings (OPEN→COMPLETED), and contact only after SELECTED.</p>
         </section>
         <section>
           <h2 className="font-semibold">3. Legal basis</h2>
-          <p className="mt-1 text-muted">Contract (matching loads) and legitimate interest (pilot operation). No KVK API or profiling.</p>
+          <p className="mt-1 text-muted">Contract (matching loads) and legitimate interest (pilot operation). No CNPJ integration or profiling.</p>
         </section>
         <section>
           <h2 className="font-semibold">4. Retention & deletion</h2>
@@ -33,7 +33,7 @@ export default function PrivacyPage() {
         </section>
         <section>
           <h2 className="font-semibold">7. Contact</h2>
-          <p className="mt-1 text-muted">MOVR Logistics — Venlo, Limburg, NL (pilot). For privacy requests, use the contact email on your Company profile.</p>
+          <p className="mt-1 text-muted">MOVR Logistics — Southeast Brazil: São Paulo, Rio de Janeiro, Minas Gerais (pilot). For privacy requests, use the contact email on your Company profile.</p>
         </section>
       </div>
     </div>

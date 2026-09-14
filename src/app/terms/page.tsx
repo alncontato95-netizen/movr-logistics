@@ -9,7 +9,7 @@ export default function TermsPage() {
       <div className="mt-8 space-y-6 text-sm leading-relaxed text-ink">
         <section>
           <h2 className="font-semibold">1. Service</h2>
-          <p className="mt-1 text-muted">MOVR LOAD intermediates loads between Company and Carrier. No guarantee of match. Company verifies manually via Prisma Studio; no admin panel, no KVK API.</p>
+          <p className="mt-1 text-muted">MOVR LOAD intermediates loads between Company and Carrier. No guarantee of match. Company verifies manually via Prisma Studio; no admin panel, no CNPJ integration.</p>
         </section>
         <section>
           <h2 className="font-semibold">2. Bookings</h2>
@@ -21,7 +21,7 @@ export default function TermsPage() {
         </section>
         <section>
           <h2 className="font-semibold">4. Conduct</h2>
-          <p className="mt-1 text-muted">No spam, no fake KVK (8 digits). Rate-limit per IP/email applies. Misuse leads to manual revocation via Studio.</p>
+          <p className="mt-1 text-muted">No spam, no fake CNPJ (14 digits). Rate-limit per IP/email applies. Misuse leads to manual revocation via Studio.</p>
         </section>
         <section>
           <h2 className="font-semibold">5. Termination</h2>

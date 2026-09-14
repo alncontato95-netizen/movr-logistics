@@ -13,7 +13,7 @@ const geistSans = Geist({
 export const metadata: Metadata = {
   title: "MOVR Logistics",
   description:
-    "Return loads and real partners for transport companies and independent carriers in Venlo and Limburg, the Netherlands.",
+    "Return loads and real partners for transport companies and independent carriers in Southeast Brazil (SP, RJ, MG).",
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {

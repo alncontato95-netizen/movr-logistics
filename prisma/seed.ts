@@ -12,18 +12,18 @@ async function main() {
   // Demo carrier
   await prisma.user.upsert({
     where: { email: "carrier@movr.dev" },
-    update: { phone: "+31 6 12345678", vehiclePlate: "01-VLN-2", professionalLicense: "2462LK123" },
+    update: { phone: "(11) 98765-4321", vehiclePlate: "ABC-1D23", professionalLicense: "01234567890" },
     create: {
       email: "carrier@movr.dev",
       passwordHash,
-      name: "Jan van der Berg",
-      phone: "+31 6 12345678",
+      name: "Carlos Eduardo Silva",
+      phone: "(11) 98765-4321",
       role: "CARRIER",
       vehicleType: "TRUCK",
-      vehiclePlate: "01-VLN-2",
-      professionalLicense: "2462LK123",
-      currentRegion: "Venlo",
-      acceptsRegions: JSON.stringify(["Venlo", "Venray", "Roermond", "Weert", "Helmond", "Eindhoven"]),
+      vehiclePlate: "ABC-1D23",
+      professionalLicense: "01234567890",
+      currentRegion: "São Paulo",
+      acceptsRegions: JSON.stringify(["São Paulo", "Guarulhos", "Campinas", "Jundiaí", "Sorocaba", "Santos"]),
       available: true,
     },
   });
@@ -33,15 +33,15 @@ async function main() {
   let companyProfile: { id: string } | null = null;
   if (!company) {
     company = await prisma.user.create({
-      data: { email: "company@movr.dev", passwordHash, name: "Lisa Willems", role: "COMPANY" },
+      data: { email: "company@movr.dev", passwordHash, name: "Marina Rodrigues", role: "COMPANY" },
     });
     companyProfile = await prisma.company.create({
       data: {
         userId: company.id,
-        name: "Willems Transport B.V.",
-        kvk: "12345678",
-        address: "Trade Port West 12, Venlo",
-        phone: "+31 6 12345678",
+        name: "Transportadora Silva Ltda.",
+        cnpj: "12345678000199",
+        address: "Av. Paulista 1000, São Paulo",
+        phone: "(11) 98765-4321",
       },
     });
   } else {
@@ -54,8 +54,8 @@ async function main() {
     const now = new Date();
     const loads = [
       {
-        origin: "Venlo",
-        destination: "Eindhoven",
+        origin: "São Paulo",
+        destination: "Campinas",
         pickupDate: addDays(now, 2),
         pickupWindow: "08:00 – 11:00",
         cargoType: "PALLET" as const,
@@ -67,8 +67,8 @@ async function main() {
         notes: "5 pallets, forklift available at load.",
       },
       {
-        origin: "Roermond",
-        destination: "Helmond",
+        origin: "Guarulhos",
+        destination: "Jundiaí",
         pickupDate: addDays(now, 3),
         pickupWindow: "14:00 – 17:00",
         cargoType: "CONTAINER" as const,
@@ -80,21 +80,21 @@ async function main() {
         notes: "1x 20ft container.",
       },
       {
-        origin: "Venray",
-        destination: "Tilburg",
+        origin: "Santos",
+        destination: "São Paulo",
         pickupDate: addDays(now, 5),
         pickupWindow: "08:00 – 12:00",
         cargoType: "BULK" as const,
         weightKg: 9000,
         volumeM3: null,
-        requiredVehicle: "TRACTOR_TRAILER" as const,
+        requiredVehicle: "CARRETA" as const,
         priceEur: 780,
         priceNegotiable: false,
         notes: "Loose load, tarped.",
       },
       {
-        origin: "Weert",
-        destination: "Venlo",
+        origin: "Ribeirão Preto",
+        destination: "São Paulo",
         pickupDate: addDays(now, 1),
         pickupWindow: "09:00 – 13:00",
         cargoType: "OTHER" as const,

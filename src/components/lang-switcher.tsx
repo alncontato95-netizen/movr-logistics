@@ -6,8 +6,7 @@ const LOCALE_LABELS: Record<string, string> = {
   en: "English",
   nl: "Nederlands",
   de: "Deutsch",
-  pl: "Polski",
-  pt: "Português (BR)",
+  es: "Español",
 };
 
 export async function LangSwitcher() {

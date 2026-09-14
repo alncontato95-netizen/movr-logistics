@@ -18,10 +18,12 @@ export type Role = (typeof Role)[keyof typeof Role]
 
 
 export const VehicleType = {
-  VAN: 'VAN',
-  LIGHT_TRUCK: 'LIGHT_TRUCK',
+  VUC: 'VUC',
+  TOCO: 'TOCO',
   TRUCK: 'TRUCK',
-  TRACTOR_TRAILER: 'TRACTOR_TRAILER'
+  BITRUCK: 'BITRUCK',
+  CARRETA: 'CARRETA',
+  BITREM: 'BITREM'
 } as const
 
 export type VehicleType = (typeof VehicleType)[keyof typeof VehicleType]

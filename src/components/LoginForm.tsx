@@ -18,7 +18,7 @@ export function LoginForm({ t }: { t: Messages["auth"] }) {
         <Label htmlFor="password">{t.password}</Label>
         <Input id="password" name="password" type="password" autoComplete="current-password" />
       </div>
-      {state?.message && <p className="text-sm text-red-600">{state.message}</p>}
+      {state?.message && <p className="text-sm text-error">{state.message}</p>}
       <Button type="submit" disabled={pending} className="w-full py-3">
         {pending ? t.loggingIn : t.loginAction}
       </Button>

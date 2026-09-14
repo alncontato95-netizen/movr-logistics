@@ -45,3 +45,6 @@ prisma/*.db-journal
 prisma/*.db-wal
 prisma/*.db-shm
 src/generated/
+
+# User-uploaded content
+public/uploads/

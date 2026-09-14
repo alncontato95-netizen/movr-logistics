@@ -5,7 +5,7 @@ import { getDictionary, getLocale } from "@/lib/i18n";
 import { getLoadStatusLabels } from "@/lib/constants";
 import { Card, Badge, LoadStatusBadge } from "@/components/ui";
 import { NOTIFICATION_ICONS } from "@/lib/constants";
-import { formatMoney } from "@/lib/format";
+import { formatMoney, formatMonthDay } from "@/lib/format";
 import { ActionCenter } from "@/components/action-center";
 
 export const dynamic = "force-dynamic";
@@ -67,11 +67,11 @@ export default async function CompanyDashboardPage() {
   return (
     <div className="mx-auto max-w-5xl space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-ink">{t.dashboard.title}</h1>
-        <p className="mt-1 text-sm text-muted">{t.dashboard.subtitle}</p>
+        <h1 className="text-xl font-extrabold text-ink">{t.dashboard.title}</h1>
+        <p className="mt-0.5 text-[13px] text-muted">{t.dashboard.subtitle}</p>
       </div>
 
-      <ActionCenter />
+      <ActionCenter user={{ id: user.id, role: user.role }} />
 
       {/* Counters */}
       <section>
@@ -112,7 +112,7 @@ export default async function CompanyDashboardPage() {
                     </span>
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-medium text-ink">{n.message}</p>
-                      <p className="mt-0.5 text-xs text-muted">{new Date(n.createdAt).toLocaleDateString(locale === "pt" ? "pt-BR" : locale === "nl" ? "nl-NL" : locale === "de" ? "de-DE" : locale === "pl" ? "pl-PL" : "en-GB", { day: "numeric", month: "short" })}</p>
+                      <p className="mt-0.5 text-xs text-muted">{formatMonthDay(n.createdAt, locale)}</p>
                     </div>
                     {!n.read && <span className="rounded-full bg-brand px-2 py-0.5 text-xs font-semibold text-white">New</span>}
                   </li>
@@ -137,10 +137,10 @@ export default async function CompanyDashboardPage() {
             <div className="space-y-4">
               {attentionSelected.length > 0 && (
                 <div>
-                  <h3 className="mb-2 text-xs font-semibold text-amber-700">{t.dashboard.awaitingCarrier} ({attentionSelected.length})</h3>
+                  <h3 className="mb-2 text-xs font-semibold text-warning-700">{t.dashboard.awaitingCarrier} ({attentionSelected.length})</h3>
                   <div className="grid gap-2">
                     {attentionSelected.map((load) => (
-                      <Link key={load.id} href={`/company/loads/${load.id}`} className="block rounded-[var(--radius-card)] border border-amber-200 bg-amber-50 p-3 hover:border-amber-300">
+                      <Link key={load.id} href={`/company/loads/${load.id}`} className="block rounded-[var(--radius-card)] border border-warning-200 bg-warning-50 p-3 hover:border-warning-300">
                         <div className="flex items-center justify-between">
                           <p className="text-sm font-semibold text-ink">
                             {load.origin} → {load.destination}
@@ -157,10 +157,10 @@ export default async function CompanyDashboardPage() {
 
               {attentionDelivered.length > 0 && (
                 <div>
-                  <h3 className="mb-2 text-xs font-semibold text-emerald-700">{t.dashboard.awaitingCompletion} ({attentionDelivered.length})</h3>
+                  <h3 className="mb-2 text-xs font-semibold text-success-700">{t.dashboard.awaitingCompletion} ({attentionDelivered.length})</h3>
                   <div className="grid gap-2">
                     {attentionDelivered.map((load) => (
-                      <Link key={load.id} href={`/company/loads/${load.id}`} className="block rounded-[var(--radius-card)] border border-emerald-200 bg-emerald-50 p-3 hover:border-emerald-300">
+                      <Link key={load.id} href={`/company/loads/${load.id}`} className="block rounded-[var(--radius-card)] border border-success-200 bg-success-light p-3 hover:border-success-300">
                         <div className="flex items-center justify-between">
                           <p className="text-sm font-semibold text-ink">
                             {load.origin} → {load.destination}

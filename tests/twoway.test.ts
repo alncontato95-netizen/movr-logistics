@@ -29,7 +29,7 @@ before(async () => {
     data: { email: `company-twoway-${Date.now()}@movr.dev`, passwordHash: "x", name: "Other Company", role: "COMPANY" },
   });
   otherCompanyProfile = await prisma.company.create({
-    data: { userId: otherCompanyUser.id, name: "Other BV", kvk: "99999999", address: "Other 1, Venlo", phone: "+31 6 00000000" },
+    data: { userId: otherCompanyUser.id, name: "Other Company", cnpj: "99999999000199", address: "Other 1, São Paulo", phone: "(11) 99999-0000" },
   });
 });
 
@@ -45,8 +45,8 @@ async function createLoad(companyId: string, publishedBy: string, status: "OPEN"
     data: {
       companyId,
       publishedBy,
-      origin: "Venlo",
-      destination: "Venray",
+      origin: "São Paulo",
+      destination: "Campinas",
       pickupDate: new Date(Date.now() + 24 * 3600 * 1000),
       cargoType: "PALLET",
       weightKg: 1000,

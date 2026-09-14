@@ -13,10 +13,12 @@ enum Role {
 }
 
 enum VehicleType {
-  VAN
-  LIGHT_TRUCK
+  VUC
+  TOCO
   TRUCK
-  TRACTOR_TRAILER
+  BITRUCK
+  CARRETA
+  BITREM
 }
 
 enum CargoType {
@@ -88,7 +90,7 @@ model Company {
   userId    String   @unique
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   name      String
-  kvk       String
+  cnpj      String
   address   String
   phone     String
   verified  Boolean  @default(false)

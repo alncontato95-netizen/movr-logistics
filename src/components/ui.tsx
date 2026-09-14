@@ -23,7 +23,7 @@ export function Button({
         variant === "primary" && "bg-brand text-white hover:bg-brand-dark shadow-sm",
         variant === "secondary" && "bg-brand-light text-brand-dark hover:bg-brand/15 border border-brand/10",
         variant === "ghost" && "text-ink hover:bg-black/5",
-        variant === "danger" && "bg-error text-white hover:bg-red-700",
+        variant === "danger" && "bg-error text-white hover:bg-error-700",
         className,
       )}
       {...props}
@@ -50,7 +50,7 @@ export function ButtonLink({
         variant === "primary" && "bg-brand text-white hover:bg-brand-dark shadow-sm",
         variant === "secondary" && "bg-brand-light text-brand-dark hover:bg-brand/15 border border-brand/10",
         variant === "ghost" && "text-ink hover:bg-black/5",
-        variant === "danger" && "bg-error text-white hover:bg-red-700",
+        variant === "danger" && "bg-error text-white hover:bg-error-700",
         className,
        )}
     >
@@ -112,7 +112,7 @@ export function FieldError({ children }: { children?: ReactNode }) {
 
 export function Card({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <div className={cn("rounded-[var(--radius-card)] border border-white/60 bg-white/75 p-5 shadow-[var(--shadow-float)] backdrop-blur-xl transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(5,5,7,0.09),0_4px_12px_rgba(58,175,66,0.08)]", className)}>
+    <div className={cn("rounded-[var(--radius-card)] border border-white/60 bg-white/75 p-5 shadow-[var(--shadow-float)] backdrop-blur-xl transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(14,18,22,0.09),0_4px_12px_rgba(58,175,66,0.08)]", className)}>
       {children}
     </div>
   );
@@ -121,11 +121,11 @@ export function Card({ children, className }: { children: ReactNode; className?:
 export function Badge({ children, tone = "neutral" }: { children: ReactNode; tone?: "brand" | "amber" | "neutral" | "red" | "green" | "blue" }) {
   const tones: Record<string, string> = {
     brand: "bg-brand-light text-brand-dark border border-brand/15",
-    amber: "bg-warning-light text-warning border border-warning/15",
+    amber: "bg-warning-light text-warning-800 border border-warning/15",
     neutral: "bg-black/[0.04] text-muted border border-border",
-    red: "bg-error-light text-error border border-error/15",
-    green: "bg-success-light text-success border border-success/20",
-    blue: "bg-info-light text-info border border-info/15",
+    red: "bg-error-light text-error-700 border border-error/15",
+    green: "bg-success-light text-success-700 border border-success/20",
+    blue: "bg-info-light text-info-700 border border-info/15",
   };
   return (
     <span className={cn("inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold", tones[tone])}>

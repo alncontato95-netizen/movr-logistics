@@ -33,14 +33,14 @@ export function LoadsViewToggle({ loads, variant, listLabel, mapLabel, listConte
         <button
           type="button"
           onClick={() => setView("list")}
-          className={`rounded-full px-4 py-1.5 text-sm font-semibold border transition ${view === "list" ? "bg-brand text-white border-brand" : "bg-white text-ink border-border hover:border-brand/30"}`}
+          className={`rounded-full px-4 py-2.5 text-sm font-semibold border transition ${view === "list" ? "bg-brand text-white border-brand" : "bg-white text-ink border-border hover:border-brand/30"}`}
         >
           {listLabel}
         </button>
         <button
           type="button"
           onClick={() => setView("map")}
-          className={`rounded-full px-4 py-1.5 text-sm font-semibold border transition ${view === "map" ? "bg-brand text-white border-brand" : "bg-white text-ink border-border hover:border-brand/30"}`}
+          className={`rounded-full px-4 py-2.5 text-sm font-semibold border transition ${view === "map" ? "bg-brand text-white border-brand" : "bg-white text-ink border-border hover:border-brand/30"}`}
         >
           {mapLabel}
         </button>

@@ -39,11 +39,11 @@ export function CarrierProfileForm({
       </Field>
 
       <Field label="Vehicle plate" error={state?.errors?.vehiclePlate?.[0]}>
-        <Input name="vehiclePlate" defaultValue={initial.vehiclePlate ?? ""} placeholder="e.g. 01-VLN-2" />
+        <Input name="vehiclePlate" defaultValue={initial.vehiclePlate ?? ""} placeholder="e.g. ABC-1D23" />
       </Field>
 
       <Field label="Professional license" error={state?.errors?.professionalLicense?.[0]}>
-        <Input name="professionalLicense" defaultValue={initial.professionalLicense ?? ""} placeholder="e.g. 2462LK123" />
+        <Input name="professionalLicense" defaultValue={initial.professionalLicense ?? ""} placeholder="e.g. 01234567890" />
       </Field>
 
       <div className="rounded-xl border border-brand/10 bg-brand-light/30 p-3">
@@ -57,9 +57,9 @@ export function CarrierProfileForm({
             <Input name="licenseExpiry" type="date" defaultValue={initial.licenseExpiry ?? ""} />
           </Field>
           {initial.carrierVerified ? (
-            <p className="text-xs font-semibold text-emerald-700">✓ Habilitação verificada</p>
+            <p className="text-xs font-semibold text-success-700">✓ Habilitação verificada</p>
           ) : initial.licenseUrl ? (
-            <p className="text-xs text-amber-700">Enviado — aguardando verificação manual.</p>
+            <p className="text-xs text-warning-700">Enviado — aguardando verificação manual.</p>
           ) : (
             <p className="text-xs text-muted">Optional now, required for high-value loads trust badge.</p>
           )}
@@ -67,7 +67,7 @@ export function CarrierProfileForm({
       </div>
 
       <Field label="Phone number" error={state?.errors?.phone?.[0]}>
-        <Input name="phone" type="tel" defaultValue={initial.phone ?? ""} placeholder="+31 6 1234 5678" />
+        <Input name="phone" type="tel" defaultValue={initial.phone ?? ""} placeholder="(11) 98765-4321" />
       </Field>
 
       <Field label="Home region" error={state?.errors?.currentRegion?.[0]}>

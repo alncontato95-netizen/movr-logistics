@@ -32,7 +32,7 @@ export function RegisterForm({ role, t }: { role: "CARRIER" | "COMPANY"; t: Mess
         />
         <FieldError>{state?.errors?.password?.[0]}</FieldError>
       </div>
-      {state?.message && <p className="text-sm text-red-600">{state.message}</p>}
+      {state?.message && <p className="text-sm text-error">{state.message}</p>}
       <Button type="submit" disabled={pending} className="w-full py-3">
         {pending ? t.creatingAccount : t.createAccount}
       </Button>

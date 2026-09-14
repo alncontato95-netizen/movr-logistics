@@ -56,7 +56,7 @@ export async function updateCompanyProfile(_state: ProfileState, formData: FormD
 
   const parsed = companyProfileSchema.safeParse({
     name: formData.get("name"),
-    kvk: formData.get("kvk"),
+    cnpj: formData.get("cnpj"),
     address: formData.get("address"),
     phone: formData.get("phone"),
   });
@@ -72,7 +72,7 @@ export async function updateCompanyProfile(_state: ProfileState, formData: FormD
     await prisma.company.update({ where: { id: company.id }, data });
   } else {
     await prisma.company.create({
-      data: { userId: user.id, name: data.name, kvk: data.kvk, address: data.address, phone: data.phone },
+      data: { userId: user.id, name: data.name, cnpj: data.cnpj, address: data.address, phone: data.phone },
     });
   }
 

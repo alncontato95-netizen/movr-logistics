@@ -8,12 +8,19 @@ import { z } from "zod";
 import { loadSchema } from "@/lib/validation";
 import { createNotification } from "@/lib/notify";
 import { isCompatible } from "@/lib/matching";
+import { canConfirmPickup } from "@/lib/schedule";
+import { rateLimit } from "@/lib/rate-limit";
 
 export type LoadState = { errors?: Record<string, string[] | undefined>; message?: string } | undefined;
 
 export async function createLoad(_state: LoadState, formData: FormData): Promise<LoadState> {
   const user = await getCurrentUser();
   if (user.role !== "COMPANY") redirect("/login");
+
+  const rateLimitResult = await rateLimit(`company_${user.id}`, { max: 10, windowMs: 60 * 1000 });
+  if (!rateLimitResult.ok) {
+    return { message: "Too many requests. Please wait a moment before creating another load." };
+  }
 
   const parsed = loadSchema.safeParse({
     origin: formData.get("origin"),
@@ -87,6 +94,11 @@ export async function updateLoad(_state: LoadState, formData: FormData): Promise
   const user = await getCurrentUser();
   if (user.role !== "COMPANY") redirect("/login");
 
+  const rateLimitResult = await rateLimit(`company_${user.id}_load`, { max: 20, windowMs: 60 * 1000 });
+  if (!rateLimitResult.ok) {
+    return { message: "Too many requests. Please wait before updating loads." };
+  }
+
   const loadId = formData.get("loadId") as string;
   if (!loadId) return { message: "Missing load." };
 
@@ -141,6 +153,11 @@ export async function updateLoad(_state: LoadState, formData: FormData): Promise
 export async function applyToLoad(formData: FormData) {
   const user = await getCurrentUser();
   if (user.role !== "CARRIER") redirect("/login");
+
+  const rateLimitResult = await rateLimit(`carrier_${user.id}`, { max: 15, windowMs: 60 * 1000 });
+  if (!rateLimitResult.ok) {
+    redirect("/loads?rate-limited=1");
+  }
 
   const loadId = formData.get("loadId") as string;
   if (!loadId || typeof loadId !== "string" || loadId.length < 10) redirect("/loads");
@@ -301,6 +318,9 @@ export async function confirmPickup(formData: FormData) {
   });
   if (!existing || existing.status !== "ACCEPTED") redirect(`/loads/${loadId}`);
 
+  // A service can only be executed from the scheduled pickup time onward.
+  if (!canConfirmPickup(load.pickupDate, load.pickupWindow)) redirect(`/loads/${loadId}?early-pickup=1`);
+
   await prisma.load.update({ where: { id: loadId }, data: { status: "PICKED_UP" } });
 
   await createNotification({
@@ -327,6 +347,9 @@ export async function confirmDelivery(formData: FormData) {
     where: { loadId_transporterId: { loadId, transporterId: user.id } },
   });
   if (!existing || existing.status !== "ACCEPTED") redirect(`/loads/${loadId}`);
+
+  // A service can only be executed from the scheduled pickup time onward.
+  if (!canConfirmPickup(load.pickupDate, load.pickupWindow)) redirect(`/loads/${loadId}?early-pickup=1`);
 
   await prisma.load.update({ where: { id: loadId }, data: { status: "DELIVERED" } });
 
@@ -523,7 +546,7 @@ export async function duplicateLoad(formData: FormData) {
   redirect(`/company/loads/${load.id}?duplicated=1`);
 }
 
-export async function submitRating(_state: { message?: string } | undefined, formData: FormData): Promise<{ message?: string } | undefined> {
+export async function submitRating(_state: LoadState, formData: FormData): Promise<LoadState> {
   const user = await getCurrentUser();
   if (user.role !== "COMPANY") redirect("/login");
   const loadId = formData.get("loadId") as string;
@@ -552,15 +575,18 @@ export async function submitPod(formData: FormData) {
   const loadId = formData.get("loadId") as string;
   const podUrlRaw = (formData.get("podUrl") as string)?.trim();
   const podNoteRaw = (formData.get("podNote") as string)?.trim();
-  const podFile = formData.get("podFile") as File | null;
+  const podFile = (formData.get("podFile") as File | null) ?? null;
+  const podPhoto = (formData.get("podFilePhoto") as File | null) ?? null;
+  const podFileChosen = podFile && podFile.size > 0 ? podFile : podPhoto && podPhoto.size > 0 ? podPhoto : null;
   if (!loadId) redirect("/loads");
   let podUrl: string | null = null;
-  if (podFile && podFile.size > 0) {
+  if (podFileChosen) {
     const allowed = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
-    if (!allowed.includes(podFile.type)) redirect(`/loads/${loadId}?pod-error=1`);
-    if (podFile.size > 5 * 1024 * 1024) redirect(`/loads/${loadId}?pod-error=1`);
-    const bytes = await podFile.arrayBuffer();
-    const ext = podFile.type === "application/pdf" ? "pdf" : podFile.type.split("/")[1] || "jpg";
+    const isImage = podFileChosen.type.startsWith("image/");
+    if (!allowed.includes(podFileChosen.type) && !isImage) redirect(`/loads/${loadId}?pod-error=1`);
+    if (podFileChosen.size > 5 * 1024 * 1024) redirect(`/loads/${loadId}?pod-error=1`);
+    const bytes = await podFileChosen.arrayBuffer();
+    const ext = podFileChosen.type === "application/pdf" ? "pdf" : podFileChosen.type.split("/")[1] || "jpg";
     const name = `${loadId}-${Date.now()}.${ext}`;
     const { writeFile, mkdir } = await import("fs/promises");
     const { join } = await import("path");

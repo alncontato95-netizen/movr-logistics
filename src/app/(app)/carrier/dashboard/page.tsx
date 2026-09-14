@@ -83,7 +83,7 @@ export default async function CarrierDashboardPage() {
         <p className="mt-1 text-sm text-muted">{t.dashboard.subtitle}</p>
       </div>
 
-      <ActionCenter />
+      <ActionCenter user={{ id: user.id, role: user.role }} />
 
       {/* Compatible */}
       <Card>
@@ -102,7 +102,7 @@ export default async function CarrierDashboardPage() {
       {/* Application counters */}
       <section>
         <h2 className="mb-3 text-sm font-semibold text-ink">{t.dashboard.applicationsTitle}</h2>
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           { (["PENDING","SELECTED","ACCEPTED"] as const).map((s) => (
             <Card key={s} className="p-4 text-center">
               <p className="text-2xl font-extrabold text-ink">{appCountMap.get(s) ?? 0}</p>
@@ -167,10 +167,10 @@ export default async function CarrierDashboardPage() {
           <div className="space-y-4">
             {pendingAccept.length > 0 && (
               <div>
-                <h3 className="mb-2 text-xs font-semibold text-amber-700">{t.dashboard.awaitingAccept} ({pendingAccept.length})</h3>
+                <h3 className="mb-2 text-xs font-semibold text-warning-700">{t.dashboard.awaitingAccept} ({pendingAccept.length})</h3>
                 <div className="grid gap-2">
                   {pendingAccept.map((a) => (
-                    <Link key={a.id} href={`/loads/${a.loadId}`} className="block rounded-[var(--radius-card)] border border-amber-200 bg-amber-50 p-3 hover:border-amber-300">
+                    <Link key={a.id} href={`/loads/${a.loadId}`} className="block rounded-[var(--radius-card)] border border-warning-200 bg-warning-50 p-3 hover:border-warning-300">
                       <div className="flex items-center justify-between">
                         <p className="text-sm font-semibold text-ink">{a.load.origin} → {a.load.destination}</p>
                         <LoadStatusBadge status={a.load.status} locale={locale} />
@@ -184,10 +184,10 @@ export default async function CarrierDashboardPage() {
             )}
             {awaitingPickup.length > 0 && (
               <div>
-                <h3 className="mb-2 text-xs font-semibold text-blue-700">{t.dashboard.awaitingPickup} ({awaitingPickup.length})</h3>
+                <h3 className="mb-2 text-xs font-semibold text-info-700">{t.dashboard.awaitingPickup} ({awaitingPickup.length})</h3>
                 <div className="grid gap-2">
                   {awaitingPickup.map((a) => (
-                    <Link key={a.id} href={`/loads/${a.loadId}`} className="block rounded-[var(--radius-card)] border border-blue-200 bg-blue-50 p-3 hover:border-blue-300">
+                    <Link key={a.id} href={`/loads/${a.loadId}`} className="block rounded-[var(--radius-card)] border border-info-200 bg-info-50 p-3 hover:border-info-300">
                       <div className="flex items-center justify-between">
                         <p className="text-sm font-semibold text-ink">{a.load.origin} → {a.load.destination}</p>
                         <LoadStatusBadge status={a.load.status} locale={locale} />
@@ -200,10 +200,10 @@ export default async function CarrierDashboardPage() {
             )}
             {awaitingDelivery.length > 0 && (
               <div>
-                <h3 className="mb-2 text-xs font-semibold text-emerald-700">{t.dashboard.awaitingDelivery} ({awaitingDelivery.length})</h3>
+                <h3 className="mb-2 text-xs font-semibold text-success-700">{t.dashboard.awaitingDelivery} ({awaitingDelivery.length})</h3>
                 <div className="grid gap-2">
                   {awaitingDelivery.map((a) => (
-                    <Link key={a.id} href={`/loads/${a.loadId}`} className="block rounded-[var(--radius-card)] border border-emerald-200 bg-emerald-50 p-3 hover:border-emerald-300">
+                    <Link key={a.id} href={`/loads/${a.loadId}`} className="block rounded-[var(--radius-card)] border border-success-200 bg-success-light p-3 hover:border-success-300">
                       <div className="flex items-center justify-between">
                         <p className="text-sm font-semibold text-ink">{a.load.origin} → {a.load.destination}</p>
                         <LoadStatusBadge status={a.load.status} locale={locale} />

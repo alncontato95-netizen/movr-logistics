@@ -85,8 +85,8 @@ export function LoadForm({ load, action: actionProp }: { load?: LoadFormLoad; ac
       </Field>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Offered price (€) (optional)" error={state?.errors?.priceEur?.[0]}>
-          <Input name="priceEur" type="number" min="0" placeholder="e.g. 350" defaultValue={load?.priceEur ?? ""} />
+        <Field label="Offered price (R$) (optional)" error={state?.errors?.priceEur?.[0]}>
+          <Input name="priceEur" type="number" min="0" placeholder="e.g. 3500" defaultValue={load?.priceEur ?? ""} />
         </Field>
         <div className="flex items-end pb-2">
           <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-black/10 px-4 py-3 text-sm text-ink">
@@ -100,7 +100,7 @@ export function LoadForm({ load, action: actionProp }: { load?: LoadFormLoad; ac
         <Textarea name="notes" rows={3} placeholder="Anything carriers should know…" defaultValue={load?.notes ?? ""} />
       </Field>
 
-      {state?.message && <p className="text-sm text-red-600">{state.message}</p>}
+      {state?.message && <p className="text-sm text-error">{state.message}</p>}
       <Button type="submit" disabled={pending} className="w-full py-3">
         {pending ? (load ? "Saving…" : "Publishing…") : load ? "Save changes" : "Publish load"}
       </Button>
