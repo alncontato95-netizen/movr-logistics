@@ -3,6 +3,7 @@ import { requireCarrier } from "@/lib/dal";
 import { prisma } from "@/lib/prisma";
 import { getDictionary, getLocale } from "@/lib/i18n";
 import { filterCompatible } from "@/lib/matching";
+import { APPLICATION_STATUS_LABELS, LOAD_STATUS_LABELS } from "@/lib/constants";
 import { Card, Badge, LoadStatusBadge } from "@/components/ui";
 import { formatMoney } from "@/lib/format";
 import { ActionCenter } from "@/components/action-center";
@@ -106,9 +107,9 @@ export default async function CarrierDashboardPage() {
           { (["PENDING","SELECTED","ACCEPTED"] as const).map((s) => (
             <Card key={s} className="p-4 text-center">
               <p className="text-2xl font-extrabold text-ink">{appCountMap.get(s) ?? 0}</p>
-              <p className="mt-1 text-xs font-medium text-muted">{s}</p>
+              <p className="mt-1 text-xs font-medium text-muted">{APPLICATION_STATUS_LABELS[s]}</p>
               <div className="mt-2 flex justify-center">
-                <Badge tone={s==="PENDING" ? "amber" : s==="SELECTED" ? "brand" : "green"}>{s}</Badge>
+                <Badge tone={s==="PENDING" ? "amber" : s==="SELECTED" ? "brand" : "green"}>{APPLICATION_STATUS_LABELS[s]}</Badge>
               </div>
             </Card>
           ))}
@@ -127,7 +128,7 @@ export default async function CarrierDashboardPage() {
               if (list.length === 0) return null;
               return (
                 <Card key={status} className="p-4">
-                  <p className="text-sm font-semibold text-ink">{status}</p>
+                  <p className="text-sm font-semibold text-ink">{LOAD_STATUS_LABELS[status]}</p>
                   <p className="text-2xl font-extrabold text-ink">{list.length}</p>
                   <ul className="mt-2 space-y-1">
                     {list.slice(0,3).map((a) => (

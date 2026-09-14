@@ -193,7 +193,7 @@ async function renderCarrierActions(locale: Locale, t: ReturnType<typeof getDict
               <p className="font-medium text-warning-700">
                 {t.actionCenter.transporterSelected
                   ? `${t.actionCenter.transporterSelected} ${app.load.origin} → ${app.load.destination}`
-                  : `Action required — You were selected for ${app.load.origin} → ${app.load.destination}`}
+                  : `Ação necessária — Você foi selecionado para ${app.load.origin} → ${app.load.destination}`}
               </p>
               <div className="flex gap-2">
                 <form action={acceptOffer}>
@@ -226,7 +226,7 @@ async function renderCarrierActions(locale: Locale, t: ReturnType<typeof getDict
               <p className="font-medium text-info-700">
                 {t.actionCenter.confirmPickup
                   ? `${t.actionCenter.confirmPickup} ${app.load.origin} → ${app.load.destination}`
-                  : `Action required — Confirm pickup for ${app.load.origin} → ${app.load.destination}`}
+                  : `Ação necessária — Confirme a coleta para ${app.load.origin} → ${app.load.destination}`}
               </p>
               {canConfirmPickup(app.load.pickupDate, app.load.pickupWindow) ? (
                 <form action={confirmPickup}>
@@ -256,7 +256,7 @@ async function renderCarrierActions(locale: Locale, t: ReturnType<typeof getDict
               <p className="font-medium text-success-600">
                 {t.actionCenter.confirmDelivery
                   ? `${t.actionCenter.confirmDelivery} ${app.load.origin} → ${app.load.destination}`
-                  : `Action required — Confirm delivery for ${app.load.origin} → ${app.load.destination}`}
+                  : `Ação necessária — Confirme a entrega para ${app.load.origin} → ${app.load.destination}`}
               </p>
               <form action={confirmDelivery}>
                 <input type="hidden" name="loadId" value={app.load.id} />

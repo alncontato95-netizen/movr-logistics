@@ -28,7 +28,7 @@ export function LogoMark({ size = 28 }: { size?: number }) {
 export function LogoWordmark({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
   const scale = size === "sm" ? "text-base" : size === "lg" ? "text-2xl" : "text-lg";
   return (
-    <span className={`inline-flex items-baseline gap-0 font-extrabold tracking-tight ${scale}`} aria-label="MOVR Logistics Network">
+    <span className={`inline-flex items-baseline gap-0 font-extrabold tracking-tight ${scale}`} aria-label="MOVR Rede de Logística">
       <span className="text-ink">MO</span>
       <span className="text-brand relative inline-block">
         V
@@ -48,7 +48,7 @@ export function LogoLockup({ size = "md" }: { size?: "sm" | "md" }) {
       </div>
       <div className="mt-1 flex w-full items-center gap-2">
         <span className="h-px flex-1 bg-brand/40" aria-hidden />
-        <span className="text-[9px] font-semibold tracking-[0.3em] text-muted">LOGISTICS NETWORK</span>
+        <span className="text-[9px] font-semibold tracking-[0.3em] text-muted">REDE DE LOGÍSTICA</span>
         <span className="h-px flex-1 bg-brand/40" aria-hidden />
       </div>
     </div>

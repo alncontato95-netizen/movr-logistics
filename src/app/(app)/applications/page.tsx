@@ -21,13 +21,13 @@ export default async function ApplicationsPage() {
     <div className="mx-auto max-w-2xl space-y-6">
       <PollRefresh intervalMs={15000} />
       <div>
-        <h1 className="text-2xl font-bold text-ink">My applications</h1>
-        <p className="mt-1 text-sm text-muted">Track the loads you showed interest in.</p>
+        <h1 className="text-2xl font-bold text-ink">Minhas candidaturas</h1>
+        <p className="mt-1 text-sm text-muted">Acompanhe as cargas em que você demonstrou interesse.</p>
       </div>
 
       {applications.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-black/15 p-10 text-center text-sm text-muted">
-          You haven&apos;t shown interest in any loads yet.
+          Você ainda não manifestou interesse em nenhuma carga.
         </div>
       ) : (
         <div className="grid gap-3">

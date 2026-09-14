@@ -20,7 +20,7 @@ export async function register(_state: AuthState, formData: FormData): Promise<A
   const ip = await clientIp();
   const ipLimit = await isLocked(ip, { max: 8, windowMs: IP_WINDOW_MS });
   if (!ipLimit.ok) {
-    return { message: "Too many attempts. Please try again in a few minutes." };
+    return { message: "Muitas tentativas. Tente novamente em alguns minutos." };
   }
 
   const rawRole = formData.get("role") as string;
@@ -40,14 +40,14 @@ export async function register(_state: AuthState, formData: FormData): Promise<A
   // (invalid input is cheap; this protects against mass account creation).
   const ipConsume = await rateLimit(ip, { max: 8, windowMs: IP_WINDOW_MS });
   if (!ipConsume.ok) {
-    return { message: "Too many attempts. Please try again in a few minutes." };
+    return { message: "Muitas tentativas. Tente novamente em alguns minutos." };
   }
 
   const { name, email, password } = parsed.data;
   const normalizedEmail = email.toLowerCase();
   const existing = await prisma.user.findUnique({ where: { email: normalizedEmail } });
   if (existing) {
-    return { errors: { email: ["An account with this email already exists."] } };
+    return { errors: { email: ["Já existe uma conta com este e-mail."] } };
   }
 
   const passwordHash = await bcrypt.hash(password, 10);
@@ -59,7 +59,7 @@ export async function register(_state: AuthState, formData: FormData): Promise<A
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : "";
     if (msg.includes("Unique constraint") || msg.includes("P2002")) {
-      return { errors: { email: ["An account with this email already exists."] } };
+      return { errors: { email: ["Já existe uma conta com este e-mail."] } };
     }
     throw e;
   }
@@ -74,11 +74,11 @@ export async function login(_state: AuthState, formData: FormData): Promise<Auth
   const ip = await clientIp();
   const ipLimit = await isLocked(ip, { max: 20, windowMs: IP_WINDOW_MS });
   if (!ipLimit.ok) {
-    return { message: "Too many attempts. Please try again in a few minutes." };
+    return { message: "Muitas tentativas. Tente novamente em alguns minutos." };
   }
   const ipConsume = await rateLimit(ip, { max: 20, windowMs: IP_WINDOW_MS });
   if (!ipConsume.ok) {
-    return { message: "Too many attempts. Please try again in a few minutes." };
+    return { message: "Muitas tentativas. Tente novamente em alguns minutos." };
   }
 
   const parsed = loginSchema.safeParse({
@@ -95,7 +95,7 @@ export async function login(_state: AuthState, formData: FormData): Promise<Auth
 
   const emailLock = await isLocked(`login:${normalizedEmail}`, { max: 5, windowMs: EMAIL_WINDOW_MS });
   if (!emailLock.ok) {
-    return { message: "Too many failed attempts for this account. Try again later." };
+    return { message: "Muitas tentativas falhas para esta conta. Tente novamente mais tarde." };
   }
 
   const user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
@@ -103,13 +103,13 @@ export async function login(_state: AuthState, formData: FormData): Promise<Auth
     // timing-equalize to avoid enumeration via bcrypt.compare timing
     await bcrypt.compare(password, "$2b$10$invalidinvalidinvalidinvalidinvalidinvalidinvalidinvalid");
     await recordFailure(`login:${normalizedEmail}`, EMAIL_WINDOW_MS);
-    return { message: "Invalid email or password." };
+    return { message: "E-mail ou senha inválidos." };
   }
 
   const valid = await bcrypt.compare(password, user.passwordHash);
   if (!valid) {
     await recordFailure(`login:${normalizedEmail}`, EMAIL_WINDOW_MS);
-    return { message: "Invalid email or password." };
+    return { message: "E-mail ou senha inválidos." };
   }
 
   await createSession({ id: user.id, role: user.role, name: user.name });

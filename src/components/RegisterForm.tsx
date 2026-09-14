@@ -13,12 +13,12 @@ export function RegisterForm({ role, t }: { role: "CARRIER" | "COMPANY"; t: Mess
       <input type="hidden" name="role" value={role} />
       <div>
         <Label htmlFor="name">{t.fullName}</Label>
-        <Input id="name" name="name" autoComplete="name" placeholder="e.g. Jan van der Berg" />
+        <Input id="name" name="name" autoComplete="name" placeholder="ex.: Maria da Silva" />
         <FieldError>{state?.errors?.name?.[0]}</FieldError>
       </div>
       <div>
         <Label htmlFor="email">{t.email}</Label>
-        <Input id="email" name="email" type="email" autoComplete="email" placeholder="you@example.com" />
+        <Input id="email" name="email" type="email" autoComplete="email" placeholder="seu@email.com" />
         <FieldError>{state?.errors?.email?.[0]}</FieldError>
       </div>
       <div>
@@ -28,7 +28,7 @@ export function RegisterForm({ role, t }: { role: "CARRIER" | "COMPANY"; t: Mess
           name="password"
           type="password"
           autoComplete="new-password"
-          placeholder="At least 8 characters"
+          placeholder="Pelo menos 8 caracteres"
         />
         <FieldError>{state?.errors?.password?.[0]}</FieldError>
       </div>

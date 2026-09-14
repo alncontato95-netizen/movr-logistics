@@ -44,7 +44,7 @@ export function NotificationItem({ id, loadId, isCompany, read, icon, message, w
               <p className="mt-0.5 text-sm text-muted">
                 {when}
                 {!read && (
-                  <span className="ml-2 rounded-full bg-brand px-2 py-0.5 text-xs font-semibold text-white">New</span>
+                  <span className="ml-2 rounded-full bg-brand px-2 py-0.5 text-xs font-semibold text-white">Nova</span>
                 )}
               </p>
             </div>

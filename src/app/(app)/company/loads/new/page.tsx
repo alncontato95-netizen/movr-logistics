@@ -13,14 +13,14 @@ export default async function NewLoadPage() {
   if (!company) {
     return (
       <div className="mx-auto max-w-lg rounded-2xl border border-brand/30 bg-brand-light p-6 text-center">
-        <p className="font-semibold text-brand-dark">Save your business details first.</p>
-        <p className="mt-1 text-sm text-muted">You need a company profile before publishing loads.</p>
+        <p className="font-semibold text-brand-dark">Salve seus dados empresariais primeiro.</p>
+        <p className="mt-1 text-sm text-muted">Você precisa de um perfil de empresa antes de publicar cargas.</p>
         <div className="mt-4">
           <Link
             href="/company/settings"
             className="rounded-xl bg-brand px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-dark"
           >
-            Set up business
+            Configurar empresa
           </Link>
         </div>
       </div>
@@ -30,8 +30,8 @@ export default async function NewLoadPage() {
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-ink">Publish a load</h1>
-        <p className="mt-1 text-sm text-muted">Companies review interest and always make the final selection.</p>
+        <h1 className="text-2xl font-bold text-ink">Publicar uma carga</h1>
+        <p className="mt-1 text-sm text-muted">As empresas analisam as candidaturas e sempre fazem a seleção final.</p>
       </div>
       <Card>
         <LoadForm />

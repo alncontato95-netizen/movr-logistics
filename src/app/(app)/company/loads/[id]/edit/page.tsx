@@ -16,14 +16,14 @@ export default async function EditLoadPage({ params }: { params: Promise<{ id: s
   if (!company) {
     return (
       <div className="mx-auto max-w-lg rounded-2xl border border-brand/30 bg-brand-light p-6 text-center">
-        <p className="font-semibold text-brand-dark">Save your business details first.</p>
-        <p className="mt-1 text-sm text-muted">You need a company profile before editing loads.</p>
+        <p className="font-semibold text-brand-dark">Salve seus dados empresariais primeiro.</p>
+        <p className="mt-1 text-sm text-muted">Você precisa de um perfil de empresa antes de editar cargas.</p>
         <div className="mt-4">
           <Link
             href="/company/settings"
             className="rounded-xl bg-brand px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-dark"
           >
-            Set up business
+            Configurar empresa
           </Link>
         </div>
       </div>
@@ -37,8 +37,8 @@ export default async function EditLoadPage({ params }: { params: Promise<{ id: s
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-ink">Edit load</h1>
-        <p className="mt-1 text-sm text-muted">Update your load details. Only open loads can be edited.</p>
+        <h1 className="text-2xl font-bold text-ink">Editar carga</h1>
+        <p className="mt-1 text-sm text-muted">Atualize os detalhes da sua carga. Apenas cargas abertas podem ser editadas.</p>
       </div>
       <Card>
         <LoadForm load={load} action={updateLoad} />

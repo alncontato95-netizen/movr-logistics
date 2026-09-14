@@ -5,6 +5,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { getRegionCoordinates } from "@/lib/region-coordinates";
+import { LOAD_STATUS_LABELS } from "@/lib/constants";
 import type { LoadStatus } from "@/lib/constants";
 
 // Fix icon (also for overview, though we use divIcon, keep for fallback)
@@ -88,12 +89,12 @@ export function LoadsOverviewMap({ loads, variant, height = 400 }: Props) {
                 <div className="font-semibold">
                   {load.origin} → {load.destination}
                 </div>
-                <div className="text-xs text-muted">{load.status}</div>
+                <div className="text-xs text-muted">{LOAD_STATUS_LABELS[load.status]}</div>
                 <Link
                   href={variant === "company" ? `/company/loads/${load.id}` : `/loads/${load.id}`}
                   className="mt-1 inline-block text-xs font-semibold text-brand underline"
                 >
-                  View details
+                  Ver detalhes
                 </Link>
               </div>
             </Popup>

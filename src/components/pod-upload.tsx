@@ -44,14 +44,14 @@ export function PodUpload({ loadId }: { loadId: string }) {
 
   return (
     <form action={submitPod} className="space-y-3 rounded-2xl border border-black/8 bg-white p-4">
-      <h3 className="font-semibold text-ink">Proof of delivery</h3>
-      <p className="text-sm text-muted">Upload a photo/PDF (max 5MB) or paste a link.</p>
+      <h3 className="font-semibold text-ink">Comprovante de entrega</h3>
+      <p className="text-sm text-muted">Envie uma foto/PDF (máx. 5MB) ou cole um link.</p>
       <input type="hidden" name="loadId" value={loadId} />
 
       <div className="grid gap-2 sm:grid-cols-2">
         <label className={optionCls}>
           <span aria-hidden>📷</span>
-          Take a photo
+          Tirar foto
           <input
             ref={photoRef}
             name="podFilePhoto"
@@ -64,7 +64,7 @@ export function PodUpload({ loadId }: { loadId: string }) {
         </label>
         <label className={optionCls}>
           <span aria-hidden>📁</span>
-          Gallery / file
+          Galeria / arquivo
           <input
             ref={fileRef}
             name="podFile"
@@ -78,23 +78,23 @@ export function PodUpload({ loadId }: { loadId: string }) {
 
       {preview ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={preview} alt="Selected proof" className="max-h-48 w-full rounded-xl border border-border object-cover" />
+        <img src={preview} alt="Comprovante selecionado" className="max-h-48 w-full rounded-xl border border-border object-cover" />
       ) : fileName ? (
         <p className="truncate rounded-xl bg-brand-light px-3 py-2 text-sm font-medium text-brand-dark">📎 {fileName}</p>
       ) : null}
 
       <input
         name="podUrl"
-        placeholder="https://... image URL (or leave empty if file above)"
+        placeholder="https://... URL da imagem (ou deixe vazio se enviou arquivo acima)"
         className="w-full rounded-[var(--radius-input)] border border-border bg-white px-3 py-2 text-sm outline-none focus:border-brand"
       />
       <input
         name="podNote"
-        placeholder="Note (optional)"
+        placeholder="Observação (opcional)"
         className="w-full rounded-[var(--radius-input)] border border-border bg-white px-3 py-2 text-sm outline-none focus:border-brand"
       />
       <button type="submit" className="w-full rounded-xl bg-brand py-2.5 text-sm font-bold text-white hover:bg-brand-dark">
-        Upload POD
+        Enviar comprovante
       </button>
     </form>
   );

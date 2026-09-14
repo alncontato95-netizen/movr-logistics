@@ -30,30 +30,30 @@ export default async function CompanySettingsPage() {
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-ink">Business details</h1>
-        <p className="mt-1 text-sm text-muted">Company information shown to carriers when you publish loads.</p>
+        <h1 className="text-2xl font-bold text-ink">Dados empresariais</h1>
+        <p className="mt-1 text-sm text-muted">Informações da empresa exibidas aos transportadores quando você publica cargas.</p>
       </div>
 
       {company && !company.verified && (
         <div className="rounded-2xl border border-warning-200 bg-warning-50 p-4 text-sm font-medium text-warning-800">
-          <p>Your company is pending verification. Publishing will be enabled once approved.</p>
+          <p>Sua empresa está com verificação pendente. A publicação será liberada após a aprovação.</p>
           <p className="mt-1 text-xs text-warning-700">
-            Submitted {company.createdAt.toLocaleDateString("en-GB")} · Verification via Prisma Studio (verified, verifiedAt) — SLA 4h.
+            Enviado em {company.createdAt.toLocaleDateString("pt-BR")} · Verificação via Prisma Studio (verified, verifiedAt) — SLA 4h.
           </p>
-          {company.verificationNote && <p className="mt-1 text-xs italic">Note: {company.verificationNote}</p>}
+          {company.verificationNote && <p className="mt-1 text-xs italic">Observação: {company.verificationNote}</p>}
         </div>
       )}
       {company?.verified && company.verifiedAt && (
         <div className="rounded-2xl border border-success-200 bg-success-light p-4 text-sm font-medium text-success-700">
-          Verified {new Date(company.verifiedAt).toLocaleDateString("en-GB")} {company.verifiedBy ? `by ${company.verifiedBy}` : ""}.
+          Verificada em {new Date(company.verifiedAt).toLocaleDateString("pt-BR")} {company.verifiedBy ? `por ${company.verifiedBy}` : ""}.
         </div>
       )}
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <Metric label="Total loads" value={summary.loads} />
-        <Metric label="Open" value={summary.open} tone="brand" />
-        <Metric label="Pending interest" value={summary.pending} tone="amber" />
-        <Metric label="Selected" value={summary.selected} tone="green" />
+        <Metric label="Total de cargas" value={summary.loads} />
+        <Metric label="Abertas" value={summary.open} tone="brand" />
+        <Metric label="Interesse pendente" value={summary.pending} tone="amber" />
+        <Metric label="Selecionadas" value={summary.selected} tone="green" />
       </div>
 
       <Card>
@@ -71,20 +71,20 @@ export default async function CompanySettingsPage() {
         <Card>
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-semibold text-ink">Publish a load</p>
-              <p className="text-sm text-muted">Add a new return load to find carriers.</p>
+              <p className="font-semibold text-ink">Publicar uma carga</p>
+              <p className="text-sm text-muted">Adicione uma nova carga de retorno para encontrar transportadores.</p>
             </div>
-            <ButtonLink href="/company/loads/new">New load</ButtonLink>
+            <ButtonLink href="/company/loads/new">Nova carga</ButtonLink>
           </div>
         </Card>
         <Card>
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-semibold text-ink">Manage loads</p>
-              <p className="text-sm text-muted">Review candidates and progress.</p>
+              <p className="font-semibold text-ink">Gerenciar cargas</p>
+              <p className="text-sm text-muted">Acompanhe candidaturas e o andamento.</p>
             </div>
             <ButtonLink href="/company/loads" variant="secondary">
-              View loads
+              Ver cargas
             </ButtonLink>
           </div>
         </Card>

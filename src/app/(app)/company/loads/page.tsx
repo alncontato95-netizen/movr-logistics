@@ -60,43 +60,43 @@ export default async function CompanyLoadsPage({ searchParams }: { searchParams:
       <PollRefresh intervalMs={15000} />
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-ink">Your loads</h1>
+          <h1 className="text-2xl font-bold text-ink">Suas cargas</h1>
           <p className="mt-1 text-sm text-muted">
-            {allLoads.length} total · {openCount} open · {selectedCount} selected · {completedCount} completed
-            {cancelledCount ? ` · ${cancelledCount} cancelled` : ""} {avgRating ? `· ★${avgRating}` : ""}
+            {allLoads.length} no total · {openCount} abertas · {selectedCount} selecionadas · {completedCount} concluídas
+            {cancelledCount ? ` · ${cancelledCount} canceladas` : ""} {avgRating ? `· ★${avgRating}` : ""}
           </p>
         </div>
-        <ButtonLink href="/company/loads/new">New load</ButtonLink>
+        <ButtonLink href="/company/loads/new">Nova carga</ButtonLink>
       </div>
 
-      {/* metrics */}
+      {/* metadata */}
       {company && allLoads.length > 0 && (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <Card className="p-4"><p className="text-2xl font-extrabold text-ink">{allLoads.length}</p><p className="text-xs text-muted">Total loads</p></Card>
-          <Card className="p-4"><p className="text-2xl font-extrabold text-brand-dark">{formatMoney(totalValue) || "—"}</p><p className="text-xs text-muted">Total value</p></Card>
-          <Card className="p-4"><p className="text-2xl font-extrabold text-ink">{completedCount}</p><p className="text-xs text-muted">Completed</p></Card>
-          <Card className="p-4"><p className="text-2xl font-extrabold text-ink">{avgRating ? `★ ${avgRating}` : "—"}</p><p className="text-xs text-muted">Avg rating</p></Card>
+          <Card className="p-4"><p className="text-2xl font-extrabold text-ink">{allLoads.length}</p><p className="text-xs text-muted">Total de cargas</p></Card>
+          <Card className="p-4"><p className="text-2xl font-extrabold text-brand-dark">{formatMoney(totalValue) || "—"}</p><p className="text-xs text-muted">Valor total</p></Card>
+          <Card className="p-4"><p className="text-2xl font-extrabold text-ink">{completedCount}</p><p className="text-xs text-muted">Concluídas</p></Card>
+          <Card className="p-4"><p className="text-2xl font-extrabold text-ink">{avgRating ? `★ ${avgRating}` : "—"}</p><p className="text-xs text-muted">Média de avaliações</p></Card>
         </div>
       )}
 
-      {/* filters */}
+      {/* filtros */}
       {company && allLoads.length > 0 && (
         <Card className="p-4">
           <form action="/company/loads" method="GET" className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex flex-wrap gap-1.5">
-              <Link href={buildHref({ status: undefined })} className={`rounded-full px-3 py-1 text-xs font-semibold border ${!status ? "bg-brand text-white border-brand" : "bg-white text-muted border-border hover:border-brand/30"}`}>All</Link>
+              <Link href={buildHref({ status: undefined })} className={`rounded-full px-3 py-1 text-xs font-semibold border ${!status ? "bg-brand text-white border-brand" : "bg-white text-muted border-border hover:border-brand/30"}`}>Todas</Link>
               { (["OPEN","SELECTED","CONFIRMED","COMPLETED","CANCELLED"] as const).map((s) => (
                 <Link key={s} href={buildHref({ status: s })} className={`rounded-full px-3 py-1 text-xs font-semibold border ${status===s ? "bg-brand text-white border-brand" : "bg-white text-muted border-border hover:border-brand/30"}`}>{getLoadStatusLabels(locale)[s]}</Link>
               ))}
             </div>
             <div className="flex w-full items-center gap-2 sm:w-auto">
-              <input name="q" defaultValue={q ?? ""} placeholder="Search origin/destination" className="min-w-0 flex-1 rounded-[var(--radius-input)] border border-border bg-white px-3 py-2 text-sm outline-none focus:border-brand" />
+              <input name="q" defaultValue={q ?? ""} placeholder="Buscar origem/destino" className="min-w-0 flex-1 rounded-[var(--radius-input)] border border-border bg-white px-3 py-2 text-sm outline-none focus:border-brand" />
               <select name="sort" defaultValue={sort ?? "created"} className="rounded-[var(--radius-input)] border border-border bg-white px-2 py-2 text-sm">
-                <option value="created">Newest</option>
-                <option value="pickup">Pickup date</option>
-                <option value="price">Price high</option>
+                <option value="created">Mais recentes</option>
+                <option value="pickup">Data de coleta</option>
+                <option value="price">Maior preço</option>
               </select>
-              <button type="submit" className="rounded-[var(--radius-input)] bg-brand px-3 py-2 text-sm font-semibold text-white">Filter</button>
+              <button type="submit" className="rounded-[var(--radius-input)] bg-brand px-3 py-2 text-sm font-semibold text-white">Filtrar</button>
             </div>
           </form>
         </Card>
@@ -104,16 +104,16 @@ export default async function CompanyLoadsPage({ searchParams }: { searchParams:
 
       {!company && (
         <div className="rounded-2xl border border-brand/30 bg-brand-light p-4 text-sm text-brand-dark">
-          Save your business details to publish loads.
+          Salve seus dados empresariais para publicar cargas.
           <div className="mt-3">
-            <ButtonLink href="/company/settings">Set up business</ButtonLink>
+            <ButtonLink href="/company/settings">Configurar empresa</ButtonLink>
           </div>
         </div>
       )}
 
       {company && loads.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-black/15 p-10 text-center text-sm text-muted">
-          {allLoads.length === 0 ? "No loads yet. Publish your first load to find carriers." : "No loads match filters."}
+          {allLoads.length === 0 ? "Nenhuma carga ainda. Publique sua primeira carga para encontrar transportadores." : "Nenhuma carga corresponde aos filtros."}
         </div>
       ) : (
         <LoadsViewToggle

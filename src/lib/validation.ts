@@ -3,43 +3,43 @@ import { VEHICLE_TYPES, CARGO_TYPES, REGIONS } from "@/lib/constants";
 
 const password = z
   .string()
-  .min(8, "Password must be at least 8 characters")
-  .max(72, "Password must be at most 72 characters");
+  .min(8, "A senha deve ter pelo menos 8 caracteres")
+  .max(72, "A senha deve ter no máximo 72 caracteres");
 
 export const registerSchema = z.object({
-  name: z.string().trim().min(2, "Please enter your name").max(80, "Name is too long"),
-  email: z.string().trim().toLowerCase().email("Please enter a valid email").max(254, "Email is too long"),
+  name: z.string().trim().min(2, "Digite seu nome").max(80, "Nome muito longo"),
+  email: z.string().trim().toLowerCase().email("Digite um e-mail válido").max(254, "E-mail muito longo"),
   password,
 });
 
 export const loginSchema = z.object({
-  email: z.string().trim().toLowerCase().email("Please enter a valid email").max(254, "Email is too long"),
-  password: z.string().min(1, "Please enter your password").max(72, "Password is too long"),
+  email: z.string().trim().toLowerCase().email("Digite um e-mail válido").max(254, "E-mail muito longo"),
+  password: z.string().min(1, "Digite sua senha").max(72, "Senha muito longa"),
 });
 
 export const carrierProfileSchema = z.object({
-  vehicleType: z.enum(VEHICLE_TYPES, { message: "Select your vehicle type" }),
-  vehiclePlate: z.string().trim().min(2, "Enter your vehicle plate").optional().or(z.literal("")),
-  professionalLicense: z.string().trim().min(3, "Enter your professional license").optional().or(z.literal("")),
-  licenseUrl: z.string().trim().url("Enter a valid URL").max(500, "URL is too long").optional().or(z.literal("")),
+  vehicleType: z.enum(VEHICLE_TYPES, { message: "Selecione o tipo do seu veículo" }),
+  vehiclePlate: z.string().trim().min(2, "Digite a placa do seu veículo").optional().or(z.literal("")),
+  professionalLicense: z.string().trim().min(3, "Digite sua licença profissional").optional().or(z.literal("")),
+  licenseUrl: z.string().trim().url("Digite uma URL válida").max(500, "URL muito longa").optional().or(z.literal("")),
   licenseExpiry: z
     .string()
     .trim()
     .optional()
     .or(z.literal(""))
-    .refine((v) => !v || !Number.isNaN(Date.parse(v)), { message: "Enter a valid date" })
-    .refine((v) => !v || new Date(v).getTime() > Date.now(), { message: "Expiry must be in the future" }),
-  phone: z.string().trim().min(6, "Enter a phone number").optional().or(z.literal("")),
+    .refine((v) => !v || !Number.isNaN(Date.parse(v)), { message: "Digite uma data válida" })
+    .refine((v) => !v || new Date(v).getTime() > Date.now(), { message: "A validade deve ser no futuro" }),
+  phone: z.string().trim().min(6, "Digite um número de telefone").optional().or(z.literal("")),
   rntrc: z
     .string()
     .trim()
     .optional()
     .or(z.literal(""))
     .refine((v) => !v || /^\d{1,14}$/.test(v), {
-      message: "RNTRC must contain only digits (up to 14)",
+      message: "O RNTRC deve conter apenas números (até 14 dígitos)",
     }),
-  currentRegion: z.enum(REGIONS, { message: "Select your home region" }),
-  acceptsRegions: z.array(z.enum(REGIONS)).min(1, "Select at least one region you serve"),
+  currentRegion: z.enum(REGIONS, { message: "Selecione sua região de origem" }),
+  acceptsRegions: z.array(z.enum(REGIONS)).min(1, "Selecione pelo menos uma região que você atende"),
   available: z.boolean().optional().default(true),
 });
 
@@ -47,24 +47,24 @@ const cnpj = z
   .string()
   .trim()
   .regex(/^(\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}|\d{14})$/, {
-    message: "Enter a valid CNPJ (00.000.000/0000-00 or 14 digits)",
+    message: "Digite um CNPJ válido (00.000.000/0000-00 ou 14 dígitos)",
   });
 
 export const companyProfileSchema = z.object({
-  name: z.string().trim().min(2, "Please enter your company name").max(120, "Name is too long"),
+  name: z.string().trim().min(2, "Digite o nome da sua empresa").max(120, "Nome muito longo"),
   cnpj,
-  address: z.string().trim().min(3, "Please enter your address").max(200, "Address is too long"),
-  phone: z.string().trim().min(6, "Please enter a phone number").max(30, "Phone is too long"),
+  address: z.string().trim().min(3, "Digite seu endereço").max(200, "Endereço muito longo"),
+  phone: z.string().trim().min(6, "Digite um número de telefone").max(30, "Telefone muito longo"),
 });
 
 export const loadSchema = z
   .object({
-    origin: z.enum(REGIONS, { message: "Select an origin" }),
-    destination: z.enum(REGIONS, { message: "Select a destination" }),
+    origin: z.enum(REGIONS, { message: "Selecione uma origem" }),
+    destination: z.enum(REGIONS, { message: "Selecione um destino" }),
     pickupDate: z
       .string()
-      .min(1, "Select a pickup date")
-      .refine((v) => !Number.isNaN(Date.parse(v)), { message: "Enter a valid date" })
+      .min(1, "Selecione uma data de coleta")
+      .refine((v) => !Number.isNaN(Date.parse(v)), { message: "Digite uma data válida" })
       .refine(
         (v) => {
           const d = new Date(v);
@@ -72,19 +72,19 @@ export const loadSchema = z
           today.setHours(0, 0, 0, 0);
           return d.getTime() >= today.getTime();
         },
-        { message: "Pickup date cannot be in the past" },
+        { message: "A data de coleta não pode estar no passado" },
       ),
     pickupWindow: z.string().trim().max(40).optional(),
-    cargoType: z.enum(CARGO_TYPES, { message: "Select a cargo type" }),
-    weightKg: z.coerce.number().int().positive("Enter a weight greater than 0").max(50000, "Weight is too high"),
-    volumeM3: z.coerce.number().positive("Enter a volume greater than 0").max(200, "Volume is too high").optional(),
+    cargoType: z.enum(CARGO_TYPES, { message: "Selecione o tipo de carga" }),
+    weightKg: z.coerce.number().int().positive("Digite um peso maior que 0").max(50000, "Peso muito alto"),
+    volumeM3: z.coerce.number().positive("Digite um volume maior que 0").max(200, "Volume muito alto").optional(),
     requiredVehicle: z.enum(VEHICLE_TYPES).optional(),
-    priceEur: z.coerce.number().int().nonnegative().max(100000, "Price is too high").optional(),
+    priceEur: z.coerce.number().int().nonnegative().max(100000, "Preço muito alto").optional(),
     priceNegotiable: z.boolean().optional().default(true),
     notes: z.string().trim().max(1000).optional(),
   })
   .refine((data) => data.origin !== data.destination, {
-    message: "Origin and destination must be different",
+    message: "Origem e destino devem ser diferentes",
     path: ["destination"],
   });
 

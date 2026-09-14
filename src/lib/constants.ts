@@ -20,147 +20,45 @@ export const VEHICLE_LABELS: Record<VehicleType, string> = {
 };
 
 export const CARGO_LABELS: Record<CargoType, string> = {
-  PALLET: "Pallets",
+  PALLET: "Paletes",
   CONTAINER: "Container",
-  BULK: "Bulk",
-  OTHER: "Other",
+  BULK: "Granel",
+  OTHER: "Outro",
 };
 
 export const LOAD_STATUS_LABELS: Record<LoadStatus, string> = {
-  OPEN: "Open",
-  SELECTED: "Carrier selected",
-  CONFIRMED: "Confirmed",
-  PICKED_UP: "Picked up",
-  DELIVERED: "Delivered",
-  COMPLETED: "Completed",
-  CANCELLED: "Cancelled",
+  OPEN: "Aberta",
+  SELECTED: "Transportador selecionado",
+  CONFIRMED: "Confirmada",
+  PICKED_UP: "Coleta realizada",
+  DELIVERED: "Entregue",
+  COMPLETED: "Concluída",
+  CANCELLED: "Cancelada",
 };
 
 export const APPLICATION_STATUS_LABELS: Record<ApplicationStatus, string> = {
-  PENDING: "Pending",
-  SELECTED: "Selected",
-  ACCEPTED: "Accepted",
-  DECLINED: "Declined",
-  REJECTED: "Not selected",
-  CANCELLED: "Cancelled",
+  PENDING: "Pendente",
+  SELECTED: "Selecionada",
+  ACCEPTED: "Aceita",
+  DECLINED: "Recusada",
+  REJECTED: "Não selecionada",
+  CANCELLED: "Cancelada",
 };
 
-export function getCargoLabels(locale: string): Record<CargoType, string> {
-  switch (locale) {
-    case "nl":
-      return { PALLET: "Pallets", CONTAINER: "Container", BULK: "Bulk", OTHER: "Overig" };
-    case "de":
-      return { PALLET: "Paletten", CONTAINER: "Container", BULK: "Schüttgut", OTHER: "Sonstiges" };
-    case "es":
-      return { PALLET: "Palés", CONTAINER: "Contenedor", BULK: "Granel", OTHER: "Otro" };
-    default:
-      return CARGO_LABELS;
-  }
+export function getCargoLabels(_locale: string): Record<CargoType, string> {
+  return CARGO_LABELS;
 }
 
-export function getVehicleLabels(locale: string): Record<VehicleType, string> {
-  switch (locale) {
-    case "nl":
-      return {
-        VUC: "VUC (até 3,5t)",
-        TOCO: "Toco (2 eixos)",
-        TRUCK: "Truck (3 eixos)",
-        BITRUCK: "Bitruck (4 eixos)",
-        CARRETA: "Carreta (simples)",
-        BITREM: "Bitrem",
-      };
-    case "de":
-      return {
-        VUC: "VUC (até 3,5t)",
-        TOCO: "Toco (2 eixos)",
-        TRUCK: "Truck (3 eixos)",
-        BITRUCK: "Bitruck (4 eixos)",
-        CARRETA: "Carreta (simples)",
-        BITREM: "Bitrem",
-      };
-    case "es":
-      return {
-        VUC: "VUC (até 3,5t)",
-        TOCO: "Toco (2 eixos)",
-        TRUCK: "Truck (3 eixos)",
-        BITRUCK: "Bitruck (4 eixos)",
-        CARRETA: "Carreta (simples)",
-        BITREM: "Bitrem",
-      };
-    default:
-      return VEHICLE_LABELS;
-  }
+export function getVehicleLabels(_locale: string): Record<VehicleType, string> {
+  return VEHICLE_LABELS;
 }
 
-export function getLoadStatusLabels(locale: string): Record<LoadStatus, string> {
-  switch (locale) {
-    case "nl":
-      return {
-        OPEN: "Open",
-        SELECTED: "Vervoerder geselecteerd",
-        CONFIRMED: "Bevestigd",
-        PICKED_UP: "Opgehaald",
-        DELIVERED: "Afgeleverd",
-        COMPLETED: "Voltooid",
-        CANCELLED: "Geannuleerd",
-      };
-    case "de":
-      return {
-        OPEN: "Offen",
-        SELECTED: "Spediteur ausgewählt",
-        CONFIRMED: "Bestätigt",
-        PICKED_UP: "Abgeholt",
-        DELIVERED: "Zugestellt",
-        COMPLETED: "Abgeschlossen",
-        CANCELLED: "Storniert",
-      };
-    case "es":
-      return {
-        OPEN: "Abierta",
-        SELECTED: "Transportista seleccionado",
-        CONFIRMED: "Confirmada",
-        PICKED_UP: "Recogida",
-        DELIVERED: "Entregada",
-        COMPLETED: "Completada",
-        CANCELLED: "Cancelada",
-      };
-    default:
-      return LOAD_STATUS_LABELS;
-  }
+export function getLoadStatusLabels(_locale: string): Record<LoadStatus, string> {
+  return LOAD_STATUS_LABELS;
 }
 
-export function getApplicationStatusLabels(locale: string): Record<ApplicationStatus, string> {
-  switch (locale) {
-    case "nl":
-      return {
-        PENDING: "In afwachting",
-        SELECTED: "Geselecteerd",
-        ACCEPTED: "Geaccepteerd",
-        DECLINED: "Afgewezen",
-        REJECTED: "Niet geselecteerd",
-        CANCELLED: "Geannuleerd",
-      };
-    case "de":
-      return {
-        PENDING: "Ausstehend",
-        SELECTED: "Ausgewählt",
-        ACCEPTED: "Angenommen",
-        DECLINED: "Abgelehnt",
-        REJECTED: "Nicht ausgewählt",
-        CANCELLED: "Storniert",
-      };
-    case "es":
-      return {
-        PENDING: "Pendiente",
-        SELECTED: "Seleccionada",
-        ACCEPTED: "Aceptada",
-        DECLINED: "Rechazada",
-        REJECTED: "No seleccionada",
-        CANCELLED: "Cancelada",
-      };
-    default:
-      return APPLICATION_STATUS_LABELS;
-  }
+export function getApplicationStatusLabels(_locale: string): Record<ApplicationStatus, string> {
+  return APPLICATION_STATUS_LABELS;
 }
 
 export const REGIONS = [
@@ -202,8 +100,8 @@ export type Region = (typeof REGIONS)[number];
  * configurable per user or storing them in a database table.
  */
 
-export const ORGANIZATION = "MOVR Logistics";
-export const TAGLINE = "Return loads, real partners.";
+export const ORGANIZATION = "MOVR Logística";
+export const TAGLINE = "Cargas de retorno, parceiros de verdade.";
 
 export const NOTIFICATION_TYPES = [
   "APPLICATION",

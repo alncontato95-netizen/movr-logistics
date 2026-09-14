@@ -50,54 +50,54 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
     <div className="mx-auto max-w-2xl space-y-5">
       <PollRefresh intervalMs={10000} />
       <Link href="/company/loads" className="text-sm font-medium text-muted hover:text-ink">
-        ← Back to your loads
+        ← Voltar para suas cargas
       </Link>
 
       {selected && chosen && (
         <div className="rounded-2xl bg-brand-light p-4 text-sm font-semibold text-brand-dark">
-          {chosen.transporter.name.split(" ")[0]} selected. The load is now reserved for them — awaiting their acceptance.
+          {chosen.transporter.name.split(" ")[0]} selecionado. A carga ficou reservada para ele — aguardando a aceitação.
         </div>
       )}
 
       {undone && (
         <div className="rounded-2xl bg-brand-light p-4 text-sm font-semibold text-brand-dark">
-          Selection undone. The load is open for applications again.
+          Seleção desfeita. A carga está aberta para candidaturas novamente.
         </div>
       )}
 
       {awaitingAcceptance && (
         <div className="rounded-2xl bg-warning-50 p-4 text-sm font-semibold text-warning-800">
-          The booking can&apos;t be confirmed yet — the selected carrier must accept the offer first.
+          A reserva ainda não pode ser confirmada — o transportador selecionado precisa aceitar a proposta primeiro.
         </div>
       )}
 
       {cancelled && (
         <div className="rounded-2xl bg-neutral-100 p-4 text-sm font-semibold text-ink">
-          Load cancelled.
+          Carga cancelada.
         </div>
       )}
 
       {updated && (
         <div className="rounded-2xl bg-brand-light p-4 text-sm font-semibold text-brand-dark">
-          Load updated.
+          Carga atualizada.
         </div>
       )}
 
       {duplicated && (
         <div className="rounded-2xl bg-brand-light p-4 text-sm font-semibold text-brand-dark">
-          Load duplicated — new draft created.
+          Carga duplicada — novo rascunho criado.
         </div>
       )}
 
       {rated && (
         <div className="rounded-2xl bg-success-light p-4 text-sm font-semibold text-success-700">
-          Rating saved. Thank you!
+          Avaliação salva. Obrigado!
         </div>
       )}
 
       {podRequired && (
         <div className="rounded-2xl bg-warning-50 p-4 text-sm font-semibold text-warning-800">
-          POD required — carrier must upload proof of delivery before completing.
+          POD obrigatória — o transportador precisa enviar o comprovante de entrega antes de concluir.
         </div>
       )}
 
@@ -108,15 +108,15 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
           </h1>
           <LoadStatusBadge status={load.status} locale={locale} />
         </div>
-        <p className="mt-1 text-muted">Pickup {formatDate(load.pickupDate)}</p>
+        <p className="mt-1 text-muted">Coleta {formatDate(load.pickupDate)}</p>
 
         <dl className="mt-6 space-y-3 text-sm">
-          <Row label="Cargo type" value={CARGO_LABELS[load.cargoType]} />
-          <Row label="Weight" value={`${load.weightKg} kg${load.volumeM3 ? ` · ${load.volumeM3} m³` : ""}`} />
-          <Row label="Required vehicle" value={load.requiredVehicle ? VEHICLE_LABELS[load.requiredVehicle] : "Any"} />
-          {load.priceEur ? <Row label="Offered price" value={formatMoney(load.priceEur)} /> : null}
-          <Row label="Pricing" value={load.priceNegotiable ? "Negotiable" : "Fixed"} />
-          {load.notes ? <Row label="Notes" value={load.notes} /> : null}
+          <Row label="Tipo de carga" value={CARGO_LABELS[load.cargoType]} />
+          <Row label="Peso" value={`${load.weightKg} kg${load.volumeM3 ? ` · ${load.volumeM3} m³` : ""}`} />
+          <Row label="Veículo necessário" value={load.requiredVehicle ? VEHICLE_LABELS[load.requiredVehicle] : "Qualquer"} />
+          {load.priceEur ? <Row label="Preço ofertado" value={formatMoney(load.priceEur)} /> : null}
+          <Row label="Preço" value={load.priceNegotiable ? "Negociável" : "Fixo"} />
+          {load.notes ? <Row label="Observações" value={load.notes} /> : null}
         </dl>
       </div>
 
@@ -131,7 +131,7 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
             href={`/company/loads/${load.id}/edit`}
             className="flex-1 rounded-xl border border-black/10 bg-white py-2.5 text-center text-sm font-semibold text-ink hover:border-brand hover:bg-brand-light/40 hover:text-brand-dark"
           >
-            Edit load
+            Editar carga
           </Link>
         )}
         <div className="flex-1">
@@ -146,7 +146,7 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
 
       {load.podUrl && (
         <div className="rounded-2xl border border-success-200 bg-success-light p-4">
-          <p className="font-semibold text-success-700">Proof of delivery</p>
+          <p className="font-semibold text-success-700">Comprovante de entrega</p>
           <a href={load.podUrl} target="_blank" rel="noopener noreferrer" className="break-all text-sm text-success-700 underline">
             {load.podUrl}
           </a>
@@ -156,10 +156,10 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
 
       {showSelect && (
         <section className="space-y-3">
-          <h2 className="text-lg font-bold text-ink">Candidates ({pending.length})</h2>
+          <h2 className="text-lg font-bold text-ink">Candidatos ({pending.length})</h2>
           {pending.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-black/15 p-8 text-center text-sm text-muted">
-              No interest yet. Share the load link or check back soon.
+              Nenhum interesse ainda. Compartilhe o link da carga ou volte em breve.
             </div>
           ) : (
             pending.map((app) => {
@@ -185,25 +185,25 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
 
       {progressStatus && chosen && (
         <section className="space-y-3 rounded-2xl border border-black/8 bg-white p-5">
-          <h2 className="text-lg font-bold text-ink">Selected carrier</h2>
+          <h2 className="text-lg font-bold text-ink">Transportador selecionado</h2>
           <CarrierInfo app={chosen} revealContact />
           {chosen.status === "ACCEPTED" && (
-            <p className="text-sm font-semibold text-success-700">Offer accepted by the carrier — you can confirm the booking.</p>
+            <p className="text-sm font-semibold text-success-700">Proposta aceita pelo transportador — você já pode confirmar a reserva.</p>
           )}
           {chosen.status === "SELECTED" && (
-            <p className="text-sm font-semibold text-warning-700">Waiting for the carrier to accept this offer.</p>
+            <p className="text-sm font-semibold text-warning-700">Aguardando o transportador aceitar esta proposta.</p>
           )}
           {chosen.status === "DECLINED" && (
-            <p className="text-sm font-semibold text-error-700">The carrier declined the offer. The load is open for applications again.</p>
+            <p className="text-sm font-semibold text-error-700">O transportador recusou a proposta. A carga está aberta para candidaturas novamente.</p>
           )}
           {load.status === "CONFIRMED" && (
-            <p className="text-sm font-semibold text-info-700">Booking confirmed — awaiting carrier pickup.</p>
+            <p className="text-sm font-semibold text-info-700">Reserva confirmada — aguardando coleta do transportador.</p>
           )}
           {load.status === "PICKED_UP" && (
-            <p className="text-sm font-semibold text-info-700">Carrier has picked up the load — in transit.</p>
+            <p className="text-sm font-semibold text-info-700">O transportador realizou a coleta — em trânsito.</p>
           )}
           {load.status === "DELIVERED" && (
-            <p className="text-sm font-semibold text-success-700">Load delivered — you can mark this booking as completed.</p>
+            <p className="text-sm font-semibold text-success-700">Carga entregue — você já pode marcar esta reserva como concluída.</p>
           )}
           {progressStatus && <LoadLifecycle status={load.status} applied selected={!!chosen} locale={locale} />}
           {progressStatus && <ProgressFlow loadId={load.id} status={progressStatus} carrierConfirmed={carrierAccepted} />}
@@ -213,27 +213,27 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
 
       {load.status === "COMPLETED" && (
         <section className="rounded-2xl border border-black/8 bg-white p-5">
-          <div className="text-center text-sm text-muted">This load is completed. Nice work.</div>
+          <div className="text-center text-sm text-muted">Esta carga está concluída. Bom trabalho.</div>
           {rating ? (
             <div className="mt-4 rounded-xl bg-brand-light/40 p-3 text-sm">
-              <p className="font-semibold text-ink">Your rating: ★ {rating.score}</p>
+              <p className="font-semibold text-ink">Sua avaliação: ★ {rating.score}</p>
               {rating.comment && <p className="mt-1 text-muted">{rating.comment}</p>}
               {carrierAvg && carrierAvg._avg.score && (
                 <p className="mt-1 text-xs text-muted">
-                  Carrier avg ★ {Number(carrierAvg._avg.score).toFixed(1)} ({carrierAvg._count._all})
+                  Média do transportador ★ {Number(carrierAvg._avg.score).toFixed(1)} ({carrierAvg._count._all})
                 </p>
               )}
             </div>
           ) : (
             <div className="mt-4">
-              <h3 className="font-semibold text-ink">Rate this carrier</h3>
-              <p className="text-sm text-muted">How was the delivery?</p>
+              <h3 className="font-semibold text-ink">Avaliar este transportador</h3>
+              <p className="text-sm text-muted">Como foi a entrega?</p>
               <div className="mt-3">
                 <RatingForm loadId={load.id} />
               </div>
               {carrierAvg && carrierAvg._avg.score && (
                 <p className="mt-2 text-xs text-muted">
-                  Carrier avg ★ {Number(carrierAvg._avg.score).toFixed(1)} ({carrierAvg._count._all} ratings)
+                  Média do transportador ★ {Number(carrierAvg._avg.score).toFixed(1)} ({carrierAvg._count._all} avaliações)
                 </p>
               )}
             </div>
@@ -244,7 +244,7 @@ export default async function CompanyLoadDetailPage({ params, searchParams }: { 
       {rejected.length > 0 && (
         <details className="rounded-2xl border border-black/8 bg-white p-4">
           <summary className="cursor-pointer text-sm font-semibold text-muted">
-            Not selected ({rejected.length})
+            Não selecionados ({rejected.length})
           </summary>
           <div className="mt-3 space-y-3">
             {rejected.map((app) => (
@@ -271,7 +271,7 @@ function CandidateRow({ app, loadId, stats, labels }: { app: { id: string; trans
             type="submit"
             className="rounded-xl bg-brand px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-dark"
           >
-            Select
+            Selecionar
           </button>
         </form>
       </div>
@@ -322,15 +322,15 @@ function CarrierInfo({
     <div className="min-w-0">
       <div className="flex items-center gap-2">
         <p className="truncate font-semibold text-ink">{app.transporter.name}</p>
-        {app.transporter.available && <Badge tone="green">Available</Badge>}
+        {app.transporter.available && <Badge tone="green">Disponível</Badge>}
       </div>
       {!compact && app.createdAt && (
-        <p className="mt-1 text-sm text-muted">Applied {app.createdAt.toLocaleDateString("en-GB")}</p>
+        <p className="mt-1 text-sm text-muted">Candidatou-se em {app.createdAt.toLocaleDateString("pt-BR")}</p>
       )}
       <div className="mt-1.5 flex flex-wrap gap-1.5">
         {app.transporter.vehicleType && <Badge>{VEHICLE_LABELS[app.transporter.vehicleType]}</Badge>}
-        {app.transporter.currentRegion && <Badge>Based in {app.transporter.currentRegion}</Badge>}
-        {regions.length > 0 && <Badge tone="brand">Serves {regions.join(", ")}</Badge>}
+        {app.transporter.currentRegion && <Badge>Baseado em {app.transporter.currentRegion}</Badge>}
+        {regions.length > 0 && <Badge tone="brand">Atende {regions.join(", ")}</Badge>}
         {app.transporter.carrierVerified ? (
           <Badge tone="green">Habilitação verificada</Badge>
         ) : app.transporter.licenseUrl ? (
@@ -341,10 +341,10 @@ function CarrierInfo({
       </div>
       {revealContact && (
         <div className="mt-3 rounded-xl bg-brand-light/60 p-3 text-sm">
-          <p className="font-semibold text-brand-dark">Contact details</p>
-          {app.transporter.phone && <p className="mt-1 break-words text-ink">Phone: {app.transporter.phone}</p>}
-          {app.transporter.email && <p className="break-all text-ink">Email: {app.transporter.email}</p>}
-          <p className="mt-1 text-xs text-muted">They&apos;re expecting to hear from you about this load.</p>
+          <p className="font-semibold text-brand-dark">Dados de contato</p>
+          {app.transporter.phone && <p className="mt-1 break-words text-ink">Telefone: {app.transporter.phone}</p>}
+          {app.transporter.email && <p className="break-all text-ink">E-mail: {app.transporter.email}</p>}
+          <p className="mt-1 text-xs text-muted">Eles aguardam seu contato sobre esta carga.</p>
         </div>
       )}
     </div>
@@ -353,13 +353,13 @@ function CarrierInfo({
 
 function ProgressFlow({ loadId, status, carrierConfirmed }: { loadId: string; status: "SELECTED" | "CONFIRMED" | "PICKED_UP" | "DELIVERED"; carrierConfirmed: boolean }) {
   const next: Record<string, { status: "CONFIRMED" | "COMPLETED"; label: string }> = {
-    SELECTED: { status: "CONFIRMED", label: "Confirm booking" },
-    DELIVERED: { status: "COMPLETED", label: "Mark completed" },
+    SELECTED: { status: "CONFIRMED", label: "Confirmar reserva" },
+    DELIVERED: { status: "COMPLETED", label: "Marcar como concluída" },
   };
   const step = next[status];
   if (!step) return null;
 
-  // Confirming a booking requires the carrier to have accepted the offer.
+  // Confirmar uma reserva exige que o transportador tenha aceitado a proposta.
   if (step.status === "CONFIRMED" && !carrierConfirmed) {
     return (
       <button
@@ -367,7 +367,7 @@ function ProgressFlow({ loadId, status, carrierConfirmed }: { loadId: string; st
         disabled
         className="w-full rounded-xl bg-brand/40 py-3 text-sm font-bold text-white disabled:opacity-60"
       >
-        Waiting for carrier to accept
+        Aguardando o transportador aceitar
       </button>
     );
   }
@@ -394,7 +394,7 @@ function UndoSelection({ loadId }: { loadId: string }) {
         type="submit"
         className="w-full rounded-xl border border-black/10 bg-white py-2.5 text-sm font-semibold text-muted hover:border-error-400 hover:text-error-600"
       >
-        Undo selection
+        Desfazer seleção
       </button>
     </form>
   );
@@ -408,7 +408,7 @@ function CancelLoad({ loadId }: { loadId: string }) {
         type="submit"
         className="w-full rounded-xl border border-black/10 bg-white py-2.5 text-sm font-semibold text-muted hover:border-error-400 hover:text-error-600"
       >
-        Cancel load
+        Cancelar carga
       </button>
     </form>
   );
@@ -422,7 +422,7 @@ function DuplicateLoad({ loadId }: { loadId: string }) {
         type="submit"
         className="w-full rounded-xl border border-black/10 bg-white py-2.5 text-sm font-semibold text-ink hover:border-brand hover:text-brand-dark"
       >
-        Duplicate
+        Duplicar
       </button>
     </form>
   );

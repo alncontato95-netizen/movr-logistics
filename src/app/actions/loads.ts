@@ -20,7 +20,7 @@ export async function createLoad(_state: LoadState, formData: FormData): Promise
 
   const rateLimitResult = await rateLimit(`company_${user.id}`, { max: 10, windowMs: 60 * 1000 });
   if (!rateLimitResult.ok) {
-    return { message: "Too many requests. Please wait a moment before creating another load." };
+    return { message: "Muitas solicitações. Aguarde um momento antes de criar outra carga." };
   }
 
   const parsed = loadSchema.safeParse({
@@ -43,10 +43,10 @@ export async function createLoad(_state: LoadState, formData: FormData): Promise
 
   const company = await prisma.company.findUnique({ where: { userId: user.id } });
   if (!company) {
-    return { message: "Please save your business details before publishing a load." };
+    return { message: "Salve seus dados empresariais antes de publicar uma carga." };
   }
   if (!company.verified) {
-    return { message: "Your company is pending verification. We'll approve it manually and let you know." };
+    return { message: "Sua empresa está com verificação pendente. Aprovaremos manualmente e avisaremos você." };
   }
 
   const data = parsed.data;
@@ -90,7 +90,7 @@ export async function createLoad(_state: LoadState, formData: FormData): Promise
             userId: carrier.id,
             loadId: load.id,
             type: "NEW_LOAD",
-            message: `New load available: ${load.origin} → ${load.destination}`,
+            message: `Nova carga disponível: ${load.origin} → ${load.destination}`,
           }).catch(() => {});
         }
       }
@@ -107,18 +107,18 @@ export async function updateLoad(_state: LoadState, formData: FormData): Promise
 
   const rateLimitResult = await rateLimit(`company_${user.id}_load`, { max: 20, windowMs: 60 * 1000 });
   if (!rateLimitResult.ok) {
-    return { message: "Too many requests. Please wait before updating loads." };
+    return { message: "Muitas solicitações. Aguarde antes de atualizar cargas." };
   }
 
   const loadId = formData.get("loadId") as string;
-  if (!loadId) return { message: "Missing load." };
+  if (!loadId) return { message: "Carga não encontrada." };
 
   const company = await prisma.company.findUnique({ where: { userId: user.id } });
-  if (!company) return { message: "Please save your business details before publishing a load." };
+  if (!company) return { message: "Salve seus dados empresariais antes de publicar uma carga." };
 
   const existing = await prisma.load.findUnique({ where: { id: loadId } });
   if (!existing || existing.companyId !== company.id) redirect("/company/loads");
-  if (existing.status !== "OPEN") return { message: "This load can no longer be edited." };
+  if (existing.status !== "OPEN") return { message: "Esta carga não pode mais ser editada." };
 
   const parsed = loadSchema.safeParse({
     origin: formData.get("origin"),
@@ -206,7 +206,7 @@ export async function applyToLoad(formData: FormData) {
       userId: load.publishedBy,
       loadId,
       type: "APPLICATION",
-      message: `${user.name} expressed interest in your load ${load.origin} → ${load.destination}.`,
+      message: `${user.name} manifestou interesse na sua carga ${load.origin} → ${load.destination}.`,
     }).catch(() => {});
   }
 
@@ -260,7 +260,7 @@ export async function acceptOffer(formData: FormData) {
       userId: load.publishedBy,
       loadId,
       type: "ACCEPTED",
-      message: `${user.name} accepted your offer for ${load.origin} → ${load.destination}. You can confirm the booking.`,
+      message: `${user.name} aceitou sua proposta para ${load.origin} → ${load.destination}. Você já pode confirmar a reserva.`,
     }).catch(() => {});
   }
 
@@ -313,7 +313,7 @@ export async function declineOffer(formData: FormData) {
       userId: load.publishedBy,
       loadId,
       type: "DECLINED",
-      message: `${user.name} declined the offer for ${load.origin} → ${load.destination}. The load is open again.`,
+      message: `${user.name} recusou a proposta para ${load.origin} → ${load.destination}. A carga está aberta novamente.`,
     }).catch(() => {});
   }
 
@@ -354,7 +354,7 @@ export async function confirmPickup(formData: FormData) {
     userId: load.publishedBy,
     loadId,
     type: "PICKED_UP",
-    message: `${user.name} picked up the load ${load.origin} → ${load.destination}. It is now in transit.`,
+    message: `${user.name} realizou a coleta da carga ${load.origin} → ${load.destination}. Ela está em trânsito.`,
   }).catch(() => {});
 
   revalidatePath(`/loads/${loadId}`);
@@ -393,7 +393,7 @@ export async function confirmDelivery(formData: FormData) {
     userId: load.publishedBy,
     loadId,
     type: "DELIVERED",
-    message: `${user.name} delivered the load ${load.origin} → ${load.destination}. You can mark the booking as complete.`,
+    message: `${user.name} entregou a carga ${load.origin} → ${load.destination}. Você já pode marcar a reserva como concluída.`,
   }).catch(() => {});
 
   revalidatePath(`/loads/${loadId}`);
@@ -421,11 +421,11 @@ export async function selectTransporter(formData: FormData) {
   try {
     await prisma.$transaction(async (tx) => {
       const freshLoad = await tx.load.findUnique({ where: { id: loadId } });
-      if (!freshLoad || freshLoad.companyId !== company.id || freshLoad.status !== "OPEN") throw new Error("Invalid load state");
+      if (!freshLoad || freshLoad.companyId !== company.id || freshLoad.status !== "OPEN") throw new Error("Estado de carga inválido");
       const alreadySelected = await tx.application.findFirst({ where: { loadId, status: "SELECTED" } });
-      if (alreadySelected) throw new Error("Already selected");
+      if (alreadySelected) throw new Error("Já selecionado");
       const freshApp = await tx.application.findUnique({ where: { id: application.id } });
-      if (!freshApp || freshApp.status !== "PENDING") throw new Error("Invalid application");
+      if (!freshApp || freshApp.status !== "PENDING") throw new Error("Candidatura inválida");
       await tx.application.updateMany({
         where: { loadId, status: "PENDING" },
         data: { status: "REJECTED" },
@@ -456,7 +456,7 @@ export async function selectTransporter(formData: FormData) {
       userId: application.transporterId,
       loadId,
       type: "SELECTED",
-      message: `${company.name} selected you for the load ${load.origin} → ${load.destination}. Review the offer and accept or decline it.`,
+      message: `${company.name} selecionou você para a carga ${load.origin} → ${load.destination}. Analise a proposta e aceite ou recuse.`,
     }).catch(() => {});
   }
 
@@ -478,12 +478,12 @@ export async function undoSelection(formData: FormData) {
   try {
     await prisma.$transaction(async (tx) => {
       const freshLoad = await tx.load.findUnique({ where: { id: loadId } });
-      if (!freshLoad || freshLoad.companyId !== company.id || freshLoad.status !== "SELECTED") throw new Error("Invalid state");
+      if (!freshLoad || freshLoad.companyId !== company.id || freshLoad.status !== "SELECTED") throw new Error("Estado inválido");
       const hasSelected = await tx.application.findFirst({ where: { loadId, status: "SELECTED" } });
-      if (!hasSelected) throw new Error("No selection");
-      // Only a load that is reserved (carrier selected) but not yet confirmed can be undone.
+      if (!hasSelected) throw new Error("Nenhuma seleção");
+      // Somente uma carga reservada (transportador selecionado) mas ainda não confirmada pode ser desfeita.
       const hasAccepted = await tx.application.findFirst({ where: { loadId, status: "ACCEPTED" } });
-      if (hasAccepted) throw new Error("Already accepted");
+      if (hasAccepted) throw new Error("Já aceito");
       await tx.application.updateMany({
         where: { loadId, status: "SELECTED" },
         data: { status: "PENDING" },
@@ -541,8 +541,8 @@ export async function cancelLoad(formData: FormData) {
 
   await prisma.$transaction(async (tx) => {
     const fresh = await tx.load.findUnique({ where: { id: loadId } });
-    if (!fresh || fresh.companyId !== company.id) throw new Error("Invalid load");
-    if (fresh.status !== "OPEN" && fresh.status !== "SELECTED") throw new Error("Cannot cancel");
+    if (!fresh || fresh.companyId !== company.id) throw new Error("Carga inválida");
+    if (fresh.status !== "OPEN" && fresh.status !== "SELECTED") throw new Error("Não é possível cancelar");
     await tx.application.updateMany({
       where: { loadId, status: { in: ["PENDING", "SELECTED"] as const } },
       data: { status: "CANCELLED" },
@@ -562,7 +562,7 @@ export async function cancelLoad(formData: FormData) {
       userId: selectedApp.transporterId,
       loadId,
       type: "CANCELLED",
-      message: `${company.name} cancelled the load ${load.origin} → ${load.destination}.`,
+      message: `${company.name} cancelou a carga ${load.origin} → ${load.destination}.`,
     }).catch(() => {});
   }
 
@@ -619,21 +619,21 @@ export async function submitRating(_state: LoadState, formData: FormData): Promi
   const loadId = formData.get("loadId") as string;
   const score = Number(formData.get("score"));
   const comment = (formData.get("comment") as string) || undefined;
-  if (!loadId || !score || score < 1 || score > 5) return { message: "Invalid rating" };
+  if (!loadId || !score || score < 1 || score > 5) return { message: "Avaliação inválida" };
   const company = await prisma.company.findUnique({ where: { userId: user.id } });
-  if (!company) return { message: "Company not found" };
+  if (!company) return { message: "Empresa não encontrada" };
   const load = await prisma.load.findUnique({ where: { id: loadId }, include: { applications: true } });
-  if (!load || load.companyId !== company.id) return { message: "Load not found" };
-  if (load.status !== "COMPLETED") return { message: "Can only rate completed loads" };
+  if (!load || load.companyId !== company.id) return { message: "Carga não encontrada" };
+  if (load.status !== "COMPLETED") return { message: "Só é possível avaliar cargas concluídas" };
   const accepted = await prisma.application.findFirst({ where: { loadId, status: "ACCEPTED" } });
-  if (!accepted) return { message: "No carrier to rate" };
+  if (!accepted) return { message: "Nenhum transportador para avaliar" };
   const existing = await prisma.rating.findUnique({ where: { loadId } });
-  if (existing) return { message: "Already rated" };
+  if (existing) return { message: "Já avaliada" };
   await prisma.rating.create({
     data: { loadId, companyId: company.id, carrierId: accepted.transporterId, score, comment },
   });
   revalidatePath(`/company/loads/${loadId}`);
-  return { message: "Rating saved" };
+  return { message: "Avaliação salva" };
 }
 
 export async function submitPod(formData: FormData) {
@@ -662,7 +662,7 @@ export async function submitPod(formData: FormData) {
     await writeFile(join(dir, name), Buffer.from(bytes));
     podUrl = `/uploads/${name}`;
   } else if (podUrlRaw) {
-    const parsed = z.string().trim().url("Enter a valid URL (https://...)").max(500).safeParse(podUrlRaw);
+    const parsed = z.string().trim().url("Digite uma URL válida (https://...)").max(500).safeParse(podUrlRaw);
     if (!parsed.success) redirect(`/loads/${loadId}?pod-error=1`);
     if (!/^https?:\/\//i.test(podUrlRaw)) redirect(`/loads/${loadId}?pod-error=1`);
     podUrl = podUrlRaw;
@@ -725,13 +725,13 @@ export async function updateLoadStatus(formData: FormData) {
   try {
     await prisma.$transaction(async (tx) => {
       const fresh = await tx.load.findUnique({ where: { id: loadId } });
-      if (!fresh || fresh.companyId !== company.id) throw new Error("Invalid load");
-      if (status === "CONFIRMED" && fresh.status !== "SELECTED") throw new Error("Invalid transition");
-      if (status === "COMPLETED" && fresh.status !== "DELIVERED") throw new Error("Invalid transition");
-      if (status === "COMPLETED" && !fresh.podUrl) throw new Error("POD required");
+      if (!fresh || fresh.companyId !== company.id) throw new Error("Carga inválida");
+      if (status === "CONFIRMED" && fresh.status !== "SELECTED") throw new Error("Transição inválida");
+      if (status === "COMPLETED" && fresh.status !== "DELIVERED") throw new Error("Transição inválida");
+      if (status === "COMPLETED" && !fresh.podUrl) throw new Error("POD obrigatória");
       if (status === "CONFIRMED") {
         const acc = await tx.application.findFirst({ where: { loadId, status: "ACCEPTED" } });
-        if (!acc) throw new Error("No acceptance");
+        if (!acc) throw new Error("Nenhuma aceitação");
       }
       await tx.load.update({ where: { id: loadId }, data: { status: status as "CONFIRMED" | "COMPLETED" } });
       await createAuditEvent(tx, {
@@ -756,14 +756,14 @@ export async function updateLoadStatus(formData: FormData) {
       userId: carrier.transporterId,
       loadId,
       type: "CONFIRMED",
-      message: `${company.name} confirmed the booking for ${load.origin} → ${load.destination}. You can now confirm pickup when ready.`,
+      message: `${company.name} confirmou a reserva para ${load.origin} → ${load.destination}. Você já pode confirmar a coleta quando estiver pronto.`,
     }).catch(() => {});
   } else if (status === "COMPLETED" && carrier) {
     await createNotification({
       userId: carrier.transporterId,
       loadId,
       type: "COMPLETED",
-      message: `${company.name} marked the load ${load.origin} → ${load.destination} as completed. Thanks for the delivery!`,
+      message: `${company.name} marcou a carga ${load.origin} → ${load.destination} como concluída. Obrigado pela entrega!`,
     }).catch(() => {});
   }
 

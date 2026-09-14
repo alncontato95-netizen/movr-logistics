@@ -1,6 +1,6 @@
 import { logout } from "@/app/actions/auth";
 
-export function LogoutButton({ label = "Log out" }: { label?: string }) {
+export function LogoutButton({ label = "Sair" }: { label?: string }) {
   return (
     <form action={logout}>
       <button

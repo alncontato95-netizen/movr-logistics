@@ -11,13 +11,13 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "MOVR Logistics",
+  title: "MOVR Logística",
   description:
-    "Return loads and real partners for transport companies and independent carriers in Southeast Brazil (SP, RJ, MG).",
+    "Cargas de retorno e parceiros de verdade para transportadoras e transportadores autônomos no Sudeste do Brasil (SP, RJ, MG).",
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  let lang = "en";
+  let lang = "pt";
   try {
     const store = await cookies();
     lang = resolveLocale(store.get(LOCALE_COOKIE)?.value);

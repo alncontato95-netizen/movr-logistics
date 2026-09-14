@@ -6,7 +6,7 @@ import type { LoadStatus } from "@/lib/constants";
 
 const LoadsOverviewMap = dynamic(
   () => import("@/components/loads-overview-map").then((mod) => mod.LoadsOverviewMap),
-  { ssr: false, loading: () => <div className="flex h-[420px] items-center justify-center rounded-[var(--radius-card)] border border-border text-sm text-muted">Loading map…</div> }
+  { ssr: false, loading: () => <div className="flex h-[420px] items-center justify-center rounded-[var(--radius-card)] border border-border text-sm text-muted">Carregando mapa…</div> }
 );
 
 type LoadLite = {

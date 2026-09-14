@@ -51,7 +51,7 @@ export default async function CarrierHistoryPage({ params }: { params: Promise<{
   return (
     <div className="mx-auto max-w-2xl space-y-5">
       <Link href="/company/loads" className="text-sm font-medium text-muted hover:text-ink">
-        ← Back to your loads
+        ← Voltar para suas cargas
       </Link>
 
       <section className="rounded-2xl border border-black/8 bg-white p-6">
@@ -65,12 +65,12 @@ export default async function CarrierHistoryPage({ params }: { params: Promise<{
               {carrier.carrierVerified ? <Badge tone="green">Habilitação verificada</Badge> : <Badge tone="neutral">Sem habilitação</Badge>}
             </div>
             <p className="mt-1 text-sm text-muted">
-              Carrier on MOVR since {formatDateTime(carrier.createdAt, locale)}
+              Transportador na MOVR desde {formatDateTime(carrier.createdAt, locale)}
             </p>
             <div className="mt-2 flex flex-wrap gap-1.5">
               {carrier.vehicleType && <Badge>{VEHICLE_LABELS[carrier.vehicleType as VehicleType]}</Badge>}
-              {carrier.currentRegion && <Badge>Based in {carrier.currentRegion}</Badge>}
-              {regions.length > 0 && <Badge tone="brand">Serves {regions.join(", ")}</Badge>}
+              {carrier.currentRegion && <Badge>Baseado em {carrier.currentRegion}</Badge>}
+              {regions.length > 0 && <Badge tone="brand">Atende {regions.join(", ")}</Badge>}
             </div>
           </div>
         </div>
@@ -116,16 +116,16 @@ export default async function CarrierHistoryPage({ params }: { params: Promise<{
 
         {workedWith ? (
           <div className="mt-5 rounded-xl bg-brand-light/60 p-3 text-sm">
-            <p className="font-semibold text-brand-dark">Contact details</p>
-            {carrier.phone && <p className="mt-1 break-words text-ink">Phone: {carrier.phone}</p>}
-            <p className="break-all text-ink">Email: {carrier.email}</p>
+            <p className="font-semibold text-brand-dark">Dados de contato</p>
+            {carrier.phone && <p className="mt-1 break-words text-ink">Telefone: {carrier.phone}</p>}
+            <p className="break-all text-ink">E-mail: {carrier.email}</p>
             <p className="mt-1 text-xs text-muted">
-              You worked together on {workedWith.load.origin} → {workedWith.load.destination}.
+              Vocês trabalharam juntos em {workedWith.load.origin} → {workedWith.load.destination}.
             </p>
           </div>
         ) : (
           <p className="mt-5 rounded-xl bg-black/[0.04] p-3 text-xs text-muted">
-            Contact details are shown after you select this carrier for a load.
+            Os dados de contato são exibidos após você selecionar este transportador para uma carga.
           </p>
         )}
       </section>

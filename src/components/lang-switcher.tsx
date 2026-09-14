@@ -32,7 +32,7 @@ export async function LangSwitcher() {
           </svg>
         </summary>
         <div className="absolute right-0 z-30 mt-2 min-w-[160px] rounded-[var(--radius-card)] border border-border bg-surface-strong p-1 shadow-[var(--shadow-card)]">
-          <p className="px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-muted">Language</p>
+          <p className="px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-muted">Idioma</p>
           <div className="mt-1 flex flex-col gap-0.5">
             {LOCALES.map((code) => (
               <button

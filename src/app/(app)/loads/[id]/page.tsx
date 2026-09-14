@@ -52,18 +52,18 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
     <div className="mx-auto max-w-2xl space-y-5">
       <PollRefresh intervalMs={10000} />
       <Link href="/loads" className="text-sm font-medium text-muted hover:text-ink">
-        ← Back to loads
+        ← Voltar para cargas
       </Link>
 
       {applied && appliedPending && (
         <div className="rounded-2xl bg-brand-light p-4 text-sm font-semibold text-brand-dark">
-          Interest sent. The company will review all applications and select their carrier.
+          Interesse enviado. A empresa vai analisar as candidaturas e selecionar o transportador.
         </div>
       )}
 
       {podError && (
         <div className="rounded-2xl bg-error-light p-4 text-sm font-semibold text-error">
-          POD upload failed. Use a JPG/PNG/WebP image or PDF up to 5MB, or a valid https:// link.
+          Falha no envio do comprovante. Use imagem JPG/PNG/WebP ou PDF de até 5MB, ou um link https:// válido.
         </div>
       )}
 
@@ -75,25 +75,25 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
 
       {accepted && (
         <div className="rounded-2xl bg-success-light p-4 text-sm font-semibold text-success-700">
-          Offer accepted. The company will confirm the booking.
+          Proposta aceita. A empresa vai confirmar a reserva.
         </div>
       )}
 
       {declined && (
         <div className="rounded-2xl bg-error-light p-4 text-sm font-semibold text-error-700">
-          You declined the offer. This load is open for other carriers.
+          Você recusou a proposta. Esta carga está aberta para outros transportadores.
         </div>
       )}
 
       {pickedUp && (
         <div className="rounded-2xl bg-info-50 p-4 text-sm font-semibold text-info-800">
-          Pickup confirmed. The load is on its way.
+          Coleta confirmada. A carga está a caminho.
         </div>
       )}
 
       {delivered && (
         <div className="rounded-2xl bg-success-light p-4 text-sm font-semibold text-success-700">
-          Delivery confirmed. Awaiting company confirmation.
+          Entrega confirmada. Aguardando confirmação da empresa.
         </div>
       )}
 
@@ -104,20 +104,20 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
           </h1>
           <LoadStatusBadge status={load.status} locale={locale} />
         </div>
-        <p className="mt-1 text-muted">Pickup {formatDate(load.pickupDate)}</p>
+        <p className="mt-1 text-muted">Coleta {formatDate(load.pickupDate)}</p>
 
         <dl className="mt-6 space-y-3 text-sm">
-          <Row label="Cargo type" value={CARGO_LABELS[load.cargoType]} />
-          <Row label="Weight" value={`${load.weightKg} kg${load.volumeM3 ? ` · ${load.volumeM3} m³` : ""}`} />
+          <Row label="Tipo de carga" value={CARGO_LABELS[load.cargoType]} />
+          <Row label="Peso" value={`${load.weightKg} kg${load.volumeM3 ? ` · ${load.volumeM3} m³` : ""}`} />
           {load.requiredVehicle ? (
-            <Row label="Required vehicle" value={VEHICLE_LABELS[load.requiredVehicle]} />
+            <Row label="Veículo necessário" value={VEHICLE_LABELS[load.requiredVehicle]} />
           ) : (
-            <Row label="Required vehicle" value="Any" />
+            <Row label="Veículo necessário" value="Qualquer" />
           )}
-          {load.priceEur ? <Row label="Offered price" value={formatMoney(load.priceEur)} /> : null}
-          <Row label="Pricing" value={load.priceNegotiable ? "Negotiable" : "Fixed"} />
-          {load.pickupWindow ? <Row label="Pickup window" value={load.pickupWindow} /> : null}
-          {load.notes ? <Row label="Notes" value={load.notes} /> : null}
+          {load.priceEur ? <Row label="Preço ofertado" value={formatMoney(load.priceEur)} /> : null}
+          <Row label="Preço" value={load.priceNegotiable ? "Negociável" : "Fixo"} />
+          {load.pickupWindow ? <Row label="Janela de coleta" value={load.pickupWindow} /> : null}
+          {load.notes ? <Row label="Observações" value={load.notes} /> : null}
         </dl>
       </div>
 
@@ -142,7 +142,7 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
       </div>
 
       <div className="rounded-2xl border border-black/8 bg-white p-6">
-        <p className="text-sm font-semibold text-muted">Published by</p>
+        <p className="text-sm font-semibold text-muted">Publicado por</p>
         <p className="mt-1 font-semibold text-ink">{load.company.user.name}</p>
         {load.company.name && <p className="text-sm text-muted">{load.company.name}</p>}
         {myApplication &&
@@ -152,17 +152,17 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
             load.status === "PICKED_UP" ||
             load.status === "DELIVERED") && (
             <div className="mt-3 rounded-xl bg-brand-light/60 p-3 text-sm">
-              <p className="font-semibold text-brand-dark">Contact details</p>
-              {load.company.phone && <p className="mt-1 break-words text-ink">Phone: {load.company.phone}</p>}
-              {load.company.user.email && <p className="break-all text-ink">Email: {load.company.user.email}</p>}
-              <p className="mt-1 text-xs text-muted">Contact to arrange pickup — they&apos;re expecting to hear from you about this load.</p>
+              <p className="font-semibold text-brand-dark">Dados de contato</p>
+              {load.company.phone && <p className="mt-1 break-words text-ink">Telefone: {load.company.phone}</p>}
+              {load.company.user.email && <p className="break-all text-ink">E-mail: {load.company.user.email}</p>}
+              <p className="mt-1 text-xs text-muted">Entre em contato para combinar a coleta — a empresa aguarda seu contato sobre esta carga.</p>
             </div>
           )}
       </div>
 
       {load.podUrl && (
         <div className="rounded-2xl border border-success-200 bg-success-light p-4">
-          <p className="font-semibold text-success-700">Proof of delivery</p>
+          <p className="font-semibold text-success-700">Comprovante de entrega</p>
           <a href={load.podUrl} target="_blank" rel="noopener noreferrer" className="break-all text-sm text-success-700 underline">
             {load.podUrl}
           </a>
@@ -172,7 +172,7 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
 
       {load.status === "COMPLETED" && rating && (
         <div className="rounded-2xl border border-black/8 bg-white p-4 text-center">
-          <p className="font-semibold text-ink">Your rating: ★ {rating.score}</p>
+          <p className="font-semibold text-ink">Sua avaliação: ★ {rating.score}</p>
           {rating.comment && <p className="mt-1 text-sm text-muted">{rating.comment}</p>}
         </div>
       )}
@@ -185,7 +185,7 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
         {myApplication?.status === "SELECTED" ? (
           <div className="space-y-2">
             <p className="rounded-xl bg-warning-50 p-3 text-center text-sm font-semibold text-warning-800">
-              The company selected you for this load. Accept the offer to book it.
+              A empresa selecionou você para esta carga. Aceite a proposta para reservá-la.
             </p>
             <div className="flex gap-2">
               <form action={declineOffer} className="flex-1">
@@ -194,7 +194,7 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
                   type="submit"
                   className="w-full rounded-xl border border-black/10 bg-white py-3.5 text-sm font-semibold text-ink hover:border-error-400 hover:text-error-600"
                 >
-                  Decline
+                  Recusar
                 </button>
               </form>
               <form action={acceptOffer} className="flex-1">
@@ -203,7 +203,7 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
                   type="submit"
                   className="w-full rounded-xl bg-brand py-3.5 text-sm font-bold text-white shadow-lg shadow-brand/30 hover:bg-brand-dark"
                 >
-                  Accept offer
+                  Aceitar proposta
                 </button>
               </form>
             </div>
@@ -240,7 +240,7 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
               type="submit"
               className="w-full rounded-xl bg-brand py-3.5 text-sm font-bold text-white shadow-lg shadow-brand/30 hover:bg-brand-dark"
             >
-              Confirm delivery
+              Confirmar entrega
             </button>
           </form>
         ) : appliedPending ? (
@@ -250,7 +250,7 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
               type="submit"
               className="w-full rounded-xl border border-black/10 bg-white py-3.5 text-sm font-semibold text-ink hover:border-error-400 hover:text-error-600"
             >
-              Withdraw interest
+              Retirar interesse
             </button>
           </form>
         ) : canApply ? (
@@ -260,21 +260,21 @@ export default async function LoadDetailPage({ params, searchParams }: { params:
               type="submit"
               className="w-full rounded-xl bg-brand py-3.5 text-sm font-bold text-white shadow-lg shadow-brand/30 hover:bg-brand-dark"
             >
-              Show interest in this load
+              Demonstrar interesse nesta carga
             </button>
           </form>
         ) : (
           <div className="rounded-xl bg-black/5 py-3.5 text-center text-sm font-semibold text-muted">
             {myApplication?.status === "ACCEPTED" && load.status === "DELIVERED" ? (
-              <Badge tone="green">Delivered — awaiting company confirmation</Badge>
+              <Badge tone="green">Entregue — aguardando confirmação da empresa</Badge>
             ) : myApplication?.status === "ACCEPTED" ? (
-              <Badge tone="green">Offer accepted — the company can now confirm the booking</Badge>
+              <Badge tone="green">Proposta aceita — a empresa já pode confirmar a reserva</Badge>
             ) : myApplication?.status === "DECLINED" ? (
-              <Badge tone="red">You declined this offer — it&apos;s open for other carriers</Badge>
+              <Badge tone="red">Você recusou esta proposta — está aberta para outros transportadores</Badge>
             ) : myApplication?.status === "REJECTED" ? (
-              <Badge tone="red">Not selected for this load</Badge>
+              <Badge tone="red">Não selecionado para esta carga</Badge>
             ) : (
-              <Badge>Not open for applications</Badge>
+              <Badge>Não está aberta para candidaturas</Badge>
             )}
           </div>
         )}

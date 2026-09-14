@@ -49,7 +49,7 @@ export async function updateCarrierProfile(_state: ProfileState, formData: FormD
   });
 
   revalidatePath("/profile");
-  return { message: "Profile updated." };
+  return { message: "Perfil atualizado." };
 }
 
 export async function updateCompanyProfile(_state: ProfileState, formData: FormData): Promise<ProfileState> {
@@ -79,7 +79,7 @@ export async function updateCompanyProfile(_state: ProfileState, formData: FormD
   }
 
   revalidatePath("/company/settings");
-  return { message: "Business details saved." };
+  return { message: "Dados empresariais salvos." };
 }
 
 async function findCompany(userId: string) {

@@ -12,7 +12,7 @@ export function LoginForm({ t }: { t: Messages["auth"] }) {
     <form action={action} className="space-y-4">
       <div>
         <Label htmlFor="email">{t.email}</Label>
-        <Input id="email" name="email" type="email" autoComplete="email" placeholder="you@example.com" />
+        <Input id="email" name="email" type="email" autoComplete="email" placeholder="seu@email.com" />
       </div>
       <div>
         <Label htmlFor="password">{t.password}</Label>

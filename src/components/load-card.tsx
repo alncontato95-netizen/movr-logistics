@@ -39,7 +39,7 @@ export function LoadCard({
         <Badge>{cargoLabels[load.cargoType]}</Badge>
         <Badge>{load.weightKg} kg</Badge>
         {load.requiredVehicle && <Badge>{vehicleLabels[load.requiredVehicle]}</Badge>}
-        {load.priceEur ? <Badge tone="green">{formatMoney(load.priceEur, locale)}</Badge> : <Badge>Price negotiable</Badge>}
+        {load.priceEur ? <Badge tone="green">{formatMoney(load.priceEur, locale)}</Badge> : <Badge>Preço negociável</Badge>}
       </div>
 
       {matchLabel && (

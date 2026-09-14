@@ -26,12 +26,12 @@ export default async function LoadsPage() {
   const listContent =
     compatible.length === 0 ? (
       <div className="rounded-2xl border border-dashed border-black/15 p-10 text-center text-sm text-muted">
-        No compatible loads right now. Check back soon or widen the regions you serve.
+        Nenhuma carga compatível no momento. Volte em breve ou amplie as regiões que você atende.
       </div>
     ) : (
       <div className="grid gap-3">
         {compatible.map((load) => (
-          <LoadCard key={load.id} load={load} href={`/loads/${load.id}`} matchLabel="Compatible with you" locale={locale} />
+          <LoadCard key={load.id} load={load} href={`/loads/${load.id}`} matchLabel="Compatível com você" locale={locale} />
         ))}
       </div>
     );
@@ -41,44 +41,44 @@ export default async function LoadsPage() {
       <PollRefresh intervalMs={15000} />
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-ink">Loads for you</h1>
+          <h1 className="text-2xl font-bold text-ink">Cargas para você</h1>
           <p className="mt-1 text-sm text-muted">
-            {compatible.length} compatible {compatible.length === 1 ? "load" : "loads"} right now.
+            {compatible.length} {compatible.length === 1 ? "carga compatível" : "cargas compatíveis"} agora.
           </p>
         </div>
         <ButtonLink href="/profile" variant="secondary">
-          Edit profile
+          Editar perfil
         </ButtonLink>
       </div>
 
       {incomplete && (
         <div className="rounded-2xl border border-brand/30 bg-brand-light p-4 text-sm text-brand-dark">
-          <p className="font-semibold">Finish your profile to see matching loads.</p>
-          <p className="mt-1">Add your vehicle type and home region to get started.</p>
+          <p className="font-semibold">Complete seu perfil para ver cargas compatíveis.</p>
+          <p className="mt-1">Adicione o tipo do seu veículo e sua região de origem para começar.</p>
           <div className="mt-3">
-            <ButtonLink href="/profile">Complete profile</ButtonLink>
+            <ButtonLink href="/profile">Completar perfil</ButtonLink>
           </div>
         </div>
       )}
 
       {!user.available && (
         <div className="rounded-2xl border border-warning-300 bg-warning-50 p-4 text-sm text-warning-800">
-          <p className="font-semibold">You&apos;re currently marked unavailable.</p>
-          <p className="mt-1">Enable &quot;Available for loads now&quot; on your profile to be matched with new loads.</p>
+          <p className="font-semibold">Você está marcado como indisponível no momento.</p>
+          <p className="mt-1">Ative &quot;Disponível para cargas agora&quot; no seu perfil para ser combinado com novas cargas.</p>
           <div className="mt-3">
-            <ButtonLink href="/profile" variant="secondary">Mark available</ButtonLink>
+            <ButtonLink href="/profile" variant="secondary">Marcar como disponível</ButtonLink>
           </div>
         </div>
       )}
 
       {serves.length === 0 ? (
         <div className="rounded-2xl border border-warning-200 bg-warning-50 p-6 text-center">
-          <p className="font-semibold text-warning-800">Complete your profile to see available loads</p>
+          <p className="font-semibold text-warning-800">Complete seu perfil para ver cargas disponíveis</p>
           <p className="mt-1 text-sm text-warning-700">
-            Select the regions you serve in your profile so we can show you loads that match your routes.
+            Selecione as regiões que você atende no seu perfil para mostrarmos cargas compatíveis com suas rotas.
           </p>
           <div className="mt-4">
-            <ButtonLink href="/profile">Go to profile</ButtonLink>
+            <ButtonLink href="/profile">Ir para o perfil</ButtonLink>
           </div>
         </div>
       ) : (

@@ -141,7 +141,7 @@ export default async function HomePage() {
         <footer className="border-t border-border px-4 py-6 text-center">
           <div className="flex items-center justify-center gap-2">
             <span className="h-px w-6 bg-brand/40" aria-hidden />
-            <span className="text-sm font-semibold tracking-[0.2em] text-muted">MOVR LOGISTICS — São Paulo, Rio de Janeiro, Minas Gerais</span>
+            <span className="text-sm font-semibold tracking-[0.2em] text-muted">MOVR LOGÍSTICA — São Paulo, Rio de Janeiro, Minas Gerais</span>
             <span className="h-px w-6 bg-brand/40" aria-hidden />
           </div>
         </footer>

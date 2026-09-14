@@ -22,7 +22,7 @@ export default async function CompanyDashboardPage() {
         <h1 className="text-2xl font-bold text-ink">{t.dashboard.title}</h1>
         <p className="text-sm text-muted">{t.dashboard.subtitle}</p>
         <Card>
-          <p className="text-sm text-muted">Please set up your business details first.</p>
+          <p className="text-sm text-muted">Configure seus dados empresariais primeiro.</p>
           <Link href="/company/settings" className="mt-3 inline-block text-sm font-semibold text-brand underline">
             {t.nav.business}
           </Link>
@@ -83,7 +83,7 @@ export default async function CompanyDashboardPage() {
               <p className="mt-1 text-xs font-medium text-muted">{statusLabels[s]}</p>
               <div className="mt-2 flex justify-center">
                 <Badge tone={s === "OPEN" ? "brand" : s === "SELECTED" ? "amber" : s === "CONFIRMED" || s === "PICKED_UP" ? "blue" : s === "DELIVERED" ? "green" : "neutral"}>
-                  {s}
+                  {statusLabels[s]}
                 </Badge>
               </div>
             </Card>
@@ -114,7 +114,7 @@ export default async function CompanyDashboardPage() {
                       <p className="truncate text-sm font-medium text-ink">{n.message}</p>
                       <p className="mt-0.5 text-xs text-muted">{formatMonthDay(n.createdAt, locale)}</p>
                     </div>
-                    {!n.read && <span className="rounded-full bg-brand px-2 py-0.5 text-xs font-semibold text-white">New</span>}
+                    {!n.read && <span className="rounded-full bg-brand px-2 py-0.5 text-xs font-semibold text-white">Nova</span>}
                   </li>
                 ))}
               </ul>

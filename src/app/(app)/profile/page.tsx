@@ -19,21 +19,21 @@ export default async function ProfilePage() {
   return (
     <div className="mx-auto max-w-lg space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-ink">Your profile</h1>
+        <h1 className="text-2xl font-bold text-ink">Seu perfil</h1>
         <p className="mt-1 text-sm text-muted">
-          Hi {user.name.split(" ")[0]} — tell us about your truck so we can match you with the right loads.
+          Olá {user.name.split(" ")[0]} — conte-nos sobre seu veículo para combinarmos cargas compatíveis.
         </p>
       </div>
 
       {incomplete && (
         <div className="rounded-2xl bg-brand-light p-4 text-sm text-brand-dark">
-          Complete your profile to start seeing compatible loads.
+          Complete seu perfil para começar a ver cargas compatíveis.
         </div>
       )}
 
       {!user.licenseUrl && (
         <div className="rounded-2xl border border-warning-200 bg-warning-50 p-4 text-sm text-warning-800">
-          Add your habilitação (C/E + Code 95) to earn the verified badge for high-value loads — optional now, soft trust signal.
+          Adicione sua habilitação (C/E) para conquistar o selo de verificado em cargas de alto valor — opcional por enquanto, sinal suave de confiança.
         </div>
       )}
 
@@ -111,19 +111,19 @@ export default async function ProfilePage() {
       <Card className="bg-transparent shadow-none border-0 space-y-1.5">
         <p className="text-sm text-muted">
           {user.vehicleType ? (
-            <>Vehicle: <span className="font-semibold text-ink">{VEHICLE_LABELS[user.vehicleType]}</span></>
+            <>Veículo: <span className="font-semibold text-ink">{VEHICLE_LABELS[user.vehicleType]}</span></>
           ) : (
-            "No vehicle selected yet."
+            "Nenhum veículo selecionado ainda."
           )}
         </p>
         {user.vehiclePlate && (
           <p className="text-sm text-muted">
-            Plate: <span className="font-semibold text-ink">{user.vehiclePlate}</span>
+            Placa: <span className="font-semibold text-ink">{user.vehiclePlate}</span>
           </p>
         )}
         {user.phone && (
           <p className="text-sm text-muted">
-            Phone: <span className="font-semibold text-ink">{user.phone}</span>
+            Telefone: <span className="font-semibold text-ink">{user.phone}</span>
           </p>
         )}
       </Card>

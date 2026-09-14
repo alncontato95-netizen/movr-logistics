@@ -17,10 +17,10 @@ export function LoadForm({ load, action: actionProp }: { load?: LoadFormLoad; ac
     <form action={action} className="space-y-5">
       {load && <input type="hidden" name="loadId" value={load.id} />}
       <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Origin" error={state?.errors?.origin?.[0]}>
+        <Field label="Origem" error={state?.errors?.origin?.[0]}>
           <Select name="origin" defaultValue={load?.origin ?? ""}>
             <option value="" disabled>
-              Select origin
+              Selecione a origem
             </option>
             {REGIONS.map((r) => (
               <option key={r} value={r}>
@@ -29,10 +29,10 @@ export function LoadForm({ load, action: actionProp }: { load?: LoadFormLoad; ac
             ))}
           </Select>
         </Field>
-        <Field label="Destination" error={state?.errors?.destination?.[0]}>
+        <Field label="Destino" error={state?.errors?.destination?.[0]}>
           <Select name="destination" defaultValue={load?.destination ?? ""}>
             <option value="" disabled>
-              Select destination
+              Selecione o destino
             </option>
             {REGIONS.map((r) => (
               <option key={r} value={r}>
@@ -44,19 +44,19 @@ export function LoadForm({ load, action: actionProp }: { load?: LoadFormLoad; ac
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Pickup date" error={state?.errors?.pickupDate?.[0]}>
+        <Field label="Data de coleta" error={state?.errors?.pickupDate?.[0]}>
           <Input name="pickupDate" type="date" defaultValue={pickupDateValue} />
         </Field>
-        <Field label="Pickup window (optional)" error={state?.errors?.pickupWindow?.[0]}>
-          <Input name="pickupWindow" defaultValue={load?.pickupWindow ?? ""} placeholder="e.g. 08:00 – 12:00" />
+        <Field label="Janela de coleta (opcional)" error={state?.errors?.pickupWindow?.[0]}>
+          <Input name="pickupWindow" defaultValue={load?.pickupWindow ?? ""} placeholder="ex.: 08:00 – 12:00" />
         </Field>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
-        <Field label="Cargo type" error={state?.errors?.cargoType?.[0]}>
+        <Field label="Tipo de carga" error={state?.errors?.cargoType?.[0]}>
           <Select name="cargoType" defaultValue={load?.cargoType ?? ""}>
             <option value="" disabled>
-              Select
+              Selecionar
             </option>
             {CARGO_TYPES.map((c) => (
               <option key={c} value={c}>
@@ -65,17 +65,17 @@ export function LoadForm({ load, action: actionProp }: { load?: LoadFormLoad; ac
             ))}
           </Select>
         </Field>
-        <Field label="Weight (kg)" error={state?.errors?.weightKg?.[0]}>
-          <Input name="weightKg" type="number" min="1" placeholder="e.g. 1200" defaultValue={load?.weightKg ?? ""} />
+        <Field label="Peso (kg)" error={state?.errors?.weightKg?.[0]}>
+          <Input name="weightKg" type="number" min="1" placeholder="ex.: 1200" defaultValue={load?.weightKg ?? ""} />
         </Field>
-        <Field label="Volume (m³) (optional)" error={state?.errors?.volumeM3?.[0]}>
-          <Input name="volumeM3" type="number" min="0" step="0.1" placeholder="e.g. 12" defaultValue={load?.volumeM3 ?? ""} />
+        <Field label="Volume (m³) (opcional)" error={state?.errors?.volumeM3?.[0]}>
+          <Input name="volumeM3" type="number" min="0" step="0.1" placeholder="ex.: 12" defaultValue={load?.volumeM3 ?? ""} />
         </Field>
       </div>
 
-      <Field label="Required vehicle (optional)" error={state?.errors?.requiredVehicle?.[0]}>
+      <Field label="Veículo necessário (opcional)" error={state?.errors?.requiredVehicle?.[0]}>
         <Select name="requiredVehicle" defaultValue={load?.requiredVehicle ?? ""}>
-          <option value="">Any vehicle</option>
+          <option value="">Qualquer veículo</option>
           {VEHICLE_TYPES.map((v) => (
             <option key={v} value={v}>
               {VEHICLE_LABELS[v]}
@@ -85,24 +85,24 @@ export function LoadForm({ load, action: actionProp }: { load?: LoadFormLoad; ac
       </Field>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Offered price (R$) (optional)" error={state?.errors?.priceEur?.[0]}>
-          <Input name="priceEur" type="number" min="0" placeholder="e.g. 3500" defaultValue={load?.priceEur ?? ""} />
+        <Field label="Preço ofertado (R$) (opcional)" error={state?.errors?.priceEur?.[0]}>
+          <Input name="priceEur" type="number" min="0" placeholder="ex.: 3500" defaultValue={load?.priceEur ?? ""} />
         </Field>
         <div className="flex items-end pb-2">
           <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-black/10 px-4 py-3 text-sm text-ink">
             <input type="checkbox" name="priceNegotiable" defaultChecked={load ? load.priceNegotiable : true} className="h-4 w-4 accent-brand" />
-            Price is negotiable
+            O preço é negociável
           </label>
         </div>
       </div>
 
-      <Field label="Notes (optional)" error={state?.errors?.notes?.[0]}>
-        <Textarea name="notes" rows={3} placeholder="Anything carriers should know…" defaultValue={load?.notes ?? ""} />
+      <Field label="Observações (opcional)" error={state?.errors?.notes?.[0]}>
+        <Textarea name="notes" rows={3} placeholder="Algo que os transportadores devam saber…" defaultValue={load?.notes ?? ""} />
       </Field>
 
       {state?.message && <p className="text-sm text-error">{state.message}</p>}
       <Button type="submit" disabled={pending} className="w-full py-3">
-        {pending ? (load ? "Saving…" : "Publishing…") : load ? "Save changes" : "Publish load"}
+        {pending ? (load ? "Salvando…" : "Publicando…") : load ? "Salvar alterações" : "Publicar carga"}
       </Button>
     </form>
   );

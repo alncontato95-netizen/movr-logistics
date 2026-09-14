@@ -32,10 +32,10 @@ export function CarrierProfileForm({
 
   return (
     <form action={action} className="space-y-5">
-      <Field label="Vehicle type" error={state?.errors?.vehicleType?.[0]}>
+      <Field label="Tipo de veículo" error={state?.errors?.vehicleType?.[0]}>
         <Select name="vehicleType" defaultValue={initial.vehicleType ?? ""}>
           <option value="" disabled>
-            Select your vehicle
+            Selecione seu veículo
           </option>
           {VEHICLE_TYPES.map((v) => (
             <option key={v} value={v}>
@@ -45,22 +45,22 @@ export function CarrierProfileForm({
         </Select>
       </Field>
 
-      <Field label="Vehicle plate" error={state?.errors?.vehiclePlate?.[0]}>
-        <Input name="vehiclePlate" defaultValue={initial.vehiclePlate ?? ""} placeholder="e.g. ABC-1D23" />
+      <Field label="Placa do veículo" error={state?.errors?.vehiclePlate?.[0]}>
+        <Input name="vehiclePlate" defaultValue={initial.vehiclePlate ?? ""} placeholder="ex.: ABC-1D23" />
       </Field>
 
-      <Field label="Professional license" error={state?.errors?.professionalLicense?.[0]}>
-        <Input name="professionalLicense" defaultValue={initial.professionalLicense ?? ""} placeholder="e.g. 01234567890" />
+      <Field label="Licença profissional" error={state?.errors?.professionalLicense?.[0]}>
+        <Input name="professionalLicense" defaultValue={initial.professionalLicense ?? ""} placeholder="ex.: 01234567890" />
       </Field>
 
       <div className="rounded-xl border border-brand/10 bg-brand-light/30 p-3">
-        <p className="text-sm font-semibold text-brand-dark">Habilitação (C/E + Code 95) — for high-value loads</p>
-        <p className="text-xs text-muted">Add a link to your license document (Drive, etc.). Manual verification via Studio.</p>
+        <p className="text-sm font-semibold text-brand-dark">Habilitação (C/E) — para cargas de alto valor</p>
+        <p className="text-xs text-muted">Adicione um link para o documento da sua habilitação (Drive etc.). Verificação manual via Studio.</p>
         <div className="mt-3 space-y-3">
-          <Field label="License document URL" error={state?.errors?.licenseUrl?.[0]}>
+          <Field label="URL do documento da habilitação" error={state?.errors?.licenseUrl?.[0]}>
             <Input name="licenseUrl" type="url" defaultValue={initial.licenseUrl ?? ""} placeholder="https://drive.google.com/..." />
           </Field>
-          <Field label="License expiry" error={state?.errors?.licenseExpiry?.[0]}>
+          <Field label="Validade da habilitação" error={state?.errors?.licenseExpiry?.[0]}>
             <Input name="licenseExpiry" type="date" defaultValue={initial.licenseExpiry ?? ""} />
           </Field>
           {initial.carrierVerified ? (
@@ -68,7 +68,7 @@ export function CarrierProfileForm({
           ) : initial.licenseUrl ? (
             <p className="text-xs text-warning-700">Enviado — aguardando verificação manual.</p>
           ) : (
-            <p className="text-xs text-muted">Optional now, required for high-value loads trust badge.</p>
+            <p className="text-xs text-muted">Opcional por enquanto; obrigatória para o selo de confiança em cargas de alto valor.</p>
           )}
         </div>
       </div>
@@ -87,14 +87,14 @@ export function CarrierProfileForm({
         </div>
       </div>
 
-      <Field label="Phone number" error={state?.errors?.phone?.[0]}>
+      <Field label="Número de telefone" error={state?.errors?.phone?.[0]}>
         <Input name="phone" type="tel" defaultValue={initial.phone ?? ""} placeholder="(11) 98765-4321" />
       </Field>
 
-      <Field label="Home region" error={state?.errors?.currentRegion?.[0]}>
+      <Field label="Região de origem" error={state?.errors?.currentRegion?.[0]}>
         <Select name="currentRegion" defaultValue={initial.currentRegion ?? ""}>
           <option value="" disabled>
-            Select your home region
+            Selecione sua região de origem
           </option>
           {REGIONS.map((r) => (
             <option key={r} value={r}>
@@ -104,7 +104,7 @@ export function CarrierProfileForm({
         </Select>
       </Field>
 
-      <Field label="Regions you serve" error={state?.errors?.acceptsRegions?.[0]}>
+      <Field label="Regiões que você atende" error={state?.errors?.acceptsRegions?.[0]}>
         <div className="grid grid-cols-2 gap-2">
           {REGIONS.map((r) => (
             <label
@@ -127,14 +127,14 @@ export function CarrierProfileForm({
       <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-black/10 px-4 py-3 text-sm text-ink">
         <input type="checkbox" name="available" defaultChecked={initial.available} className="h-4 w-4 accent-brand" />
         <span>
-          Available for loads now
-          <span className="block text-xs text-muted">We&apos;ll include your truck in matching.</span>
+          Disponível para cargas agora
+          <span className="block text-xs text-muted">Vamos incluir seu veículo no emparelhamento.</span>
         </span>
       </label>
 
       {state?.message && <p className="text-sm text-brand-dark">{state.message}</p>}
       <Button type="submit" disabled={pending} className="w-full py-3">
-        {pending ? "Saving…" : "Save profile"}
+        {pending ? "Salvando…" : "Salvar perfil"}
       </Button>
     </form>
   );
