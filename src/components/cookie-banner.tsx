@@ -1,17 +1,35 @@
 "use client";
 
-import { useState } from "react";
+import { useSyncExternalStore } from "react";
 import Link from "next/link";
 
+const listeners = new Set<() => void>();
+
+function subscribe(callback: () => void) {
+  listeners.add(callback);
+  return () => {
+    listeners.delete(callback);
+  };
+}
+
+function getSnapshot() {
+  try {
+    return !localStorage.getItem("movr_cookie_consent");
+  } catch {
+    return true;
+  }
+}
+
+function getServerSnapshot() {
+  return false;
+}
+
+function consentChanged() {
+  for (const listener of listeners) listener();
+}
+
 export function CookieBanner() {
-  const [visible, setVisible] = useState(() => {
-    if (typeof window === "undefined") return false;
-    try {
-      return !localStorage.getItem("movr_cookie_consent");
-    } catch {
-      return true;
-    }
-  });
+  const visible = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   if (!visible) return null;
 
@@ -19,7 +37,7 @@ export function CookieBanner() {
     try {
       localStorage.setItem("movr_cookie_consent", "accepted");
     } catch {}
-    setVisible(false);
+    consentChanged();
   };
 
   return (

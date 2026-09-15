@@ -3,16 +3,19 @@ import { LogoutButton } from "@/components/logout-button";
 import { NotificationBell } from "@/components/notification-bell";
 import { MobileNav } from "@/components/mobile-nav";
 import { Navbar } from "@/components/navbar";
+import { FirstRunGuide } from "@/components/first-run-guide";
 import { getDictionary, getLocale } from "@/lib/i18n";
 
 export async function AppShell({
   user,
   unread,
   children,
+  showGuide,
 }: {
   user: { role: "CARRIER" | "COMPANY"; name: string };
   unread: number;
   children: React.ReactNode;
+  showGuide?: boolean;
 }) {
   const locale = await getLocale();
   const t = getDictionary(locale);
@@ -50,6 +53,7 @@ export async function AppShell({
         </div>
       </Navbar>
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 pb-16">{children}</main>
+      {showGuide && <FirstRunGuide role={user.role} t={t.guide} />}
     </div>
   );
 }

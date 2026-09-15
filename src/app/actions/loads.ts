@@ -11,6 +11,19 @@ import { isCompatible } from "@/lib/matching";
 import { canConfirmPickup } from "@/lib/schedule";
 import { rateLimit } from "@/lib/rate-limit";
 import { createAuditEvent } from "@/lib/audit";
+import type { Load } from "@/generated/prisma/client";
+
+function loadTermsSnapshot(load: Load): Record<string, unknown> {
+  return {
+    origin: load.origin,
+    destination: load.destination,
+    cargoType: load.cargoType,
+    weightKg: load.weightKg,
+    requiredVehicle: load.requiredVehicle,
+    priceEur: load.priceEur,
+    pickupDate: load.pickupDate.toISOString(),
+  };
+}
 
 export type LoadState = { errors?: Record<string, string[] | undefined>; message?: string } | undefined;
 
@@ -443,7 +456,12 @@ export async function selectTransporter(formData: FormData) {
         entityId: loadId,
         eventType: "CARRIER_SELECTED",
         actorUserId: user.id,
-        metadata: { previousStatus: "OPEN", newStatus: "SELECTED", carrierUserId: application.transporterId },
+        metadata: {
+          previousStatus: "OPEN",
+          newStatus: "SELECTED",
+          carrierUserId: application.transporterId,
+          terms: loadTermsSnapshot(freshLoad),
+        },
       });
     });
   } catch {
@@ -734,12 +752,16 @@ export async function updateLoadStatus(formData: FormData) {
         if (!acc) throw new Error("Nenhuma aceitação");
       }
       await tx.load.update({ where: { id: loadId }, data: { status: status as "CONFIRMED" | "COMPLETED" } });
+      const auditMetadata: Record<string, unknown> = { previousStatus: fresh.status, newStatus: status };
+      if (status === "CONFIRMED") {
+        auditMetadata.terms = loadTermsSnapshot(fresh);
+      }
       await createAuditEvent(tx, {
         entityType: "Load",
         entityId: loadId,
         eventType: status === "CONFIRMED" ? "BOOKING_CONFIRMED" : "LOAD_COMPLETED",
         actorUserId: user.id,
-        metadata: { previousStatus: fresh.status, newStatus: status },
+        metadata: auditMetadata,
       });
     });
   } catch {

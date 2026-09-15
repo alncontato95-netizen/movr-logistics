@@ -6,7 +6,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   const user = await getCurrentUser();
   const unread = await unreadCount(user.id);
   return (
-    <AppShell user={{ role: user.role, name: user.name }} unread={unread}>
+    <AppShell user={{ role: user.role, name: user.name }} unread={unread} showGuide={!user.onboardedAt}>
       {children}
     </AppShell>
   );

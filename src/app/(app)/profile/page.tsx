@@ -97,6 +97,7 @@ export default async function ProfilePage() {
             licenseExpiry: licenseExpiryStr,
             carrierVerified: user.carrierVerified,
             rntrc: user.rntrc,
+            cnpj: user.cnpj,
             phone: user.phone,
             currentRegion: user.currentRegion,
             acceptsRegions,
@@ -105,6 +106,9 @@ export default async function ProfilePage() {
           rntrcLabel={t.profile.rntrcLabel}
           rntrcDescription={t.profile.rntrcDescription}
           rntrcPlaceholder={t.profile.rntrcPlaceholder}
+          cnpjLabel={t.profile.cnpjLabel}
+          cnpjDescription={t.profile.cnpjDescription}
+          cnpjPlaceholder={t.profile.cnpjPlaceholder}
         />
       </Card>
 

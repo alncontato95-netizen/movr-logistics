@@ -88,10 +88,12 @@ export const UserScalarFieldEnum = {
   licenseExpiry: 'licenseExpiry',
   carrierVerified: 'carrierVerified',
   rntrc: 'rntrc',
+  cnpj: 'cnpj',
   currentRegion: 'currentRegion',
   available: 'available',
   acceptsRegions: 'acceptsRegions',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  onboardedAt: 'onboardedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]

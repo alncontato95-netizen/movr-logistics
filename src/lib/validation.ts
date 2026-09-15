@@ -17,6 +17,13 @@ export const loginSchema = z.object({
   password: z.string().min(1, "Digite sua senha").max(72, "Senha muito longa"),
 });
 
+export const cnpj = z
+  .string()
+  .trim()
+  .regex(/^(\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}|\d{14})$/, {
+    message: "Digite um CNPJ válido (00.000.000/0000-00 ou 14 dígitos)",
+  });
+
 export const carrierProfileSchema = z.object({
   vehicleType: z.enum(VEHICLE_TYPES, { message: "Selecione o tipo do seu veículo" }),
   vehiclePlate: z.string().trim().min(2, "Digite a placa do seu veículo").optional().or(z.literal("")),
@@ -38,17 +45,11 @@ export const carrierProfileSchema = z.object({
     .refine((v) => !v || /^\d{1,14}$/.test(v), {
       message: "O RNTRC deve conter apenas números (até 14 dígitos)",
     }),
+  cnpj: cnpj.optional().or(z.literal("")),
   currentRegion: z.enum(REGIONS, { message: "Selecione sua região de origem" }),
   acceptsRegions: z.array(z.enum(REGIONS)).min(1, "Selecione pelo menos uma região que você atende"),
   available: z.boolean().optional().default(true),
 });
-
-const cnpj = z
-  .string()
-  .trim()
-  .regex(/^(\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}|\d{14})$/, {
-    message: "Digite um CNPJ válido (00.000.000/0000-00 ou 14 dígitos)",
-  });
 
 export const companyProfileSchema = z.object({
   name: z.string().trim().min(2, "Digite o nome da sua empresa").max(120, "Nome muito longo"),

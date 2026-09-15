@@ -74,10 +74,12 @@ model User {
   licenseExpiry DateTime?
   carrierVerified Boolean @default(false)
   rntrc String?
+  cnpj String?
   currentRegion String?
   available    Boolean     @default(true)
   acceptsRegions String?
   createdAt    DateTime    @default(now())
+  onboardedAt  DateTime?
   company      Company?
   loads        Load[]      @relation("PublishedLoads")
   applications Application[]
@@ -141,7 +143,7 @@ model Load {
 
 model Rating {
   id         String   @id @default(cuid())
-  loadId     String   @unique
+  loadId     String   @unique(map: "Rating_loadId_key")
   load       Load     @relation(fields: [loadId], references: [id], onDelete: Cascade)
   companyId  String
   company    Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)

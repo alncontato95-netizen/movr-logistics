@@ -164,6 +164,20 @@ export type Messages = {
     rntrcLabel: string;
     rntrcDescription: string;
     rntrcPlaceholder: string;
+    cnpjLabel: string;
+    cnpjDescription: string;
+    cnpjPlaceholder: string;
+  };
+  guide: {
+    title: string;
+    subtitle: string;
+    doCta: string;
+    doneCta: string;
+    closeLabel: string;
+    carrierStepsTitle: string[];
+    carrierStepsBody: string[];
+    companyStepsTitle: string[];
+    companyStepsBody: string[];
   };
 };
 
@@ -204,7 +218,7 @@ const pt: Messages = {
   landing: {
     title: "Cargas de retorno, parceiros de verdade.",
     subtitle:
-      "A MOVR conecta transportadores independentes a empresas locais no Sudeste do Brasil, transformando viagens de retorno vazias em cargas pagas.",
+      "A MOVR conecta transportadores independentes a empresas locais no Sudeste do Brasil, transformando viagens de retorno vazias em cargas pagas. São mais de 5.000 operações já realizadas na Europa — o modelo europeu que agora chega ao Brasil, com a mesma eficiência comprovada.",
     carrierCta: "Sou transportador",
     companyCta: "Sou empresa",
     featureCarrierTitle: "Para transportadores",
@@ -323,6 +337,42 @@ const pt: Messages = {
     rntrcDescription:
       "Número do seu registro de transportador rodoviário de cargas, associado à ANTT. Informar o número não é o mesmo que verificação — a verificação pode ser exigida antes de operar na MOVR.",
     rntrcPlaceholder: "Somente números, até 14 dígitos",
+    cnpjLabel: "CNPJ",
+    cnpjDescription:
+      "CNPJ da sua empresa de transporte. Desde agora a MOVR trabalha apenas com transportadores registrados (pessoa jurídica). Informar o CNPJ não é o mesmo que verificação — a verificação pode ser exigida antes de operar na MOVR.",
+    cnpjPlaceholder: "00.000.000/0000-00",
+  },
+  guide: {
+    title: "Seja bem-vindo(a) à MOVR",
+    subtitle:
+      "Você está a alguns passos de fazer sua primeira carga. Este guia mostra o caminho — comece pelo que fizer sentido para você.",
+    doCta: "Fazer",
+    doneCta: "Entendi, começar",
+    closeLabel: "Fechar",
+    carrierStepsTitle: [
+      "Complete seu perfil",
+      "Veja cargas compatíveis",
+      "Demonstre interesse",
+      "Conclua quando selecionado",
+    ],
+    carrierStepsBody: [
+      "Cadastre seu veículo, placa, habilitação/RNTRC e as regiões que você atende.",
+      "Apenas cargas que cabem no seu veículo e nas suas regiões aparecem para você.",
+      "Candidatar-se não reserva nada: a empresa sempre escolhe o transportador em quem confia.",
+      "Aceite a proposta, confirme a coleta e registre o comprovante de entrega.",
+    ],
+    companyStepsTitle: [
+      "Configure a empresa",
+      "Publique sua 1ª carga",
+      "Escolha o transportador",
+      "Acompanhe e avalie",
+    ],
+    companyStepsBody: [
+      "Preencha CNPJ, endereço e telefone. A verificação é manual pelo fundador.",
+      "Informe origem, destino, data, peso e preço. Em minutos a carga fica visível.",
+      "Receba o interesse, selecione o transportador e só então o contato é revelado.",
+      "Acompanhe do OPEN ao COMPLETED, com comprovante de entrega antes de concluir. Avalie ao final.",
+    ],
   },
 };
 

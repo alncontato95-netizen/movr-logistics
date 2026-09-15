@@ -10,6 +10,9 @@ export function CarrierProfileForm({
   rntrcLabel,
   rntrcDescription,
   rntrcPlaceholder,
+  cnpjLabel,
+  cnpjDescription,
+  cnpjPlaceholder,
 }: {
   initial: {
     vehicleType: string | null;
@@ -19,6 +22,7 @@ export function CarrierProfileForm({
     licenseExpiry: string | null;
     carrierVerified: boolean;
     rntrc: string | null;
+    cnpj: string | null;
     phone: string | null;
     currentRegion: string | null;
     acceptsRegions: string[];
@@ -27,6 +31,9 @@ export function CarrierProfileForm({
   rntrcLabel: string;
   rntrcDescription: string;
   rntrcPlaceholder: string;
+  cnpjLabel: string;
+  cnpjDescription: string;
+  cnpjPlaceholder: string;
 }) {
   const [state, action, pending] = useActionState<ProfileState, FormData>(updateCarrierProfile, undefined);
 
@@ -84,6 +91,20 @@ export function CarrierProfileForm({
             placeholder={rntrcPlaceholder}
           />
           <FieldError>{state?.errors?.rntrc?.[0]}</FieldError>
+        </div>
+      </div>
+
+      <div className="rounded-xl border border-brand/10 bg-brand-light/30 p-3">
+        <p className="text-sm font-semibold text-brand-dark">{cnpjLabel}</p>
+        <p className="text-xs text-muted">{cnpjDescription}</p>
+        <div className="mt-3 space-y-1">
+          <Input
+            name="cnpj"
+            inputMode="numeric"
+            defaultValue={initial.cnpj ?? ""}
+            placeholder={cnpjPlaceholder}
+          />
+          <FieldError>{state?.errors?.cnpj?.[0]}</FieldError>
         </div>
       </div>
 

@@ -38,10 +38,12 @@ export type UserMinAggregateOutputType = {
   licenseExpiry: Date | null
   carrierVerified: boolean | null
   rntrc: string | null
+  cnpj: string | null
   currentRegion: string | null
   available: boolean | null
   acceptsRegions: string | null
   createdAt: Date | null
+  onboardedAt: Date | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -58,10 +60,12 @@ export type UserMaxAggregateOutputType = {
   licenseExpiry: Date | null
   carrierVerified: boolean | null
   rntrc: string | null
+  cnpj: string | null
   currentRegion: string | null
   available: boolean | null
   acceptsRegions: string | null
   createdAt: Date | null
+  onboardedAt: Date | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -78,10 +82,12 @@ export type UserCountAggregateOutputType = {
   licenseExpiry: number
   carrierVerified: number
   rntrc: number
+  cnpj: number
   currentRegion: number
   available: number
   acceptsRegions: number
   createdAt: number
+  onboardedAt: number
   _all: number
 }
 
@@ -100,10 +106,12 @@ export type UserMinAggregateInputType = {
   licenseExpiry?: true
   carrierVerified?: true
   rntrc?: true
+  cnpj?: true
   currentRegion?: true
   available?: true
   acceptsRegions?: true
   createdAt?: true
+  onboardedAt?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -120,10 +128,12 @@ export type UserMaxAggregateInputType = {
   licenseExpiry?: true
   carrierVerified?: true
   rntrc?: true
+  cnpj?: true
   currentRegion?: true
   available?: true
   acceptsRegions?: true
   createdAt?: true
+  onboardedAt?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -140,10 +150,12 @@ export type UserCountAggregateInputType = {
   licenseExpiry?: true
   carrierVerified?: true
   rntrc?: true
+  cnpj?: true
   currentRegion?: true
   available?: true
   acceptsRegions?: true
   createdAt?: true
+  onboardedAt?: true
   _all?: true
 }
 
@@ -233,10 +245,12 @@ export type UserGroupByOutputType = {
   licenseExpiry: Date | null
   carrierVerified: boolean
   rntrc: string | null
+  cnpj: string | null
   currentRegion: string | null
   available: boolean
   acceptsRegions: string | null
   createdAt: Date
+  onboardedAt: Date | null
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
@@ -274,10 +288,12 @@ export type UserWhereInput = {
   licenseExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   carrierVerified?: Prisma.BoolFilter<"User"> | boolean
   rntrc?: Prisma.StringNullableFilter<"User"> | string | null
+  cnpj?: Prisma.StringNullableFilter<"User"> | string | null
   currentRegion?: Prisma.StringNullableFilter<"User"> | string | null
   available?: Prisma.BoolFilter<"User"> | boolean
   acceptsRegions?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  onboardedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
   loads?: Prisma.LoadListRelationFilter
   applications?: Prisma.ApplicationListRelationFilter
@@ -300,10 +316,12 @@ export type UserOrderByWithRelationInput = {
   licenseExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
   carrierVerified?: Prisma.SortOrder
   rntrc?: Prisma.SortOrderInput | Prisma.SortOrder
+  cnpj?: Prisma.SortOrderInput | Prisma.SortOrder
   currentRegion?: Prisma.SortOrderInput | Prisma.SortOrder
   available?: Prisma.SortOrder
   acceptsRegions?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  onboardedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   company?: Prisma.CompanyOrderByWithRelationInput
   loads?: Prisma.LoadOrderByRelationAggregateInput
   applications?: Prisma.ApplicationOrderByRelationAggregateInput
@@ -329,10 +347,12 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   licenseExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   carrierVerified?: Prisma.BoolFilter<"User"> | boolean
   rntrc?: Prisma.StringNullableFilter<"User"> | string | null
+  cnpj?: Prisma.StringNullableFilter<"User"> | string | null
   currentRegion?: Prisma.StringNullableFilter<"User"> | string | null
   available?: Prisma.BoolFilter<"User"> | boolean
   acceptsRegions?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  onboardedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
   loads?: Prisma.LoadListRelationFilter
   applications?: Prisma.ApplicationListRelationFilter
@@ -355,10 +375,12 @@ export type UserOrderByWithAggregationInput = {
   licenseExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
   carrierVerified?: Prisma.SortOrder
   rntrc?: Prisma.SortOrderInput | Prisma.SortOrder
+  cnpj?: Prisma.SortOrderInput | Prisma.SortOrder
   currentRegion?: Prisma.SortOrderInput | Prisma.SortOrder
   available?: Prisma.SortOrder
   acceptsRegions?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  onboardedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
@@ -381,10 +403,12 @@ export type UserScalarWhereWithAggregatesInput = {
   licenseExpiry?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   carrierVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   rntrc?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  cnpj?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   currentRegion?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   available?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   acceptsRegions?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
+  onboardedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
 }
 
 export type UserCreateInput = {
@@ -401,10 +425,12 @@ export type UserCreateInput = {
   licenseExpiry?: Date | string | null
   carrierVerified?: boolean
   rntrc?: string | null
+  cnpj?: string | null
   currentRegion?: string | null
   available?: boolean
   acceptsRegions?: string | null
   createdAt?: Date | string
+  onboardedAt?: Date | string | null
   company?: Prisma.CompanyCreateNestedOneWithoutUserInput
   loads?: Prisma.LoadCreateNestedManyWithoutPublisherInput
   applications?: Prisma.ApplicationCreateNestedManyWithoutTransporterInput
@@ -427,10 +453,12 @@ export type UserUncheckedCreateInput = {
   licenseExpiry?: Date | string | null
   carrierVerified?: boolean
   rntrc?: string | null
+  cnpj?: string | null
   currentRegion?: string | null
   available?: boolean
   acceptsRegions?: string | null
   createdAt?: Date | string
+  onboardedAt?: Date | string | null
   company?: Prisma.CompanyUncheckedCreateNestedOneWithoutUserInput
   loads?: Prisma.LoadUncheckedCreateNestedManyWithoutPublisherInput
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutTransporterInput
@@ -453,10 +481,12 @@ export type UserUpdateInput = {
   licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rntrc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  onboardedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   company?: Prisma.CompanyUpdateOneWithoutUserNestedInput
   loads?: Prisma.LoadUpdateManyWithoutPublisherNestedInput
   applications?: Prisma.ApplicationUpdateManyWithoutTransporterNestedInput
@@ -479,10 +509,12 @@ export type UserUncheckedUpdateInput = {
   licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rntrc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  onboardedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   company?: Prisma.CompanyUncheckedUpdateOneWithoutUserNestedInput
   loads?: Prisma.LoadUncheckedUpdateManyWithoutPublisherNestedInput
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutTransporterNestedInput
@@ -505,10 +537,12 @@ export type UserCreateManyInput = {
   licenseExpiry?: Date | string | null
   carrierVerified?: boolean
   rntrc?: string | null
+  cnpj?: string | null
   currentRegion?: string | null
   available?: boolean
   acceptsRegions?: string | null
   createdAt?: Date | string
+  onboardedAt?: Date | string | null
 }
 
 export type UserUpdateManyMutationInput = {
@@ -525,10 +559,12 @@ export type UserUpdateManyMutationInput = {
   licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rntrc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  onboardedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -545,10 +581,12 @@ export type UserUncheckedUpdateManyInput = {
   licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rntrc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  onboardedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -565,10 +603,12 @@ export type UserCountOrderByAggregateInput = {
   licenseExpiry?: Prisma.SortOrder
   carrierVerified?: Prisma.SortOrder
   rntrc?: Prisma.SortOrder
+  cnpj?: Prisma.SortOrder
   currentRegion?: Prisma.SortOrder
   available?: Prisma.SortOrder
   acceptsRegions?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  onboardedAt?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -585,10 +625,12 @@ export type UserMaxOrderByAggregateInput = {
   licenseExpiry?: Prisma.SortOrder
   carrierVerified?: Prisma.SortOrder
   rntrc?: Prisma.SortOrder
+  cnpj?: Prisma.SortOrder
   currentRegion?: Prisma.SortOrder
   available?: Prisma.SortOrder
   acceptsRegions?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  onboardedAt?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -605,10 +647,12 @@ export type UserMinOrderByAggregateInput = {
   licenseExpiry?: Prisma.SortOrder
   carrierVerified?: Prisma.SortOrder
   rntrc?: Prisma.SortOrder
+  cnpj?: Prisma.SortOrder
   currentRegion?: Prisma.SortOrder
   available?: Prisma.SortOrder
   acceptsRegions?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  onboardedAt?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -742,10 +786,12 @@ export type UserCreateWithoutCompanyInput = {
   licenseExpiry?: Date | string | null
   carrierVerified?: boolean
   rntrc?: string | null
+  cnpj?: string | null
   currentRegion?: string | null
   available?: boolean
   acceptsRegions?: string | null
   createdAt?: Date | string
+  onboardedAt?: Date | string | null
   loads?: Prisma.LoadCreateNestedManyWithoutPublisherInput
   applications?: Prisma.ApplicationCreateNestedManyWithoutTransporterInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -767,10 +813,12 @@ export type UserUncheckedCreateWithoutCompanyInput = {
   licenseExpiry?: Date | string | null
   carrierVerified?: boolean
   rntrc?: string | null
+  cnpj?: string | null
   currentRegion?: string | null
   available?: boolean
   acceptsRegions?: string | null
   createdAt?: Date | string
+  onboardedAt?: Date | string | null
   loads?: Prisma.LoadUncheckedCreateNestedManyWithoutPublisherInput
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutTransporterInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -808,10 +856,12 @@ export type UserUpdateWithoutCompanyInput = {
   licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rntrc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  onboardedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   loads?: Prisma.LoadUpdateManyWithoutPublisherNestedInput
   applications?: Prisma.ApplicationUpdateManyWithoutTransporterNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -833,10 +883,12 @@ export type UserUncheckedUpdateWithoutCompanyInput = {
   licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rntrc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  onboardedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   loads?: Prisma.LoadUncheckedUpdateManyWithoutPublisherNestedInput
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutTransporterNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -858,10 +910,12 @@ export type UserCreateWithoutLoadsInput = {
   licenseExpiry?: Date | string | null
   carrierVerified?: boolean
   rntrc?: string | null
+  cnpj?: string | null
   currentRegion?: string | null
   available?: boolean
   acceptsRegions?: string | null
   createdAt?: Date | string
+  onboardedAt?: Date | string | null
   company?: Prisma.CompanyCreateNestedOneWithoutUserInput
   applications?: Prisma.ApplicationCreateNestedManyWithoutTransporterInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -883,10 +937,12 @@ export type UserUncheckedCreateWithoutLoadsInput = {
   licenseExpiry?: Date | string | null
   carrierVerified?: boolean
   rntrc?: string | null
+  cnpj?: string | null
   currentRegion?: string | null
   available?: boolean
   acceptsRegions?: string | null
   createdAt?: Date | string
+  onboardedAt?: Date | string | null
   company?: Prisma.CompanyUncheckedCreateNestedOneWithoutUserInput
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutTransporterInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -924,10 +980,12 @@ export type UserUpdateWithoutLoadsInput = {
   licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rntrc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  onboardedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   company?: Prisma.CompanyUpdateOneWithoutUserNestedInput
   applications?: Prisma.ApplicationUpdateManyWithoutTransporterNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -949,10 +1007,12 @@ export type UserUncheckedUpdateWithoutLoadsInput = {
   licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rntrc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  onboardedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   company?: Prisma.CompanyUncheckedUpdateOneWithoutUserNestedInput
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutTransporterNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -974,10 +1034,12 @@ export type UserCreateWithoutRatingsReceivedInput = {
   licenseExpiry?: Date | string | null
   carrierVerified?: boolean
   rntrc?: string | null
+  cnpj?: string | null
   currentRegion?: string | null
   available?: boolean
   acceptsRegions?: string | null
   createdAt?: Date | string
+  onboardedAt?: Date | string | null
   company?: Prisma.CompanyCreateNestedOneWithoutUserInput
   loads?: Prisma.LoadCreateNestedManyWithoutPublisherInput
   applications?: Prisma.ApplicationCreateNestedManyWithoutTransporterInput
@@ -999,10 +1061,12 @@ export type UserUncheckedCreateWithoutRatingsReceivedInput = {
   licenseExpiry?: Date | string | null
   carrierVerified?: boolean
   rntrc?: string | null
+  cnpj?: string | null
   currentRegion?: string | null
   available?: boolean
   acceptsRegions?: string | null
   createdAt?: Date | string
+  onboardedAt?: Date | string | null
   company?: Prisma.CompanyUncheckedCreateNestedOneWithoutUserInput
   loads?: Prisma.LoadUncheckedCreateNestedManyWithoutPublisherInput
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutTransporterInput
@@ -1040,10 +1104,12 @@ export type UserUpdateWithoutRatingsReceivedInput = {
   licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rntrc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  onboardedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   company?: Prisma.CompanyUpdateOneWithoutUserNestedInput
   loads?: Prisma.LoadUpdateManyWithoutPublisherNestedInput
   applications?: Prisma.ApplicationUpdateManyWithoutTransporterNestedInput
@@ -1065,10 +1131,12 @@ export type UserUncheckedUpdateWithoutRatingsReceivedInput = {
   licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rntrc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  onboardedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   company?: Prisma.CompanyUncheckedUpdateOneWithoutUserNestedInput
   loads?: Prisma.LoadUncheckedUpdateManyWithoutPublisherNestedInput
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutTransporterNestedInput
@@ -1090,10 +1158,12 @@ export type UserCreateWithoutApplicationsInput = {
   licenseExpiry?: Date | string | null
   carrierVerified?: boolean
   rntrc?: string | null
+  cnpj?: string | null
   currentRegion?: string | null
   available?: boolean
   acceptsRegions?: string | null
   createdAt?: Date | string
+  onboardedAt?: Date | string | null
   company?: Prisma.CompanyCreateNestedOneWithoutUserInput
   loads?: Prisma.LoadCreateNestedManyWithoutPublisherInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -1115,10 +1185,12 @@ export type UserUncheckedCreateWithoutApplicationsInput = {
   licenseExpiry?: Date | string | null
   carrierVerified?: boolean
   rntrc?: string | null
+  cnpj?: string | null
   currentRegion?: string | null
   available?: boolean
   acceptsRegions?: string | null
   createdAt?: Date | string
+  onboardedAt?: Date | string | null
   company?: Prisma.CompanyUncheckedCreateNestedOneWithoutUserInput
   loads?: Prisma.LoadUncheckedCreateNestedManyWithoutPublisherInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -1156,10 +1228,12 @@ export type UserUpdateWithoutApplicationsInput = {
   licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rntrc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  onboardedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   company?: Prisma.CompanyUpdateOneWithoutUserNestedInput
   loads?: Prisma.LoadUpdateManyWithoutPublisherNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -1181,10 +1255,12 @@ export type UserUncheckedUpdateWithoutApplicationsInput = {
   licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rntrc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  onboardedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   company?: Prisma.CompanyUncheckedUpdateOneWithoutUserNestedInput
   loads?: Prisma.LoadUncheckedUpdateManyWithoutPublisherNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -1206,10 +1282,12 @@ export type UserCreateWithoutSessionsInput = {
   licenseExpiry?: Date | string | null
   carrierVerified?: boolean
   rntrc?: string | null
+  cnpj?: string | null
   currentRegion?: string | null
   available?: boolean
   acceptsRegions?: string | null
   createdAt?: Date | string
+  onboardedAt?: Date | string | null
   company?: Prisma.CompanyCreateNestedOneWithoutUserInput
   loads?: Prisma.LoadCreateNestedManyWithoutPublisherInput
   applications?: Prisma.ApplicationCreateNestedManyWithoutTransporterInput
@@ -1231,10 +1309,12 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   licenseExpiry?: Date | string | null
   carrierVerified?: boolean
   rntrc?: string | null
+  cnpj?: string | null
   currentRegion?: string | null
   available?: boolean
   acceptsRegions?: string | null
   createdAt?: Date | string
+  onboardedAt?: Date | string | null
   company?: Prisma.CompanyUncheckedCreateNestedOneWithoutUserInput
   loads?: Prisma.LoadUncheckedCreateNestedManyWithoutPublisherInput
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutTransporterInput
@@ -1272,10 +1352,12 @@ export type UserUpdateWithoutSessionsInput = {
   licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rntrc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  onboardedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   company?: Prisma.CompanyUpdateOneWithoutUserNestedInput
   loads?: Prisma.LoadUpdateManyWithoutPublisherNestedInput
   applications?: Prisma.ApplicationUpdateManyWithoutTransporterNestedInput
@@ -1297,10 +1379,12 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rntrc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  onboardedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   company?: Prisma.CompanyUncheckedUpdateOneWithoutUserNestedInput
   loads?: Prisma.LoadUncheckedUpdateManyWithoutPublisherNestedInput
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutTransporterNestedInput
@@ -1322,10 +1406,12 @@ export type UserCreateWithoutNotificationsInput = {
   licenseExpiry?: Date | string | null
   carrierVerified?: boolean
   rntrc?: string | null
+  cnpj?: string | null
   currentRegion?: string | null
   available?: boolean
   acceptsRegions?: string | null
   createdAt?: Date | string
+  onboardedAt?: Date | string | null
   company?: Prisma.CompanyCreateNestedOneWithoutUserInput
   loads?: Prisma.LoadCreateNestedManyWithoutPublisherInput
   applications?: Prisma.ApplicationCreateNestedManyWithoutTransporterInput
@@ -1347,10 +1433,12 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   licenseExpiry?: Date | string | null
   carrierVerified?: boolean
   rntrc?: string | null
+  cnpj?: string | null
   currentRegion?: string | null
   available?: boolean
   acceptsRegions?: string | null
   createdAt?: Date | string
+  onboardedAt?: Date | string | null
   company?: Prisma.CompanyUncheckedCreateNestedOneWithoutUserInput
   loads?: Prisma.LoadUncheckedCreateNestedManyWithoutPublisherInput
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutTransporterInput
@@ -1388,10 +1476,12 @@ export type UserUpdateWithoutNotificationsInput = {
   licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rntrc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  onboardedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   company?: Prisma.CompanyUpdateOneWithoutUserNestedInput
   loads?: Prisma.LoadUpdateManyWithoutPublisherNestedInput
   applications?: Prisma.ApplicationUpdateManyWithoutTransporterNestedInput
@@ -1413,10 +1503,12 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   licenseExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   carrierVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rntrc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentRegion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsRegions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  onboardedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   company?: Prisma.CompanyUncheckedUpdateOneWithoutUserNestedInput
   loads?: Prisma.LoadUncheckedUpdateManyWithoutPublisherNestedInput
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutTransporterNestedInput
@@ -1505,10 +1597,12 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   licenseExpiry?: boolean
   carrierVerified?: boolean
   rntrc?: boolean
+  cnpj?: boolean
   currentRegion?: boolean
   available?: boolean
   acceptsRegions?: boolean
   createdAt?: boolean
+  onboardedAt?: boolean
   company?: boolean | Prisma.User$companyArgs<ExtArgs>
   loads?: boolean | Prisma.User$loadsArgs<ExtArgs>
   applications?: boolean | Prisma.User$applicationsArgs<ExtArgs>
@@ -1532,10 +1626,12 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   licenseExpiry?: boolean
   carrierVerified?: boolean
   rntrc?: boolean
+  cnpj?: boolean
   currentRegion?: boolean
   available?: boolean
   acceptsRegions?: boolean
   createdAt?: boolean
+  onboardedAt?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1552,10 +1648,12 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   licenseExpiry?: boolean
   carrierVerified?: boolean
   rntrc?: boolean
+  cnpj?: boolean
   currentRegion?: boolean
   available?: boolean
   acceptsRegions?: boolean
   createdAt?: boolean
+  onboardedAt?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -1572,13 +1670,15 @@ export type UserSelectScalar = {
   licenseExpiry?: boolean
   carrierVerified?: boolean
   rntrc?: boolean
+  cnpj?: boolean
   currentRegion?: boolean
   available?: boolean
   acceptsRegions?: boolean
   createdAt?: boolean
+  onboardedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "passwordHash" | "name" | "phone" | "role" | "vehicleType" | "vehiclePlate" | "professionalLicense" | "licenseUrl" | "licenseExpiry" | "carrierVerified" | "rntrc" | "currentRegion" | "available" | "acceptsRegions" | "createdAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "passwordHash" | "name" | "phone" | "role" | "vehicleType" | "vehiclePlate" | "professionalLicense" | "licenseUrl" | "licenseExpiry" | "carrierVerified" | "rntrc" | "cnpj" | "currentRegion" | "available" | "acceptsRegions" | "createdAt" | "onboardedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.User$companyArgs<ExtArgs>
   loads?: boolean | Prisma.User$loadsArgs<ExtArgs>
@@ -1615,10 +1715,12 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     licenseExpiry: Date | null
     carrierVerified: boolean
     rntrc: string | null
+    cnpj: string | null
     currentRegion: string | null
     available: boolean
     acceptsRegions: string | null
     createdAt: Date
+    onboardedAt: Date | null
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -2061,10 +2163,12 @@ export interface UserFieldRefs {
   readonly licenseExpiry: Prisma.FieldRef<"User", 'DateTime'>
   readonly carrierVerified: Prisma.FieldRef<"User", 'Boolean'>
   readonly rntrc: Prisma.FieldRef<"User", 'String'>
+  readonly cnpj: Prisma.FieldRef<"User", 'String'>
   readonly currentRegion: Prisma.FieldRef<"User", 'String'>
   readonly available: Prisma.FieldRef<"User", 'Boolean'>
   readonly acceptsRegions: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly onboardedAt: Prisma.FieldRef<"User", 'DateTime'>
 }
     
 
